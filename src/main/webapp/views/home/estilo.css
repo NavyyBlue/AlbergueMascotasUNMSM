@@ -8,8 +8,7 @@ p{
     color: #26979f;
 }
 h3, p{
-    color: #0e0036;
-    font-style: italic;
+    color: #000000;
 }
 
 #especial{
@@ -21,20 +20,20 @@ h3, p{
 
 p.morado{
     background-color: #6b44d6;
-    color: #979797;
+    color: #000000;
     font-size: 20px;
     padding: 5px;
 }
 
 .moradopatodos{
-    background-color: #6b44d6;
+    background-color: #0900ff;
     color: #979797;
-    font-size: 20px;
+    font-size: 30px;
     text-align: justify;
     padding: 5px;
     padding-top: 20px;
     padding-left: 30px;
-    border: 10px red solid;
+    border: 10px #0900ff solid;
     border-radius: 20px;
     margin: 30px;
     font-family: Arial, Helvetica, sans-serif;
@@ -63,5 +62,12 @@ a{
 }
 
 .listaemp{
-
+    width: 300px;
+    height: 47px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    background-color: #BBD478;
 }

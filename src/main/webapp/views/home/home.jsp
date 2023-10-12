@@ -9,13 +9,12 @@
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>akila chino</title>
-    <link rel="stylesheet" href="../assets/css/estilo.css">
+    <link rel="stylesheet" type='text/css'  href="estilo.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;1,100;1,200&display=swap"
           rel="stylesheet">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
 </head>
 <body>
 <ul>
@@ -26,8 +25,12 @@
     <li><a href="">Cisneros Condori, Gloria Stephany</a></li>
     <li><a href="">Solano Otiniano, Lucia Alejandra</a></li>
     <li><a href="">Soria Villanueva, Miguel Stalin</a></li>
-    <li><a href="">Zavala Sanchez, Diego hodacqwcwqcqwasdla</a></li>
+    <li><a href="">Zavala Sanchez, Diego Alonso</a></li>
 </ul>
+<div class="listaemp">
+    <img src="../../assets/icon/ic_home.svg">
+    <p>Otras imagenes</p>
+</div>
 <p>Empresaurios</p>
 <h3>Carreritas</h3>
 <p id="especial">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos nihil quidem sed temporibus
