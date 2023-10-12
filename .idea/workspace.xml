@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c41ba46-803d-42da-944f-3293970409f3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/grupo12/webapp/servlet/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/grupo12/webapp/servlet/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/estilo.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/assets/css/estilo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/icon/ic_home.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/assets/icon/ic_home.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/img/logo.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/assets/img/logo.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/jsp/main.jsp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,22 +38,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/jccr_/IdeaProjects/AlberguedeMascotas/src/main/webapp/jsp",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\webapp\jsp" />
+      <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\resources\icon" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\webapp" />
+      <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\webapp\jsp" />
+      <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\webapp\assets" />
+      <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\resources\img" />
       <recent name="C:\Users\jccr_\IdeaProjects\AlberguedeMascotas\src\main\resources\css" />
     </key>
   </component>
@@ -95,10 +107,23 @@
       <option name="presentableId" value="Default" />
       <updated>1696911560498</updated>
       <workItem from="1696911561579" duration="3565000" />
+      <workItem from="1697071961000" duration="2567000" />
+      <workItem from="1697120502157" duration="2513000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
