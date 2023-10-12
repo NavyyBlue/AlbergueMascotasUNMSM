@@ -1,0 +1,67 @@
+body{
+    background-color: #e6d7b8;
+    color: #4c264b; 
+    font-size: 25px;
+    font-family: 'Montserrat', sans-serif;
+}
+p{
+    color: #26979f;
+}
+h3, p{
+    color: #0e0036;
+    font-style: italic;
+}
+
+#especial{
+    background-color: #0e0036;
+    color: #26979f;
+    font-size: 20px;
+    padding: 5px;
+}
+
+p.morado{
+    background-color: #6b44d6;
+    color: #979797;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.moradopatodos{
+    background-color: #6b44d6;
+    color: #979797;
+    font-size: 20px;
+    text-align: justify;
+    padding: 5px;
+    padding-top: 20px;
+    padding-left: 30px;
+    border: 10px red solid;
+    border-radius: 20px;
+    margin: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul , li {
+    display: list-item;
+    list-style-type: none;
+}
+
+li{
+    padding-bottom: 40px;
+}
+
+a:hover{
+    background-color: #4c264b;
+    color: white;
+}
+
+a{
+    background-color: chocolate;
+    color: black;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.listaemp{
+
+}
