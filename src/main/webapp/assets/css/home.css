@@ -1,0 +1,106 @@
+section{
+    padding-top: 4vh;
+    height: 96vh;
+    margin: 0 10rem;
+    box-sizing: border-box;
+    min-height: fit-content;
+}
+
+.section-container{
+    display: flex;
+}
+
+/*presentacion*/
+
+#presentacion{
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    height: 50vh;
+
+}
+
+.section_img_dog_container{
+    display: flex;
+    height: 250px;
+    width: 250px;
+    margin: auto 0;
+}
+
+.section_text{
+    align-self: center;
+    text-align: start;
+}
+
+.section-text_p1{
+    font-weight: 600;
+}
+
+.section_welcome{
+    color: black;
+}
+
+.section_refugio{
+    color: brown;
+}
+
+.h2{
+
+    color: gray;
+    font-size: medium;
+    text-align: justify;
+}
+
+.button_container{
+    text-align: end;
+    
+}
+
+.button_color{
+    color: #94C11F;
+    border-color: #94C11F;
+    width: 150px; 
+  height: 50px;
+  text-justify: auto;
+}
+
+.material-symbols-outlined{
+    justify-items: center;
+}
+
+#fotos{
+    background-color: #A53535;
+    height: 45vh;
+    width: auto;
+    justify-items: center;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#mapa{
+    display: flex;
+    justify-content: start;
+    gap: 5rem;
+    height: 50vh;
+
+}
+
+.button_container2{
+    text-align: start;
+    
+}
+
+.img_map{
+position: absolute;
+text-align: end;
+right: 400px;
+}
+
+.section_text2{
+    align-self: center;
+    text-align: start;
+    position: absolute;
+    left: 300px;
+}
