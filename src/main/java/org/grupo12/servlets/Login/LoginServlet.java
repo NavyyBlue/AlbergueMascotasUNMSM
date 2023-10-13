@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("username", user);
                 response.sendRedirect(request.getContextPath() + "/home");
             } else {
-                response.sendRedirect("/login");
+                response.sendRedirect("login");
             }
         } catch (SQLException e) {
             e.printStackTrace();
