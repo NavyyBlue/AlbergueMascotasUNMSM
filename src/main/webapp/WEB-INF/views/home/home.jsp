@@ -13,6 +13,7 @@
 </head>
 <body>
 
+<jsp:include page="../navBar/navBar.jsp"/>
 <section id="presentacion">
     <div class="img_dog_container">
         <img src="<%=request.getContextPath()%>/assets/img/home/Rectangle_4222.png" class="img-fluid" alt="perro" style="width: 400px;" >
@@ -76,10 +77,6 @@
     </div>
 
 </section>
-
-<footer>
-    xd
-</footer>
 
 </body>
 </html>
