@@ -3,7 +3,7 @@
 <%
     Map<String, String> errors = (Map<String, String>) request.getAttribute("errors");
 %>
-
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <body>
 
 <nav class="navbar navbar-expand-sm navbar-light ml-auto">
@@ -26,6 +26,7 @@
                 href="#"
                 class="navbar px-3">
             <img
+                    alt="logo-navbar"
                     class="d-inline-block"
                     src="<%=request.getContextPath()%>/assets/img/navbar/NavBarLogo.png"
                     width="100" height="80"
@@ -85,9 +86,19 @@
                     </a>
                 </li>
                 <li style="padding: 10px">
-                    <a href="#" class="bttnBrun" style="white-space: nowrap">
-                        Iniciar Sesion
-                    </a>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.username}">
+                            <a href="#" class="bttnVert">
+                                <c:out value="${sessionScope.username}"/>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<%=request.getContextPath()%>/login" class="bttnBrun" style="white-space: nowrap">
+                                Iniciar Sesion
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+
                 </li>
             </ul>
         </div>

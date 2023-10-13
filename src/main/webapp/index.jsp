@@ -12,13 +12,14 @@
     <title>Albergue de Mascotas</title>
 </head>
 <body>
-    <c:choose>
+    <%--<c:choose>
         <c:when test="${not empty sessionScope.username}">
             <jsp:forward page="WEB-INF/views/home/home.jsp"/>
         </c:when>
         <c:otherwise>
             <jsp:forward page="WEB-INF/views/Login/login.jsp"/>
         </c:otherwise>
-    </c:choose>
+    </c:choose>--%>
+    <jsp:forward page="WEB-INF/views/home/home.jsp"/>
 </body>
 </html>
