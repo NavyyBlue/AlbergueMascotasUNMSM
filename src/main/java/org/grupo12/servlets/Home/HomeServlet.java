@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.grupo12.models.User;
 
 import java.io.IOException;
 
@@ -13,9 +14,8 @@ import java.io.IOException;
 public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        String username = (String) session.getAttribute("username");
-        if (username != null) {
-            request.setAttribute("username", username);
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
             request.getRequestDispatcher("/WEB-INF/views/home/home.jsp").forward(request, response);
         } else {
             response.sendRedirect("login");

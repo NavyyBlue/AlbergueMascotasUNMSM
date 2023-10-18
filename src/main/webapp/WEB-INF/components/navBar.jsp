@@ -1,11 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@page import="java.util.Map" %>
+<%@ page import="org.grupo12.models.User" %>
+<%User user = (User) session.getAttribute("user");%>
 <%
     Map<String, String> errors = (Map<String, String>) request.getAttribute("errors");
 %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <body>
-
 <nav class="navbar navbar-expand-sm navbar-light ml-auto">
 
     <div class="container-fluid">
@@ -86,18 +86,15 @@
                     </a>
                 </li>
                 <li style="padding: 10px">
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.username}">
-                            <a href="#" class="bttnVert">
-                                <c:out value="${sessionScope.username}"/>
-                            </a>
-                        </c:when>
-                        <c:otherwise>
-                            <a href="<%=request.getContextPath()%>/login" class="bttnBrun" style="white-space: nowrap">
-                                Iniciar Sesion
-                            </a>
-                        </c:otherwise>
-                    </c:choose>
+                    <% if (user != null) { %>
+                    <a href="#" class="bttnVert">
+                        <%= user.getFirstName()%>
+                    </a>
+                    <% } else {%>
+                    <a href="<%=request.getContextPath()%>/login" class="bttnBrun" style="white-space: nowrap">
+                        Iniciar Sesion
+                    </a>
+                    <% } %>
 
                 </li>
             </ul>
