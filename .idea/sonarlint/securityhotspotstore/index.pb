@@ -5,3 +5,15 @@
 0src/main/java/org/grupo12/util/ConnectionDB.java,d\f\df0845273eaae344c02a1c57dbfa9229fa7b79ff
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+_
+/src/main/webapp/WEB-INF/views/footer/footer.jsp,1\0\10b0fe24d77e35f931c68d64a27c4928e76e9022
+S
+#src/main/webapp/assets/css/home.css,6\a\6a325c03d4b9cff88220f3cda9a7c77ef9ab0deb
+[
++src/main/webapp/WEB-INF/views/home/home.jsp,7\7\77bfeb696f254570376b352b596064428de1b06d
+U
+%src/main/webapp/assets/css/navbar.css,f\9\f961a897c63bf0d0d3266866df66c20435ed09a2
+O
+src/main/webapp/WEB-INF/web.xml,2\e\2e22b6edd746fa3dc40ad7276c87c8d87d72a392
+I
+src/main/webapp/index.jsp,8\e\8e6d3b70c9f5b02570779b0441540d45eceb0ded
