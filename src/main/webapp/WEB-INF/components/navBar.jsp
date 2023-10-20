@@ -58,7 +58,7 @@
                 </li>
 
                 <li class="nav-item flex-grow-1">
-                    <a href="#" class="nav-link">
+                    <a href="<%=request.getContextPath()%>/petlist" class="nav-link">
                         Mascotas
                     </a>
                 </li>
