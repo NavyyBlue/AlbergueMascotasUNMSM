@@ -6,66 +6,60 @@
     Map<String, String> errors = (Map<String, String>) request.getAttribute("errors");
 %>
 <body>
-<nav class="navbar navbar-expand-sm navbar-light ml-auto">
-    <div class="container-fluid">
-        <button type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                class="navbar-toggler"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a href="#"
-           class="navbar px-3">
-            <img alt="logo-navbar"
-                 class="d-inline-block"
-                 src="<%=request.getContextPath()%>/assets/img/navbar/NavBarLogo.png"
-                 width="100" height="80"
-            />
-        </a>
-        <div class="collapse navbar-collapse"
-             id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">
-                        Nosotros
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Mascotas
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Adopcion</a></li>
-                        <li><a class="dropdown-item disabled" href="#">Apadrinamiento</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item ">
-                    <a href="#" class="nav-link">
-                        Mascotas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Voluntariado
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        Mapa
-                    </a>
-                </li>
-            </ul>
-            <div class="d-flex me-5">
-                <a href="#" class="bttnVert me-4">
+<nav class="navbar navbar-expand-sm navbar-light ml-auto mx-5">
+    <div class="container-fluid justify-content-between">
+        <div class="d-flex">
+            <button type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    class="navbar-toggler"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a href="#"
+               class="navbar-brand me-2 mb-1 d-flex align-items-center">
+                <img alt="logo-navbar"
+                     class="d-inline-block"
+                     src="<%=request.getContextPath()%>/assets/img/navbar/NavBarLogo.png"
+                     width="100" height="80"
+                />
+            </a>
+        </div>
+
+        <ul class="navbar-nav flex-row d-none d-md-flex">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    Nosotros
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a href="#" class="nav-link">
+                    Mascotas
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    Voluntariado
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    Mapa
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav flex-row align-items-center">
+            <li class="nav-item me-3 me-lg-1">
+                <a href="#" class="nav-link bttnVert m-0 me-4">
                     Donaciones
                 </a>
+            </li>
+            <li class="nav-item me-3 me-lg-1">
                 <% if (user != null) { %>
-                <div class="userNavbarContainer">
+                <div class="nav-link d-sm-flex align-items-sm-center">
                     <p class="m-0 me-2">
                         Hola,<br>
                         <%= user.getFirstName()%>
@@ -73,12 +67,13 @@
                     <img class="imgUser" src="<%=request.getContextPath()%>/assets/img/home/download.jpeg">
                 </div>
                 <% } else {%>
-                <a href="<%=request.getContextPath()%>/login" class="bttnBrun">
+                <a href="<%=request.getContextPath()%>/login" class="nav-link bttnBrun">
                     Iniciar Sesion
                 </a>
                 <% } %>
-            </div>
-        </div>
+            </li>
+        </ul>
+
     </div>
 </nav>
 </body>
