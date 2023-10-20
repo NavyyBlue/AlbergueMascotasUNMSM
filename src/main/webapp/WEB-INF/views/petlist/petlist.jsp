@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jccr_
-  Date: 19/10/2023
-  Time: 20:19
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -47,7 +40,20 @@
             </div>
         </div>
     </div>
-</main>
+
+    <div class="petlistContainer">
+        <div class="container" id="card-container"></div>
+        <div id="pagination" class="pagination-container"></div>
+
+        <div id="card-details">
+            <h2 id="card-name"></h2>
+            <p id="card-description"></p>
+        </div>
+
+        <script
+                src="<%=request.getContextPath()%>/js/petlist/petlist.js"></script>
+    </div>
 <jsp:include page="../../components/footer.jsp"/>
 </body>
 </html>
+
