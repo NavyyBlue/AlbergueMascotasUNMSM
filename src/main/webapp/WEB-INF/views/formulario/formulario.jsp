@@ -18,7 +18,7 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 </head>
 <body>
-<jsp:include page="../navBar/navBar.jsp"/>
+<jsp:include page="../../components/navBar.jsp"/>
 
 <section class="d-flex justify-content-center align-items-center">
     <div class="card shadow col-xs-12 col-sm-6 col-md-6 col-lg-4   p-4">
