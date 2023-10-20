@@ -5,8 +5,6 @@
 0src/main/java/org/grupo12/util/ConnectionDB.java,d\f\df0845273eaae344c02a1c57dbfa9229fa7b79ff
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-_
-/src/main/webapp/WEB-INF/views/footer/footer.jsp,1\0\10b0fe24d77e35f931c68d64a27c4928e76e9022
 S
 #src/main/webapp/assets/css/home.css,6\a\6a325c03d4b9cff88220f3cda9a7c77ef9ab0deb
 [
@@ -17,3 +15,17 @@ O
 src/main/webapp/WEB-INF/web.xml,2\e\2e22b6edd746fa3dc40ad7276c87c8d87d72a392
 I
 src/main/webapp/index.jsp,8\e\8e6d3b70c9f5b02570779b0441540d45eceb0ded
+]
+-src/main/webapp/WEB-INF/components/footer.jsp,3\b\3bd70c2ba413a7d90ab5a59f8c9240158b889d32
+T
+$src/main/webapp/assets/css/login.css,f\e\fed0c2ce7d4124b57c1dfb3566199e424eaea3ea
+]
+-src/main/webapp/WEB-INF/components/navBar.jsp,0\7\07cb0cf35ca97e9bb561ac536182ef1ac6dee11c
+h
+8src/main/java/org/grupo12/servlets/Home/HomeServlet.java,5\9\5964223827e280a9c9210cf07ed217de527bdcf0
+j
+:src/main/java/org/grupo12/servlets/Login/LoginServlet.java,8\f\8fa833971427bcf43e6d22d6b7b088085bb11632
+k
+;src/main/java/org/grupo12/servlets/Login/LogoutServlet.java,d\6\d66a1b2217d07c5fc9bf2d570851f3357e2ad3e9
+]
+-src/main/webapp/WEB-INF/views/Login/login.jsp,8\5\85bd916b69c8697160771ebcab10042ecbf76fce
