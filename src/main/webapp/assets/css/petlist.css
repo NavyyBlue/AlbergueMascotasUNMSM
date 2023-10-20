@@ -24,11 +24,37 @@
     max-width: 60%;
     display: grid;
     grid-auto-flow: column;
-    text-align: -webkit-center;
     grid-gap: 7rem;
 }
 
 .filterContainer button{
     border-radius: 30px;
+    background:  #BBD478;
+    border: 0;
+    width: min-content;
+    padding: 10px 23px;
 }
 
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 271px;
+}
+
+.input {
+    box-sizing: border-box;
+    color: #191919;
+    padding: 10px 60px;
+    width: 100%;
+    border-radius: 30px;
+    border: 1px solid #94C11F;
+    background: #FFF;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
