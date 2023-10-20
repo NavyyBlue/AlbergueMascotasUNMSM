@@ -80,16 +80,17 @@
 
         <div>
             <ul class="nav navbar-nav navbar-right">
-                <li style="padding: 10px">
+                <li style="padding: 10px; align-items: center;">
                     <a href="#" class="bttnVert">
                         Donaciones
                     </a>
                 </li>
                 <li style="padding: 10px">
                     <% if (user != null) { %>
-                    <a href="#" class="bttnVert">
-                        <%= user.getFirstName()%>
-                    </a>
+                    <div class="userNavbarContainer">
+                        <p class="nameUser" >Hola,<br/><%= user.getFirstName()%></p>
+                        <img class="imgUser" src="<%=request.getContextPath()%>/assets/img/home/download.jpeg">
+                    </div>
                     <% } else {%>
                     <a href="<%=request.getContextPath()%>/login" class="bttnBrun" style="white-space: nowrap">
                         Iniciar Sesion
