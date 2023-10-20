@@ -28,24 +28,23 @@
                 />
             </a>
         </div>
-
         <ul class="navbar-nav flex-row d-none d-md-flex">
-            <li class="nav-item">
+            <li class="nav-item me-3 me-lg-1 active">
                 <a href="#" class="nav-link active">
                     Nosotros
                 </a>
             </li>
-            <li class="nav-item ">
+            <li class="nav-item me-3 me-lg-1">
                 <a href="#" class="nav-link">
                     Mascotas
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item me-3 me-lg-1">
                 <a href="#" class="nav-link">
                     Voluntariado
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item me-3 me-lg-1">
                 <a href="#" class="nav-link">
                     Mapa
                 </a>
@@ -53,7 +52,7 @@
         </ul>
         <ul class="navbar-nav flex-row align-items-center">
             <li class="nav-item me-3 me-lg-1">
-                <a href="#" class="nav-link bttnVert m-0 me-4">
+                <a href="#" class="nav-link align-items-sm-center me-4 bttnVert">
                     Donaciones
                 </a>
             </li>
