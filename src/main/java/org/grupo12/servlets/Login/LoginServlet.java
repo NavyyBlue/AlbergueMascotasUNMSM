@@ -7,16 +7,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.grupo12.models.User;
-import org.grupo12.util.ConnectionDB;
-
+import org.grupo12.dao.UserDAO;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+    private UserDAO userDAO;
+
+    @Override
+    public void init() throws ServletException {
+        userDAO = new UserDAO();
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         getServletContext()
@@ -29,36 +31,14 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String pass = request.getParameter("password");
 
-        Connection connection = ConnectionDB.getConnection();
+        User user = userDAO.getUserByUsernameAndPassword(username, pass);
 
-        String sql = "SELECT * FROM User WHERE UserName = ? AND Password = ?";
-
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, username);
-            statement.setString(2, pass);
-
-            ResultSet result = statement.executeQuery();
-
-            if (result.next()) {
-                User user = new User();
-                user.setUserId(result.getInt("UserId"));
-                user.setFirstName(result.getString("FirstName"));
-                user.setLastName(result.getString("LastName"));
-                user.setEmail(result.getString("Email"));
-                user.setUserImage(result.getString("UserImage"));
-                user.setUserName(result.getString("UserName"));
-                user.setPhoneNumber(result.getString("PhoneNumber"));
-                user.setActive(result.getBoolean("Active"));
-
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                response.sendRedirect(request.getContextPath() + "/home");
-            } else {
-                response.sendRedirect("login");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            response.sendRedirect(request.getContextPath() + "/home");
+        } else {
+            response.sendRedirect("login");
         }
     }
 }
