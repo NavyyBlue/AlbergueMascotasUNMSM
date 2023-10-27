@@ -37,3 +37,17 @@ g
 7src/main/webapp/WEB-INF/views/formulario/formulario.jsp,7\3\733f8937176bc9437e668fa6f38935728754bdc2
 Z
 *src/main/java/org/grupo12/models/User.java,8\4\8480e7641a550d0d74b4ee6b88b9f6cccfec7da2
+Z
+*src/main/java/org/grupo12/dao/UserDAO.java,f\f\ffcf9e019e5468bbb982616f9e662f0f168cd448
+U
+%src/main/webapp/js/petlist/petlist.js,e\d\ed25c26151b6036a42db08ef851328073c4ee271
+V
+&src/main/webapp/assets/css/petlist.css,3\f\3fa6b4dcebf1b0ca372affb511c5433bb69a5997
+^
+.src/main/java/org/grupo12/util/Pagination.java,6\d\6d69a7ddeeab045e0009d127a3535b66847f7ade
+Y
+)src/main/java/org/grupo12/models/Pet.java,a\c\ac603ceb804b0c011f36f1399681e4e84350ca98
+n
+>src/main/java/org/grupo12/servlets/PetList/PetListServlet.java,2\9\2934811116f05cf26313261e4227790bec0e8ea2
+Y
+)src/main/java/org/grupo12/dao/PetDAO.java,8\5\85241abd92d6e6173d96785151770e269529e9f8

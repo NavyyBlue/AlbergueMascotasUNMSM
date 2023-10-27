@@ -1,5 +1,6 @@
 package org.grupo12.dao;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.models.Pet;
 import org.grupo12.util.ConnectionDB;
 
@@ -11,9 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PetDAO {
+    private HikariDataSource dataSource;
+
+    public PetDAO(HikariDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     public List<Pet> getPetListBySpecies(int speciesId, int offset, int limit) {
         List<Pet> pets = new ArrayList<>();
-        Connection connection = ConnectionDB.getConnection();
         String sql = "SELECT " +
                 "    p.PetId, " +
                 "    p.Name, " +
@@ -27,8 +33,8 @@ public class PetDAO {
                 "AND p.Active = 1 " +
                 "LIMIT ? OFFSET ?";
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             int paramIndex = 1;
             if (speciesId != 0) {
                 statement.setInt(paramIndex++, speciesId);
@@ -53,18 +59,13 @@ public class PetDAO {
         return pets;
     }
 
-    public List<Pet> getPetListBySpecies(int offset, int limit) {
-        return getPetListBySpecies(0, offset, limit);
-    }
-
     public int getTotalPetCount(int speciesId) {
         int total = 0;
-        Connection connection = ConnectionDB.getConnection();
         String countSql = "SELECT COUNT(*) AS total FROM Pet WHERE AdoptionStatusId = 1 " +
-                        (speciesId == 0 ? "" : "AND SpeciesId = ?");
+                (speciesId == 0 ? "" : "AND SpeciesId = ?");
 
-        try {
-            PreparedStatement countStatement = connection.prepareStatement(countSql);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement countStatement = connection.prepareStatement(countSql)) {
             if (speciesId != 0) {
                 countStatement.setInt(1, speciesId);
             }

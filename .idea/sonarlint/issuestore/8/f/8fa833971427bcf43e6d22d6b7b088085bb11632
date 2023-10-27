@@ -1,4 +1,4 @@
 
 o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(…ı§
-j
-java:S2095%"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ƒ»ÊŞûÿÿÿÿ
+K
+java:S1948")Make "userDAO" transient or serializable.(¡âÒşÿÿÿÿ8öÎ÷¶1

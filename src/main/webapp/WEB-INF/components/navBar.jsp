@@ -19,7 +19,7 @@
             >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="#"
+            <a href="<%=request.getContextPath()%>/home"
                class="navbar-brand me-2 mb-1 d-flex align-items-center">
                 <img alt="logo-navbar"
                      class="d-inline-block"
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li class="nav-item me-3 me-lg-1">
-                <a href="#" class="nav-link">
+                <a href="<%=request.getContextPath()%>/petlist" class="nav-link">
                     Mascotas
                 </a>
             </li>
