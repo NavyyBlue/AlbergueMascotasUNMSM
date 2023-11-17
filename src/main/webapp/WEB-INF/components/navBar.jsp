@@ -49,6 +49,11 @@
                     Mapa
                 </a>
             </li>
+            <li class="nav-item me-3 me-lg-1">
+                <a href="<%=request.getContextPath()%>/news" class="nav-link">
+                    Noticias
+                </a>
+            </li>
         </ul>
         <ul class="navbar-nav flex-row align-items-center">
             <li class="nav-item me-3 me-lg-1">
