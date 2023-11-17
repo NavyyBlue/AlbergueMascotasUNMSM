@@ -30,7 +30,7 @@
         </div>
         <ul class="navbar-nav flex-row d-none d-md-flex">
             <li class="nav-item me-3 me-lg-1 active">
-                <a href="#" class="nav-link active">
+                <a href="<%=request.getContextPath()%>/about" class="nav-link active">
                     Nosotros
                 </a>
             </li>
@@ -40,7 +40,7 @@
                 </a>
             </li>
             <li class="nav-item me-3 me-lg-1">
-                <a href="<%=request.getContextPath()%>/petinfo" class="nav-link">
+                <a href="<%=request.getContextPath()%>/volunteering" class="nav-link">
                     Voluntariado
                 </a>
             </li>
