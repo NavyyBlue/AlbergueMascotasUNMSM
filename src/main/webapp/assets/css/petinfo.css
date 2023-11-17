@@ -1,0 +1,71 @@
+.divMainPet{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.divDetailsPet {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.divDescriptionPet {
+    display: flex;
+    flex-direction: column;
+    width: 706px;
+    height: 375px;
+    background: #EEEEEE;
+    border-radius: 0px 30px 30px 0px;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0 50px 0 0;
+}
+
+#etiquetasMascota {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#etiquetasMascota li {
+    margin: 5px;
+    padding: 10px;
+    background-color: #8B0000; /* Color rojo vino */
+    color: #FFF; /* Texto en color blanco */
+    border: 2px solid #8B0000; /* Borde de 2px sólido */
+    border-radius: 30px; /* Radio del borde */
+    cursor: pointer; /* Cambia el cursor al pasar sobre los elementos */
+}
+
+.divButtonsPet {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.buttonPetDetails {
+    width: 150px;
+    height: 44px;
+    border-radius: 30px;
+    background: #94C11F;
+    color: #FFF;
+    margin: 0 10px
+}
+
+.image-list {
+    column-count: 3;
+    column-gap: 20px; /* Espacio entre las columnas */
+}
+
+.image-list img {
+    width: 200px;
+    height: 271px; /* Asegura que las imágenes ocupen el 100% del ancho del contenedor */
+    border-radius: 10px; /* Borde redondeado para las imágenes */
+    margin-bottom: 10px; /* Espacio entre las imágenes */
+}
