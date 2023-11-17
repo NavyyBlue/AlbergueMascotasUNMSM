@@ -12,5 +12,6 @@ public class Pet {
     private String entryDate;
     private int adoptionStatusId;
     private String imageUrl;
+    private String petStatusName;
     private int active;
 }

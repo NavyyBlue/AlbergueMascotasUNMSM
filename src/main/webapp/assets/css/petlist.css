@@ -27,13 +27,23 @@
     grid-gap: 7rem;
 }
 
-.filterContainer a{
+#filterContainer a{
     border-radius: 30px;
-    background:  #BBD478;
     border: 0;
     width: min-content;
     padding: 10px 23px;
     text-decoration: none;
+    color: black;
+}
+
+#filterContainer a.selected {
+    background: #94C11F;
+    color: white;
+}
+
+#filterContainer a:hover{
+    background: #94C11F;
+    color: white;
 }
 
 .input-wrapper {

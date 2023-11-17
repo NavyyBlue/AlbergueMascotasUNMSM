@@ -1,5 +1,6 @@
 <%@ page import="org.grupo12.models.Pet" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.grupo12.util.Pagination" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -21,13 +22,13 @@
 <main>
     <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 32.7px">
         <img class="imgMain" src="<%=request.getContextPath()%>/assets/img/petlist/petlistmain.png">
-        <p class="titleText">ADOPCIÓN</p>
+        <p class="titleText">MASCOTAS</p>
 
     </div>
 
     <div style="align-items: center; justify-content: center; padding: 20px; text-align: -webkit-center;">
-        <div class="filterContainer">
-            <a href="petlist?speciesId=0">Todos</a>
+        <div class="filterContainer" id="filterContainer">
+            <a href="petlist?speciesId=0" class="selected">Todos</a>
             <a href="petlist?speciesId=1">Perros</a>
             <a href="petlist?speciesId=2">Gatos</a>
             <a href="petlist?speciesId=3">Otros</a>
@@ -50,10 +51,13 @@
             <%
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
                 for (Pet pet : pets) {
+                    String petInfoUrl = "petinfo?petId=" + pet.getPetId();
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card mb-4">
+                    <a href="<%= petInfoUrl %>">
                     <img src="<%= pet.getImageUrl() %>" class="petImg" alt="<%= pet.getName() %>">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title"><%= pet.getName() %>
                         </h5>
@@ -66,20 +70,60 @@
                 }
             %>
         </div>
+        <%
+            Pagination pagination = (Pagination) request.getAttribute("pagination");
+            int start = pagination.getStartPage();
+            int end = pagination.getEndPage();
+            int totalPages = pagination.getTotalPages(); //Total de páginas
+            int total = pagination.getTotal(); //Total de datos
+            int currentPage = pagination.getCurrentPage();
+            int offset = pagination.getOffset();
+            int limit = pagination.getLimit();
+
+            //Obtener el id de la especie del parametro de la url
+            int speciesId = Integer.parseInt(request.getParameter("speciesId"));
+            System.out.println("speciesId: " + speciesId);
+        %>
+
         <!-- Controles de paginación -->
-        <%--<div class="d-flex justify-content-center">
-            <nav>
-                <ul class="pagination">
-                    <li class="page-item <% if (offset <= 0) { %>disabled<% } %>">
-                        <a class="page-link" href="petlist?offset=<%= offset - limit %>&limit=<%= limit %>">Anterior</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link"
-                           href="petlist?offset=<%= offset + limit %>&limit=<%= limit %>">Siguiente</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>--%>
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+                <%
+                    if (currentPage > 1) {
+                %>
+                <li class="page-item">
+                    <a class="page-link" href="petlist?speciesId=<%= speciesId %>&offset=<%= offset - 1 %>&limit=<%= limit %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <%
+                    }
+                %>
+
+                <%
+                    for (int i = start; i <= end; i++) {
+                %>
+                <li class="page-item <%= i == currentPage ? "active" : "" %>">
+                    <a class="page-link" href="petlist?speciesId=<%= speciesId %>&offset=<%= (i - 1) * limit %>&limit=<%= limit %>"><%= page %></a>
+                </li>
+                <%
+                    }
+                %>
+
+                <%
+                    if (currentPage < totalPages) {
+                %>
+                <li class="page-item">
+                    <a class="page-link" href="petlist?speciesId=<%= speciesId %>&offset=<%= offset + 1 %>&limit=<%= limit %>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <%
+                    }
+                %>
+            </ul>
+        </nav>
+
     </div>
     <jsp:include page="../../components/footer.jsp"/>
 </body>
