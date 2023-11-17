@@ -1,10 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jccr_
-  Date: 16/11/2023
-  Time: 22:16
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="org.grupo12.models.Pet" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Arrays" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -19,35 +16,61 @@
 </head>
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
+<%
+    String petIdParam = request.getParameter("petId");
+    if (petIdParam != null && !petIdParam.isEmpty()) {
+        Pet petInfo = (Pet) request.getAttribute("petInfo");
+        List<Pet> petStatus = (List<Pet>) request.getAttribute("petStatus");
+        List<Pet> petImages = (List<Pet>) request.getAttribute("petImages");
+        String firstImageUrl = null;
+        // Verificar si la lista no está vacía
+        if (!petImages.isEmpty()) {
+            // Obtener el primer elemento de la lista
+            Pet firstPetImage = petImages.get(0);
 
+            // Obtener la propiedad imgUrl del primer elemento
+            firstImageUrl = firstPetImage.getImageUrl();
+        }
+
+        // Crear un array de strings con los valores de petStatusName
+        List<String> petStatusNames = new ArrayList<>();
+        for (Pet pet : petStatus) {
+            petStatusNames.add(pet.getPetStatusName());
+        }
+
+        // Convertir la lista de strings a un array de strings
+        String[] petStatusArray = petStatusNames.toArray(new String[0]);
+%>
 <div class="divMainPet">
     <div class="divDetailsPet" style="align-items: center;">
-        <img style="width: 545px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath()%>/assets/img/petlist/foto_petprueba.png">
+        <img style="width: 545px; height: 406px; border-radius: 30px;" src="<%=firstImageUrl%>">
         <div class="divDescriptionPet">
             <div class="divDetailsPet" style="height: 71px; align-items: center">
                 <img style="width: 55.675px; height: 52.984px; transform: rotate(52.107deg); margin: 0 10px 0 0;" src="<%=request.getContextPath()%>/assets/img/petlist/pet_footprint.png">
-                <p style="margin: 0; font-size: 54px;">Archie</p>
+                <p style="margin: 0; font-size: 54px;"><%= petInfo.getName() %></p>
             </div>
             <div class="animal-info" id="animalInfo">
-                <p>Sexo: <span id="sexoPlaceholder"></span></p>
-                <p>Edad: <span id="edadPlaceholder"></span></p>
-                <p>Raza: <span id="tamanioPlaceholder"></span></p>
-                <p>Descripción: <span id="descriptionPlaceholder"></span></p>
-                <p>Ubicación: <span id="locationPlaceholder"></span></p>
+                <p>Sexo: <span id="sexoPlaceholder"><%= petInfo.getGender() %></span></p>
+                <p>Edad: <span id="edadPlaceholder"><%= petInfo.getAge() %></span></p>
+                <%if(petInfo.getBreed() != null){%>
+                <p>Raza: <span id="tamanioPlaceholder"><%=petInfo.getBreed()%></span></p>
+                <%}%>
+                <p>Descripción: <span id="descriptionPlaceholder"><%= petInfo.getDescription() %></span></p>
+                <p>Ubicación: <span id="locationPlaceholder"><%= petInfo.getLocation() %></span></p>
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
             </div>
             <script>
-                // Supongamos que tienes una lista de etiquetas asociadas con la mascota
-                var etiquetasMascota = ["Vacunado", "Enfermo", "Recién Nacido", "Esterilizado"];
+                const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');
+                console.log("etiquetas: ", etiquetasMascota);
 
                 // Obtén la referencia al elemento ul donde se mostrarán las etiquetas
-                var listaEtiquetas = document.getElementById("etiquetasMascota");
+                const listaEtiquetas = document.getElementById("etiquetasMascota");
 
                 // Recorre la lista de etiquetas y crea elementos li para cada una
                 etiquetasMascota.forEach(function(etiqueta) {
-                    var li = document.createElement("li");
+                    let li = document.createElement("li");
                     li.textContent = etiqueta;
                     listaEtiquetas.appendChild(li);
                 });
@@ -68,11 +91,14 @@
 
     </div>
     <div class="image-list">
-        <img src="<%=request.getContextPath()%>/assets/img/petlist/image1.png" alt="Imagen 1">
-        <img src="<%=request.getContextPath()%>/assets/img/petlist/image1.png"  alt="Imagen 2">
-        <img src="<%=request.getContextPath()%>/assets/img/petlist/image1.png"  alt="Imagen 3">
-        <!-- Agrega más imágenes según sea necesario -->
+        <% for (Pet image : petImages) { %>
+        <img src="<%= image.getImageUrl() %>" alt="Imagen de la mascota">
+        <% } %>
     </div>
+
 </div>
+<%} else {%>
+<h1>No se encontró la mascota</h1>
+<%}%>
 </body>
 </html>

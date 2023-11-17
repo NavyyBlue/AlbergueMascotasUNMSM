@@ -1,4 +1,4 @@
-package org.grupo12.servlets.PetList;
+package org.grupo12.servlets.Pet;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.servlet.ServletException;
@@ -34,7 +34,7 @@ public class PetInfoServlet extends HttpServlet {
         request.setAttribute("petImages", petImages);
         request.setAttribute("petStatus", petStatus);
 
-        request.getRequestDispatcher("/WEB-INF/views/petlist/petinfo.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/pet/petinfo.jsp").forward(request, response);
     }
 
 }

@@ -47,24 +47,26 @@
     </div>
 
     <div class="container mx-auto mt-4">
-        <div class="row2" id="card-row">
+        <div class="row" id="card-row">
             <%
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <div class="card mb-4">
-                    <a href="<%= petInfoUrl %>">
-                    <img src="<%= pet.getImageUrl() %>" class="petImg" alt="<%= pet.getName() %>">
-                    </a>
-                    <div class="card-body">
-                        <h5 class="card-title"><%= pet.getName() %>
-                        </h5>
-                        <p class="card-text">Edad: <%= pet.getAge() %>
-                        </p>
+                <a href="<%= petInfoUrl %>">
+                    <div class="card mb-4">
+
+                            <img src="<%= pet.getImageUrl() %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+
+                        <div class="card-img-overlay infoCardImg">
+                            <h3 class="card-text"><%= pet.getName() %>
+                            </h3>
+                            <p class="card-text">Sexo: <%= pet.getGender() %>
+                            <p class="card-text">Edad: <%= pet.getAge() %> años</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <%
                 }
@@ -88,39 +90,19 @@
         <!-- Controles de paginación -->
         <nav aria-label="Page navigation example" class="d-flex justify-content-center">
             <ul class="pagination">
-                <%
-                    if (currentPage > 1) {
-                %>
                 <li class="page-item">
-                    <a class="page-link" href="petlist?speciesId=<%= speciesId %>&offset=<%= offset - 1 %>&limit=<%= limit %>" aria-label="Previous">
+                    <a class="page-link" href="#" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <%
-                    }
-                %>
-
-                <%
-                    for (int i = start; i <= end; i++) {
-                %>
-                <li class="page-item <%= i == currentPage ? "active" : "" %>">
-                    <a class="page-link" href="petlist?speciesId=<%= speciesId %>&offset=<%= (i - 1) * limit %>&limit=<%= limit %>"><%= page %></a>
-                </li>
-                <%
-                    }
-                %>
-
-                <%
-                    if (currentPage < totalPages) {
-                %>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item">
-                    <a class="page-link" href="petlist?speciesId=<%= speciesId %>&offset=<%= offset + 1 %>&limit=<%= limit %>" aria-label="Next">
+                    <a class="page-link" href="#" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
-                <%
-                    }
-                %>
             </ul>
         </nav>
 

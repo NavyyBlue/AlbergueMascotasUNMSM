@@ -79,7 +79,7 @@
 }
 
 .card {
-    width: 200px;
+    width: 300px;
     height: 300px;
     background-color: #f0f0f0;
     background-size: cover;
@@ -133,7 +133,25 @@
 
 .petImg{
     width: 100%;
-    height: 200px;
+    height: 300px;
     border-radius: 10px;
 }
 
+.card-img-overlay.infoCardImg {
+    display: none;
+}
+
+.card.mb-4:hover .bd-placeholder-img .bd-placeholder-img-lg .petImg{
+    opacity: 0.5;
+}
+
+.card.mb-4:hover .card-img-overlay.infoCardImg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgba(165, 54, 54, 0.6);
+    margin: 20px;
+    color: white;
+}

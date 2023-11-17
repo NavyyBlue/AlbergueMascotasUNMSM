@@ -9,7 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PetDAO {
     private HikariDataSource dataSource;
@@ -87,6 +89,8 @@ public class PetDAO {
                     " Name, " +
                     " Age, " +
                     " Gender, " +
+                    " Breed, " +
+                    " Location, " +
                     " Description " +
                     "FROM Pet " +
                     "WHERE PetId = ? AND Active = 1 ";
@@ -100,11 +104,26 @@ public class PetDAO {
                 pet.setAge(result.getInt("Age"));
                 pet.setGender(result.getString("Gender"));
                 pet.setDescription(result.getString("Description"));
+                pet.setBreed(result.getString("Breed"));
+                //Mapeo de los nombres de las ubicaciones
+                int locationValue = result.getInt("Location");
+                String locationName = getLocationName(locationValue);
+                pet.setLocation(locationName);
             }
         }catch (SQLException e) {
             e.printStackTrace();
         }
         return pet;
+    }
+
+    //Metodo para mapear los nombres de las ubicaciones
+    private String getLocationName(int locationValue) {
+        Map<Integer, String> locationMap = new HashMap<>();
+        locationMap.put(0, "Ciudad Universitaria");
+        locationMap.put(1, "San Fernando");
+        locationMap.put(2, "Veterinaria");
+
+        return locationMap.getOrDefault(locationValue, "Desconocido");
     }
 
     public List<Pet> getPetStatus(int petId){

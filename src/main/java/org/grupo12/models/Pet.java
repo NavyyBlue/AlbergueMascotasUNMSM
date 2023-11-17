@@ -9,6 +9,8 @@ public class Pet {
     private String speciesId;
     private String gender;
     private String description;
+    private String breed;
+    private String location;
     private String entryDate;
     private int adoptionStatusId;
     private String imageUrl;
