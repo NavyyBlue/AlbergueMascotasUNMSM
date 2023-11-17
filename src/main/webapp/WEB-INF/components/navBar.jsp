@@ -40,7 +40,7 @@
                 </a>
             </li>
             <li class="nav-item me-3 me-lg-1">
-                <a href="#" class="nav-link">
+                <a href="<%=request.getContextPath()%>/petinfo" class="nav-link">
                     Voluntariado
                 </a>
             </li>
@@ -57,7 +57,7 @@
         </ul>
         <ul class="navbar-nav flex-row align-items-center">
             <li class="nav-item me-3 me-lg-1">
-                <a href="#" class="nav-link align-items-sm-center me-4 bttnVert">
+                <a href="<%=request.getContextPath()%>/donation" class="nav-link align-items-sm-center me-4 bttnVert">
                     Donaciones
                 </a>
             </li>
