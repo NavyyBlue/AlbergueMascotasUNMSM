@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div class="row" style="margin-bottom: 35px">
+    <div class="row2" style="margin-bottom: 35px">
         <div class="small-12 medium-10 small-centered columns" style="margin-left: auto;">
             <h2>Últimas Noticias</h2>
         </div>
@@ -67,7 +67,89 @@
 
     </div>
 
-    <div class="row" style="margin-bottom: 35px">
+    <div class="row2" style="margin-bottom: 50px;margin-top: 50px">
+        <div class="small-12 medium-10 small-centered columns" style="margin-left: auto;">
+            <h2>Otras Noticias</h2>
+        </div>
+
+        <ul class="news-container">
+
+            <li class="news-item" style="margin-bottom: 40px">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-md-3">
+
+                            <div class="photo" style="background-image: url('<%=request.getContextPath()%>/assets/img/news/news01.png'); width: 270px;">
+                                <a href="#">
+                                    <img src="<%=request.getContextPath()%>/assets/img/news/news01.png" style="width: 270px;">
+                                </a>
+                                <div class="label" style="width: 270px;">ANUNCIO</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+
+                            <div class="text" style="vertical-align: center">
+                                <h3><a href="#">URGENTE: Medicina para Hiena</a></h3>
+                                <p>"Urge comprarle su medicamento a Hiena, la perrita toma pastillas para sus articulaciones ya que tiene problemas para caminar producto de su edad."</p>
+                                <p style="text-transform: uppercase; display: inline-block;">29/09/2013 <a style="padding-left: 400px; font-weight: bold;" href="#">Leer más</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+            <li class="news-item" style="margin-bottom: 40px">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-md-3">
+
+                            <div class="photo" style="background-image: url('<%=request.getContextPath()%>/assets/img/news/news02.png'); width: 270px;">
+                                <a href="#">
+                                    <img src="<%=request.getContextPath()%>/assets/img/news/news02.png" style="width: 270px;">
+                                </a>
+                                <div class="label" style="width: 270px;">ANUNCIO</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+
+                            <div class="text" style="vertical-align: center">
+                                <h3><a href="#">URGENTE: Se acaba el tiempo</a></h3>
+                                <p>"Necesitamos un hogar temporal urgente para esta perrita. Ya nadie puede cuidarla, solo hasta hoy."</p>
+                                <p style="text-transform: uppercase; display: inline-block;">29/09/2013 <a style="padding-left: 400px; font-weight: bold;" href="#">Leer más</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+            <li class="news-item" style="margin-bottom: 40px">
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-md-3">
+
+                            <div class="photo" style="background-image: url('<%=request.getContextPath()%>/assets/img/news/news03.png'); width: 270px;">
+                                <a href="#">
+                                    <img src="<%=request.getContextPath()%>/assets/img/news/news03.png" style="width: 270px;">
+                                </a>
+                                <div class="label" style="width: 270px;">ACTUALIZACION</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+
+                            <div class="text" style="vertical-align: center">
+                                <h3><a href="#">ANUNCIO: Caso Atun</a></h3>
+                                <p>"Luego de una cirugía y semanas de recuperación, Atuncita fue adoptada por una egresada de la especialidad de Ortodoncia de la facultad de Odontología."</p>
+                                <p style="text-transform: uppercase; display: inline-block;">29/09/2013 <a style="padding-left: 400px; font-weight: bold;" href="#">Leer más</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
 
     </div>
 

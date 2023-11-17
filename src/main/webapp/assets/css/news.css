@@ -12,7 +12,7 @@
     font-weight: 400;
 }
 
-.row {
+row.row2 {
     margin: auto;
     max-width: 82.5rem;
 
@@ -82,7 +82,7 @@ a{
 .news-container{
     display: block;
     margin: 0;
-    padding: 0;
+    padding-left: 10%;
     list-style: none;
     clear: both;
 }

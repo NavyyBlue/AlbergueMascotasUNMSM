@@ -46,7 +46,7 @@
     </div>
 
     <div class="container mx-auto mt-4">
-        <div class="row" id="card-row">
+        <div class="row2" id="card-row">
             <%
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
                 for (Pet pet : pets) {
