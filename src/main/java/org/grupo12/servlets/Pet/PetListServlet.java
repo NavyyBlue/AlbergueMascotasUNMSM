@@ -1,4 +1,4 @@
-package org.grupo12.servlets.PetList;
+package org.grupo12.servlets.Pet;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.servlet.ServletException;
@@ -38,6 +38,6 @@ public class PetListServlet extends HttpServlet {
 
         request.setAttribute("pagination", pagination);
         request.setAttribute("pets", pets);
-        request.getRequestDispatcher("/WEB-INF/views/petlist/petlist.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/pet/petlist.jsp").forward(request, response);
     }
 }

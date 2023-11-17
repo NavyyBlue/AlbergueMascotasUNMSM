@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: migue
-  Date: 19/10/2023
-  Time: 23:41
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -23,7 +16,7 @@
 <section class="d-flex justify-content-center align-items-center">
     <div class="card shadow col-xs-12 col-sm-6 col-md-6 col-lg-4   p-4">
 
-        <div class="mb-4 d-flex justify-content-start align-items-center">
+       <%-- <div class="mb-4 d-flex justify-content-start align-items-center">
 
             <h4>  <i class="bi bi-chat-left-quote"></i> &nbsp; Mascota a Adoptar</h4>
         </div>
@@ -33,7 +26,7 @@
             <option>Perros</option>
             <option>Gatos</option>
             <option>Otros</option>
-        </select>
+        </select>--%>
 
         <div class="mb-4 d-flex justify-content-start align-items-center">
 
@@ -91,7 +84,7 @@
                         <input class="form-check-input" type="checkbox">
                     </label>
                     <div>
-                        <h6>Al llenar la ficha otorgo mi consentimiento libre, previo, informado, expreso e inequívoco para que el refugio se comunique utilizando mis datos para proceder con el proceso de adopción. * </h6>
+                        <h6>Al llenar la ficha otorgo mi consentimiento libre, previo, informado, expreso e inequívoco para que el refugio se comunique utilizando mis datos para proceder con el proceso de donación. * </h6>
                     </div>
                 </div>
 

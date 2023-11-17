@@ -1,4 +1,4 @@
-package org.grupo12.servlets.PetInfo;
+package org.grupo12.servlets.News;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,11 +8,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/petinfo")
-public class PetInfoServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@WebServlet("/news")
+public class news extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         getServletContext()
-                .getRequestDispatcher("/WEB-INF/views/petinfo/petinfo.jsp")
+                .getRequestDispatcher("/WEB-INF/views/news/news.jsp")
                 .forward(request, response);
-    }
+        }
 }

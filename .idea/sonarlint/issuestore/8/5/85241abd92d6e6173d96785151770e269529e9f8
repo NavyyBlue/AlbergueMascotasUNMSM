@@ -1,7 +1,9 @@
 
-q
-java:S2095C"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(óå›ûÿÿÿÿ8Ïìóı¶1
-q
-java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ƒ»ÊŞûÿÿÿÿ8Ïìóı¶1
+i
+java:S1192"LDefine a constant instead of duplicating this literal "FROM Pet p " 3 times.(®áâÅ8¤ÒÒÚ½1
+j
+java:S1192"HDefine a constant instead of duplicating this literal "SELECT " 4 times.(ÛŞ„ëüÿÿÿÿ8®ëÏÚ½1
 M
-java:S2695E"+This "PreparedStatement" has no parameters.(ÄÛüøÿÿÿÿ8Úìóı¶1
+java:S2695H"+This "PreparedStatement" has no parameters.(ÄÛüøÿÿÿÿ8ãëÏÚ½1
+\
+java:S1128":Remove this unused import 'org.grupo12.util.ConnectionDB'.(’ªáÿÿÿÿÿ8Ç©é½1
