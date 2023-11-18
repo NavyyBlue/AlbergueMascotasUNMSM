@@ -137,6 +137,20 @@
     border-radius: 10px;
 }
 
+.card-link {
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.card-img {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-link:hover .card-img {
+    transform: scale(1.1);
+}
+
 .card-img-overlay.infoCardImg {
     display: none;
 }

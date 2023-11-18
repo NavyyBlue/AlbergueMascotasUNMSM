@@ -28,4 +28,17 @@ public class Pagination {
             startPage = Math.max(1, endPage - maxPagesToShow + 1);
         }
     }
+
+    public int calculateOffset(int requestedPage) {
+        if (requestedPage < 1) {
+            requestedPage = 1;
+        } else if (requestedPage > getTotalPages()) {
+            requestedPage = getTotalPages();
+        }
+        // Update the current page
+        setCurrentPage(requestedPage);
+        // Calculate and return the offset
+        int offset = (requestedPage - 1) * limit;
+        return Math.max(offset, 0);
+    }
 }

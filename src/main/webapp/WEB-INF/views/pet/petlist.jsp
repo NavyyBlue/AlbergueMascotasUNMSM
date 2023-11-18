@@ -25,13 +25,19 @@
         <p class="titleText">MASCOTAS</p>
 
     </div>
-
+        <%
+            // Default speciesId if not present in the request
+            int defaultSpeciesId = 0;
+            int speciesId = request.getParameter("speciesId") != null ?
+                    Integer.parseInt(request.getParameter("speciesId")) : defaultSpeciesId;
+        %>
     <div style="align-items: center; justify-content: center; padding: 20px; text-align: -webkit-center;">
         <div class="filterContainer" id="filterContainer">
-            <a href="petlist?speciesId=0" class="selected">Todos</a>
-            <a href="petlist?speciesId=1">Perros</a>
-            <a href="petlist?speciesId=2">Gatos</a>
-            <a href="petlist?speciesId=3">Otros</a>
+            <a href="petlist?speciesId=0" class="<%= (speciesId == 0) ? "selected" : "" %>">Todos</a>
+            <a href="petlist?speciesId=1" class="<%= (speciesId == 1) ? "selected" : "" %>">Perros</a>
+            <a href="petlist?speciesId=2" class="<%= (speciesId == 2) ? "selected" : "" %>">Gatos</a>
+            <a href="petlist?speciesId=3" class="<%= (speciesId == 3) ? "selected" : "" %>">Otros</a>
+
 
             <div class="input-wrapper">
                 <input type="search" class="input" placeholder="Search">
@@ -54,56 +60,60 @@
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <a href="<%= petInfoUrl %>">
                     <div class="card mb-4">
-
+                        <a href="<%= petInfoUrl %>" class="card-link">
                             <img src="<%= pet.getImageUrl() %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
-
-                        <div class="card-img-overlay infoCardImg">
-                            <h3 class="card-text"><%= pet.getName() %>
-                            </h3>
-                            <p class="card-text">Sexo: <%= pet.getGender() %>
-                            <p class="card-text">Edad: <%= pet.getAge() %> años</p>
-                        </div>
+                            <div class="card-img-overlay infoCardImg">
+                                <h3 class="card-text"><%= pet.getName() %>
+                                </h3>
+                                <p class="card-text">Sexo: <%= pet.getGender() %>
+                                <p class="card-text">Edad: <%= pet.getAge() %> años</p>
+                            </div>
+                        </a>
                     </div>
-                </a>
             </div>
             <%
                 }
             %>
         </div>
+        <script>
+            function submitPage(page) {
+                document.getElementById('currentPage').value = page;
+                document.getElementById('paginationForm').submit();
+            }
+        </script>
         <%
             Pagination pagination = (Pagination) request.getAttribute("pagination");
             int start = pagination.getStartPage();
             int end = pagination.getEndPage();
             int totalPages = pagination.getTotalPages(); //Total de páginas
-            int total = pagination.getTotal(); //Total de datos
             int currentPage = pagination.getCurrentPage();
-            int offset = pagination.getOffset();
-            int limit = pagination.getLimit();
-
-            //Obtener el id de la especie del parametro de la url
-            int speciesId = Integer.parseInt(request.getParameter("speciesId"));
-            System.out.println("speciesId: " + speciesId);
         %>
-
-        <!-- Controles de paginación -->
+        <!-- Controles de paginacion -->
         <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
+            <form id="paginationForm" action="<%=request.getContextPath()%>/petlist" method="get">
+                <!-- Add hidden fields for other parameters if needed -->
+                <input type="hidden" name="speciesId" value="<%=speciesId%>" />
+                <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
+
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous" onclick="submitPage(<%= currentPage > start ? currentPage - 1 : start%>)">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <% for (int i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
+                        <a class="page-link" href="#" onclick="submitPage(<%=i%>)"><%=i%></a>
+                    </li>
+                    <% } %>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next" onclick="submitPage(<%= currentPage < end ? currentPage + 1: end %>)">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </form>
         </nav>
 
     </div>

@@ -26,13 +26,21 @@ public class PetListServlet extends HttpServlet {
         Pagination pagination = new Pagination();
         PetDAO petDAO = new PetDAO(dataSource);
 
-        int offset = pagination.getOffset();
-        int limit = pagination.getLimit();
+        // Retrieve the requested page number from the request
+        String pageParam = request.getParameter("page");
+        int requestedPage = 1; // Default to page 1
+        if (pageParam != null && !pageParam.isEmpty()) {
+            requestedPage = Integer.parseInt(pageParam);
+        }
 
         int total = petDAO.getTotalPetCount(speciesId);
         pagination.setTotal(total);
         pagination.calculate();
-        pagination.setCurrentPage(1);
+        pagination.setCurrentPage(requestedPage);
+
+        int offset = pagination.calculateOffset(requestedPage);
+        int limit = pagination.getLimit();
+
 
         List<Pet> pets = petDAO.getPetListBySpecies(speciesId, offset, limit);
 
