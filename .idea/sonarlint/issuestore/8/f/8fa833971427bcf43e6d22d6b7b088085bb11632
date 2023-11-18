@@ -1,0 +1,6 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(…ı§
+N
+java:S1948",Make "dataSource" transient or serializable.(€Íº·ÿÿÿÿÿ8¬íÏ½1
+K
+java:S1948")Make "userDAO" transient or serializable.(¡âÒşÿÿÿÿ8öÎ÷¶1

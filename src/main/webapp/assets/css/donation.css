@@ -1,0 +1,75 @@
+.mainDivText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainText {
+    font-size: 40px;
+}
+
+.divTextDonation {
+    width: 1260px;
+    height: 198px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    background-color: #BBD478;
+    border-radius: 30px;
+    position: relative;
+}
+
+.imageDiv {
+    background-color: #CBC5C5;
+    padding: 10px;
+    border-radius: 15px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.imageDiv img {
+    width: 155px;
+    height: 159px;
+    flex-shrink: 0;
+    display: block;
+    margin: 0 auto;
+}
+
+.donationText {
+    color: #FFF;
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 600;
+    margin: 0;
+}
+
+.divTypeDonation {
+    width: 615px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 30px;
+    background: #EEE;
+}
+
+.divTextMain {
+    background: #795234;
+    display: flex;
+    width: 615px;
+    height: 82px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px 30px 0 0;
+}
+
+.textDescriptionDonation {
+    color: #000;
+    font-size: 16px;
+    margin: 0 31px;
+    text-align: center;
+}

@@ -1,0 +1,55 @@
+.divMainVolunteering{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.buttonVolunteer {
+    width: 150px;
+    height: 44px;
+    border-radius: 30px;
+    background: #94C11F;
+    color: #FFF;
+    margin: 0 10px
+}
+
+.volunteer-section {
+    max-width: 1352px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.volunteer-row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.volunteer-text {
+    display: flex;
+    height: 400px;
+    flex-direction: column;
+    flex: 1;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.volunteer-image {
+    height: 400px;
+    flex: 1;
+    text-align: center;
+}
+
+.imgVolunteers {
+    max-width: 100%;
+    height: 400px;
+    width: 646px;
+    border-radius: 8px;
+}

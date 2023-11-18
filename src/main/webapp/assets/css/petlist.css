@@ -1,0 +1,157 @@
+.imgMain{
+    width: 185px;
+    height: 173.298px;
+    flex-shrink: 0;
+}
+
+.titleText{
+    width: 605px;
+    height: 113px;
+    flex-shrink: 0;
+    border-radius: 70px;
+    border: 1px solid #BBD478;
+    background: #FFFDFD;
+    color: #000;
+    align-items: center;
+    text-align: center;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+.filterContainer{
+    max-width: 60%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 7rem;
+}
+
+#filterContainer a{
+    border-radius: 30px;
+    border: 0;
+    width: min-content;
+    padding: 10px 23px;
+    text-decoration: none;
+    color: black;
+}
+
+#filterContainer a.selected {
+    background: #94C11F;
+    color: white;
+}
+
+#filterContainer a:hover{
+    background: #94C11F;
+    color: white;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 271px;
+}
+
+.input {
+    box-sizing: border-box;
+    color: #191919;
+    padding: 10px 60px;
+    width: 100%;
+    border-radius: 30px;
+    border: 1px solid #94C11F;
+    background: #FFF;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.petlistContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    width: 300px;
+    height: 300px;
+    background-color: #f0f0f0;
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+
+.card:hover {
+    background-color: rgba(0, 123, 255, 0.3); /* Color de resaltado transparente */
+}
+
+#card-details {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    background-color: #BBD478;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.pagination-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.petImg{
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.card-img-overlay.infoCardImg {
+    display: none;
+}
+
+.card.mb-4:hover .bd-placeholder-img .bd-placeholder-img-lg .petImg{
+    opacity: 0.5;
+}
+
+.card.mb-4:hover .card-img-overlay.infoCardImg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgba(165, 54, 54, 0.6);
+    margin: 20px;
+    color: white;
+}

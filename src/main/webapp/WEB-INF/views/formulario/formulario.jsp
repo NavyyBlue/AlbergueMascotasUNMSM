@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: migue
-  Date: 19/10/2023
-  Time: 23:41
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -18,17 +11,14 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 </head>
 <body>
-<jsp:include page="../navBar/navBar.jsp"/>
+<jsp:include page="../../components/navBar.jsp"/>
 
 <section class="d-flex justify-content-center align-items-center">
-    <div class="card rounded shadow col-xs-12 col-sm-6 col-md-6 col-lg-4 p-4">
+    <div class="card shadow col-xs-12 col-sm-6 col-md-6 col-lg-4   p-4">
 
-        <div class="bg-success text-white text-center p-2 mb-4">
-            <h3>Ficha de Apadrinamiento</h3>
-        </div>
+       <%-- <div class="mb-4 d-flex justify-content-start align-items-center">
 
-        <div class="mb-4 d-flex justify-content-start align-items-center">
-            <h4><i class="bi bi-chat-left-quote"></i> &nbsp; Mascota a Adoptar</h4>
+            <h4>  <i class="bi bi-chat-left-quote"></i> &nbsp; Mascota a Adoptar</h4>
         </div>
 
         <select class="form-select" >
@@ -36,9 +26,10 @@
             <option>Perros</option>
             <option>Gatos</option>
             <option>Otros</option>
-        </select>
+        </select>--%>
 
-        <div class="mb-4 mt-4 d-flex justify-content-start align-items-center">
+        <div class="mb-4 d-flex justify-content-start align-items-center">
+
             <h4>  <i class="bi bi-chat-left-quote"></i> &nbsp; Datos Personales</h4>
         </div>
         <div class="mb-1">
@@ -91,15 +82,14 @@
                 <div class="form-check">
                     <label class="form-check-label">
                         <input class="form-check-input" type="checkbox">
-                        <div>
-                            <h6>Al llenar la ficha otorgo mi consentimiento libre, previo, informado, expreso e inequívoco para que el refugio se comunique utilizando mis datos para proceder con el proceso de adopción. * </h6>
-                        </div>
                     </label>
-
+                    <div>
+                        <h6>Al llenar la ficha otorgo mi consentimiento libre, previo, informado, expreso e inequívoco para que el refugio se comunique utilizando mis datos para proceder con el proceso de donación. * </h6>
+                    </div>
                 </div>
 
                 <div class="mb-2">
-                    <button id ="botton" class="col-12 btn btn-primary d-flex justify-center ">
+                    <button id ="botton" class="col-12 btn btn-primary d-flex justify-content-between ">
                         <span>Enviar </span><i id="icono" class="bi bi-cursor-fill "></i>
                     </button>
                 </div>
