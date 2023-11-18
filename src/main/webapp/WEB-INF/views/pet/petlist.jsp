@@ -96,34 +96,40 @@
             int end = pagination.getEndPage();
             int totalPages = pagination.getTotalPages(); //Total de páginas
             int currentPage = pagination.getCurrentPage();
+            if(totalPages > 0){
         %>
-        <!-- Controles de paginacion -->
-        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-            <form id="paginationForm" action="<%=request.getContextPath()%>/petlist" method="get">
-                <!-- Add hidden fields for other parameters if needed -->
-                <input type="hidden" name="speciesId" value="<%=speciesId%>" />
-                <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
+            <!-- Controles de paginacion -->
+            <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+                <form id="paginationForm" action="<%=request.getContextPath()%>/petlist" method="get">
+                    <!-- Add hidden fields for other parameters if needed -->
+                    <input type="hidden" name="speciesId" value="<%=speciesId%>" />
+                    <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
 
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous" onclick="submitPage(<%= currentPage > start ? currentPage - 1 : start%>)">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <% for (int i = 1; i <= totalPages; i++) { %>
-                    <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
-                        <a class="page-link" href="#" onclick="submitPage(<%=i%>)"><%=i%></a>
-                    </li>
-                    <% } %>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next" onclick="submitPage(<%= currentPage < end ? currentPage + 1: end %>)">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </form>
-        </nav>
-
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous" onclick="submitPage(<%= currentPage > start ? currentPage - 1 : start%>)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% for (int i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
+                            <a class="page-link" href="#" onclick="submitPage(<%=i%>)"><%=i%></a>
+                        </li>
+                        <% } %>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next" onclick="submitPage(<%= currentPage < end ? currentPage + 1: end %>)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </form>
+            </nav>
+        <%}
+            if(pets.size() == 0){
+        %>
+            <img src="<%=request.getContextPath()%>/assets/svg/pet.svg" alt="No se encontraron mascotas" class="imgEmpty">
+            <p class="textEmpty">No se encontraron mascotas</p>
+        <%}%>
     </div>
     <jsp:include page="../../components/footer.jsp"/>
 </body>
