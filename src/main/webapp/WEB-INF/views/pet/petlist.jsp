@@ -30,6 +30,12 @@
             int defaultSpeciesId = 0;
             int speciesId = request.getParameter("speciesId") != null ?
                     Integer.parseInt(request.getParameter("speciesId")) : defaultSpeciesId;
+
+            String searchKeyword = (String) request.getAttribute("searchKeyword");
+            if (searchKeyword == null) {
+                searchKeyword = "";
+            }
+            request.setAttribute("searchKeyword", searchKeyword);
         %>
     <div style="align-items: center; justify-content: center; padding: 20px; text-align: -webkit-center;">
         <div class="filterContainer" id="filterContainer">
@@ -39,16 +45,18 @@
             <a href="petlist?speciesId=3" class="<%= (speciesId == 3) ? "selected" : "" %>">Otros</a>
 
 
-            <div class="input-wrapper">
-                <input type="search" class="input" placeholder="Search">
+            <form id="searchForm" action="<%= request.getContextPath() %>/petlist" method="get">
+                <div class="input-wrapper">
+                    <input type="search" class="input" placeholder="Search" name="searchKeyword" value="<%= searchKeyword %>">
 
-                <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" width="51" height="50" viewBox="0 0 51 50"
-                     fill="none">
-                    <path d="M38.25 22.9166C38.25 30.9707 31.5902 37.4999 23.375 37.4999C15.1598 37.4999 8.5 30.9707 8.5 22.9166C8.5 14.8624 15.1598 8.33325 23.375 8.33325C31.5902 8.33325 38.25 14.8624 38.25 22.9166Z"
-                          fill="#BBD478"/>
-                    <path d="M42.5 41.6667L38.25 37.5" stroke="#BBD478" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" width="51" height="50" viewBox="0 0 51 50"
+                         fill="none">
+                        <path d="M38.25 22.9166C38.25 30.9707 31.5902 37.4999 23.375 37.4999C15.1598 37.4999 8.5 30.9707 8.5 22.9166C8.5 14.8624 15.1598 8.33325 23.375 8.33325C31.5902 8.33325 38.25 14.8624 38.25 22.9166Z"
+                              fill="#BBD478"/>
+                        <path d="M42.5 41.6667L38.25 37.5" stroke="#BBD478" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </form>
         </div>
     </div>
 
