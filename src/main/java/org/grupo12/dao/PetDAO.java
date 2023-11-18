@@ -97,25 +97,25 @@ public class PetDAO {
         List<Object> parameters = new ArrayList<>();
         // Add speciesId filter
         if (speciesId != 0) {
-            sqlBuilder.append("AND p.SpeciesId = ? ");
+            sqlBuilder.append("AND SpeciesId = ? ");
             parameters.add(speciesId);
         }
 
         // Add age filter
         if (age > 0) {
-            sqlBuilder.append("AND p.Age = ? ");
+            sqlBuilder.append("AND Age = ? ");
             parameters.add(age);
         }
 
         // Add gender filter
         if (gender != null && !gender.isEmpty()) {
-            sqlBuilder.append("AND p.Gender = ? ");
+            sqlBuilder.append("AND Gender = ? ");
             parameters.add(gender);
         }
 
         // Add searchKeyword filter
         if (searchKeyword != null && !searchKeyword.isEmpty()) {
-            sqlBuilder.append("AND p.Name LIKE ? ");
+            sqlBuilder.append("AND Name LIKE ? ");
             parameters.add("%" + searchKeyword + "%");
         }
 

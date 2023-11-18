@@ -47,7 +47,7 @@
 
             <form id="searchForm" action="<%= request.getContextPath() %>/petlist" method="get">
                 <div class="input-wrapper">
-                    <input type="search" class="input" placeholder="Search" name="searchKeyword" value="<%= searchKeyword %>">
+                    <input type="search" class="input" placeholder="Buscar por nombre" name="searchKeyword" value="<%= searchKeyword %>">
 
                     <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" width="51" height="50" viewBox="0 0 51 50"
                          fill="none">
