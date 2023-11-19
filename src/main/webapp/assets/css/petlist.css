@@ -169,3 +169,16 @@
     margin: 20px;
     color: white;
 }
+
+.imgEmpty {
+    width: 100%;
+    height: 300px;
+}
+
+.textEmpty {
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 900;
+    margin-bottom: 50px;
+    text-align: center;
+}

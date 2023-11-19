@@ -48,7 +48,6 @@
             <form id="searchForm" action="<%= request.getContextPath() %>/petlist" method="get">
                 <div class="input-wrapper">
                     <input type="search" class="input" placeholder="Buscar por nombre" name="searchKeyword" value="<%= searchKeyword %>">
-
                     <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" width="51" height="50" viewBox="0 0 51 50"
                          fill="none">
                         <path d="M38.25 22.9166C38.25 30.9707 31.5902 37.4999 23.375 37.4999C15.1598 37.4999 8.5 30.9707 8.5 22.9166C8.5 14.8624 15.1598 8.33325 23.375 8.33325C31.5902 8.33325 38.25 14.8624 38.25 22.9166Z"
@@ -96,34 +95,40 @@
             int end = pagination.getEndPage();
             int totalPages = pagination.getTotalPages(); //Total de páginas
             int currentPage = pagination.getCurrentPage();
+            if(totalPages > 0){
         %>
-        <!-- Controles de paginacion -->
-        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-            <form id="paginationForm" action="<%=request.getContextPath()%>/petlist" method="get">
-                <!-- Add hidden fields for other parameters if needed -->
-                <input type="hidden" name="speciesId" value="<%=speciesId%>" />
-                <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
+            <!-- Controles de paginacion -->
+            <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+                <form id="paginationForm" action="<%=request.getContextPath()%>/petlist" method="get">
+                    <!-- Add hidden fields for other parameters if needed -->
+                    <input type="hidden" name="speciesId" value="<%=speciesId%>" />
+                    <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
 
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous" onclick="submitPage(<%= currentPage > start ? currentPage - 1 : start%>)">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <% for (int i = 1; i <= totalPages; i++) { %>
-                    <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
-                        <a class="page-link" href="#" onclick="submitPage(<%=i%>)"><%=i%></a>
-                    </li>
-                    <% } %>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next" onclick="submitPage(<%= currentPage < end ? currentPage + 1: end %>)">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </form>
-        </nav>
-
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous" onclick="submitPage(<%= currentPage > start ? currentPage - 1 : start%>)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% for (int i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
+                            <a class="page-link" href="#" onclick="submitPage(<%=i%>)"><%=i%></a>
+                        </li>
+                        <% } %>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next" onclick="submitPage(<%= currentPage < end ? currentPage + 1: end %>)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </form>
+            </nav>
+        <%}
+            if(pets.size() == 0){
+        %>
+            <img src="<%=request.getContextPath()%>/assets/svg/pet.svg" alt="No se encontraron mascotas" class="imgEmpty">
+            <p class="textEmpty">No se encontraron mascotas</p>
+        <%}%>
     </div>
     <jsp:include page="../../components/footer.jsp"/>
 </body>
