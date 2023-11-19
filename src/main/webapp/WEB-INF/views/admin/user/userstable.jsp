@@ -25,6 +25,23 @@
         int defaultUserId = 0;
         int userId = request.getParameter("userId") != null ?
                 Integer.parseInt(request.getParameter("userId")) : defaultUserId;
+        String editSuccessMessage = (String) request.getSession().getAttribute("editSuccess");
+        String errorSuccessMessage = (String) request.getSession().getAttribute("editError");
+        System.out.println("editSuccessMessage: " + editSuccessMessage);
+        System.out.println("errorSuccessMessage: " + errorSuccessMessage);
+    %>
+    <% if(editSuccessMessage != null ) {%>
+        <div class="alert alert-success" role="alert">
+            <%= editSuccessMessage %>
+        </div>
+    <% } else if (errorSuccessMessage != null){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= errorSuccessMessage %>
+        </div>
+    <% }
+        //Eliminar los mensajes de la sesión después de mostrarlos
+        request.getSession().removeAttribute("editSuccess");
+        request.getSession().removeAttribute("editError");
     %>
     <div class="table-responsive m-5">
         <table class="table">
@@ -83,7 +100,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editUserForm" enctype="multipart/form-data" action="<%=request.getContextPath()%>/admin/userstable" method="post">
+                    <form id="editUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
                         <div class="mb-3">
                             <label for="editFirstName" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="editFirstName" name="editFirstName">
@@ -112,9 +129,9 @@
                             </select>
                         </div>
                         <div class="modal-footer">
-                            <input type="hidden" id="editUserId" name="editUserId" value="">
+                            <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" onclick="saveUser()">Guardar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -159,14 +176,14 @@
         <%}%>
     <script>
         $('#editModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Botón que activó el modal
-            var userId = button.data('userid'); // Extraer el userId del atributo data-userid
+            let button = $(event.relatedTarget); // Botón que activó el modal
+            let userId = button.data('userid'); // Extraer el userId del atributo data-userid
 
             // Parse the JSON data from the attribute
-            var usersJson = '<%= request.getAttribute("usersJson") %>';
-            var users = JSON.parse(usersJson);
+            let usersJson = '<%= request.getAttribute("usersJson") %>';
+            let users = JSON.parse(usersJson);
             // Find the user with the corresponding userId
-            var user = users.find(function(u) {
+            let user = users.find(function(u) {
                 return u.userId === userId;
             });
 
@@ -179,28 +196,6 @@
             $('#editPhoneNumber').val(user.phoneNumber);
             $('#editUserRole').val(user.userRole);
         });
-
-        function saveUser() {
-            // Obtén el formulario y su contenido
-            var formData = new FormData(document.getElementById("editUserForm"));
-
-            // Realiza una solicitud AJAX
-            $.ajax({
-                type: "POST",
-                url: "<%=request.getContextPath()%>/admin/userstable",  // Reemplaza con la URL de tu servlet
-                data: formData,
-                processData: false,  // Indica a jQuery que no procese los datos
-                contentType: false,  // Indica a jQuery que no configure el tipo de contenido
-                success: function(response) {
-                    // Maneja la respuesta del servidor si es necesario
-                    console.log(response);
-                },
-                error: function(error) {
-                    // Maneja los errores de la solicitud AJAX
-                    console.error(error);
-                }
-            });
-        }
 
     </script>
 </body>

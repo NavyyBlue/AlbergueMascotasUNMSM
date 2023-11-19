@@ -121,7 +121,7 @@ public class UserDAO {
         return total;
     }
 
-    public void updateUser(User user){
+    public boolean updateUser(User user){
         String sql = "UPDATE User SET FirstName = ?, LastName = ?, Email = ?, UserName = ?, PhoneNumber = ? WHERE UserId = ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -131,11 +131,14 @@ public class UserDAO {
             statement.setString(3, user.getEmail());
             statement.setString(4, user.getUserName());
             statement.setString(5, user.getPhoneNumber());
-            statement.setInt(7, user.getUserId());
+            statement.setInt(6, user.getUserId());
 
-            statement.executeUpdate();
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

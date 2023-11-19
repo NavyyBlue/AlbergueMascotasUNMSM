@@ -2,6 +2,7 @@ package org.grupo12.servlets.Admin.User;
 
 import com.google.gson.Gson;
 import com.zaxxer.hikari.HikariDataSource;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,6 +19,13 @@ import java.util.List;
 @WebServlet("/admin/userstable")
 public class UsersTableServlet extends HttpServlet {
     private HikariDataSource dataSource = ConnectionDB.getDataSource();
+    private UserDAO userDAO;
+    @Override
+    public void init() throws ServletException {
+        userDAO = new UserDAO(dataSource);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = 0;
 
@@ -26,7 +34,6 @@ public class UsersTableServlet extends HttpServlet {
             userId = Integer.parseInt(userIdParam);
 
         Pagination pagination = new Pagination();
-        UserDAO userDAO = new UserDAO(dataSource);
 
         // Retrieve the requested page number from the request
         String pageParam = request.getParameter("page");
@@ -55,32 +62,35 @@ public class UsersTableServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/admin/user/userstable.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int editUserId = Integer.parseInt(request.getParameter(("editUserId")));
+        String editFirstName = request.getParameter("editFirstName");
+        String editLastName = request.getParameter("editLastName");
+        String editEmail = request.getParameter("editEmail");
+        String editUserName = request.getParameter("editUserName");
+        String editPhoneNumber = request.getParameter("editPhoneNumber");
+        int editUserRole = Integer.parseInt(request.getParameter("editUserRole"));
 
-//                int editUserId = Integer.parseInt(editUserIdParam);
-                String editFirstName = request.getParameter("editFirstName");
-                String editLastName = request.getParameter("editLastName");
-                String editEmail = request.getParameter("editEmail");
-                String editUserName = request.getParameter("editUserName");
-                String editPhoneNumber = request.getParameter("editPhoneNumber");
-                int editUserRole = Integer.parseInt(request.getParameter("editUserRole"));
+        // Crea un objeto User con los nuevos datos
+        User updatedUser = new User();
+        updatedUser.setUserId(editUserId);
+        updatedUser.setFirstName(editFirstName);
+        updatedUser.setLastName(editLastName);
+        updatedUser.setEmail(editEmail);
+        updatedUser.setUserName(editUserName);
+        updatedUser.setPhoneNumber(editPhoneNumber);
+        updatedUser.setUserRole(editUserRole);
 
-                // Crea un objeto User con los nuevos datos
-                User updatedUser = new User();
-                updatedUser.setFirstName(editFirstName);
-                updatedUser.setLastName(editLastName);
-                updatedUser.setEmail(editEmail);
-                updatedUser.setUserName(editUserName);
-                updatedUser.setPhoneNumber(editPhoneNumber);
-                updatedUser.setUserRole(editUserRole);
+        boolean success = userDAO.updateUser(updatedUser);
+        System.out.println("success: " + success);
+        if(success){
+            request.getSession().setAttribute("editSuccess", "Usuario actualizado correctamente");
+        }
+        else{
+            request.getSession().setAttribute("editError", "Error al actualizar el usuario");
+        }
 
-                UserDAO userDAO = new UserDAO(dataSource);
-                userDAO.updateUser(updatedUser);
-
-                response.sendRedirect(request.getContextPath() + "/admin/userstable");
-
-
-
+        response.sendRedirect(request.getContextPath() + "/admin/userstable");
     }
-
 }
