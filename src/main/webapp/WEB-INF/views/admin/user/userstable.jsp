@@ -179,12 +179,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="restoreModalLabel">Eliminar Usuario</h1>
+                    <h1 class="modal-title fs-5" id="restoreModalLabel">Restaurar Usuario</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="restoreUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
                     <div class="modal-body">
-                        ¿Está seguro de eliminar el usuario?
+                        ¿Está seguro de restaurar el usuario?
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="restoreUserId" name="restoreUserId" value="<%=userId%>">
