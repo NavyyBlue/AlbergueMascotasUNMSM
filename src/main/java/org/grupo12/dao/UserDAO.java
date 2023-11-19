@@ -16,7 +16,7 @@ public class UserDAO {
         this.dataSource = dataSource;
     }
     public User getUserByUsernameAndPassword(String username, String password) {
-        String sql = "SELECT * FROM User WHERE UserName = ? AND Password = ?";
+        String sql = "SELECT * FROM User WHERE UserName = ? AND Password = ? AND Active = 1";
         User user = null;
 
         try (Connection connection = dataSource.getConnection();
@@ -44,7 +44,7 @@ public class UserDAO {
         return user;
     }
 
-    public List<User> getUsers(int userId, int offset, int limit){
+    public List<User> getUsers(int userId, int active, int offset, int limit){
         List<User> users = new ArrayList<>();
         StringBuilder sqlBuilder =new StringBuilder(
                 "SELECT " +
@@ -57,10 +57,16 @@ public class UserDAO {
                     " UserImage, " +
                     " UserRole, " +
                     " Active " +
-                    "FROM User " +
-                "WHERE Active = 1 ");
+                    "FROM User ");
+//                "WHERE Active = ? ");
 
         List<Object> parameters = new ArrayList<>();
+        if(active != 2){
+            sqlBuilder.append("WHERE Active = ? ");
+            parameters.add(active);
+        }else {
+            sqlBuilder.append("WHERE Active = 1 OR Active = 0 ");
+        }
 
         if(userId != 0){
             sqlBuilder.append("AND UserId = ? ");
@@ -93,6 +99,8 @@ public class UserDAO {
                 user.setUserName(result.getString("UserName"));
                 user.setPhoneNumber(result.getString("PhoneNumber"));
                 user.setUserImage(result.getString("UserImage"));
+                user.setUserRole(result.getInt("UserRole"));
+                user.setActive(result.getBoolean("Active"));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -102,13 +110,27 @@ public class UserDAO {
         return users;
     }
 
-    public int getTotalCountUsers(){
+    public int getTotalCountUsers(int active){
         int total = 0;
-        String countSql = "SELECT COUNT(*) AS total FROM User WHERE Active = 1";
+        StringBuilder sqlBuilder = new StringBuilder( "SELECT COUNT(*) AS total FROM User ");
+
+        List<Object> parameters = new ArrayList<>();
+        if(active != 2) {
+            sqlBuilder.append("WHERE Active = ? ");
+            parameters.add(active);
+        }else {
+            sqlBuilder.append("WHERE Active = 1 OR Active = 0 ");
+        }
+
+        String countSql = sqlBuilder.toString();
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement countStatement = connection.prepareStatement(countSql)) {
 
+            int paramIndex = 1;
+            for (Object parameter : parameters) {
+                countStatement.setObject(paramIndex++, parameter);
+            }
             ResultSet countResult = countStatement.executeQuery();
 
             if (countResult.next()) {
@@ -122,7 +144,7 @@ public class UserDAO {
     }
 
     public boolean updateUser(User user){
-        String sql = "UPDATE User SET FirstName = ?, LastName = ?, Email = ?, UserName = ?, PhoneNumber = ? WHERE UserId = ?";
+        String sql = "UPDATE User SET FirstName = ?, LastName = ?, Email = ?, UserName = ?, PhoneNumber = ?, UserRole = ? WHERE UserId = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -131,7 +153,62 @@ public class UserDAO {
             statement.setString(3, user.getEmail());
             statement.setString(4, user.getUserName());
             statement.setString(5, user.getPhoneNumber());
-            statement.setInt(6, user.getUserId());
+            statement.setInt(6, user.getUserRole());
+            statement.setInt(7, user.getUserId());
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteUser(int userId){
+        String sql = "UPDATE User SET Active = 0 WHERE UserId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean restoreUser(int userId){
+        String sql = "UPDATE User SET Active = 1 WHERE UserId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean createUser(User user){
+        String sql = "INSERT INTO User (FirstName, LastName, Email, UserName, Password, PhoneNumber, UserRole) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getUserName());
+            statement.setString(5, user.getPassword());
+            statement.setString(6, user.getPhoneNumber());
+            statement.setInt(7, user.getUserRole());
 
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
