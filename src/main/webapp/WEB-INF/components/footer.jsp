@@ -10,7 +10,7 @@
     <!-- Grid container -->
     <div class="container p-4">
         <!--Grid row-->
-        <div class="row">
+        <div class="row2">
             <!--columna escritos-->
             <div class="col-lg-3 col-xl-3 col-md-12 mb-10 mb-md-0">
                 <h5 class="text-uppercase">Refugio Sanmarquino</h5>

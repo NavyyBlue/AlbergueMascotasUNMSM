@@ -1,0 +1,27 @@
+
+.titulo{
+    font-weight: 900;
+    font-size: 3rem;
+    color: #232323;
+}
+
+.subtitle{
+    font-weight: bold;
+    color: #3E3E3E;
+}
+
+.boxWhite{
+    border-color: #FFFFFF;
+    background-color: transparent;
+}
+
+.buttonAcept{
+    color: white;
+    background-color: #A53535;
+    border-radius: 20px;
+    width: 70%;
+}
+select.documentos{
+    color: #8B0000;
+    background-color: white;
+}

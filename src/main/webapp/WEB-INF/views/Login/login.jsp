@@ -22,7 +22,7 @@
             <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
             <button type="submit" class="form-button">Iniciar Sesión</button>
             <div class="form-group text-center">
-                ¿Es un usuario nuevo? <a href="#" class="form-link">Registrarse</a>
+                ¿Es un usuario nuevo? <a href="<%=request.getContextPath()%>/signup" class="form-link">Registrarse</a>
             </div>
                 </form>
         </div>
