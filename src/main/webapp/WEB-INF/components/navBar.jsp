@@ -30,7 +30,7 @@
         </div>
         <ul class="navbar-nav flex-row d-none d-md-flex">
             <li class="nav-item me-3 me-lg-1 active">
-                <a href="<%=request.getContextPath()%>/about" class="nav-link active">
+                <a href="<%=request.getContextPath()%>/petTable" class="nav-link active">
                     Nosotros
                 </a>
             </li>

@@ -26,7 +26,11 @@ public class PetDAO {
                 "    p.PetId, " +
                 "    p.Name, " +
                 "    p.Age, " +
+                "    p.Age, " +
                 "    p.Gender, " +
+                "    p.Breed, " +
+                "    p.EntryDate, " +
+                "    p.Location, " +
                 "    img.ImageUrl " +
                 "FROM Pet p " +
                 "LEFT JOIN Image img ON img.PetId = p.PetId " +
@@ -162,8 +166,8 @@ public class PetDAO {
                 pet.setBreed(result.getString("Breed"));
                 //Mapeo de los nombres de las ubicaciones
                 int locationValue = result.getInt("Location");
-                String locationName = getLocationName(locationValue);
-                pet.setLocation(locationName);
+//                String locationName = getLocationName(locationValue);
+//                pet.setLocation(locationName);
             }
         }catch (SQLException e) {
             e.printStackTrace();
