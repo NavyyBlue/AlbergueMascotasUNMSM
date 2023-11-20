@@ -31,11 +31,11 @@
 
                                 <div class="row mb-2">
 
-                                    <div class="col-md-6 mb-4 boxWhite">
+                                    <div class="col-12 col-md-6 mb-4 boxWhite">
                                         <input type="text" id="FirstName" class="form-control form-control-lg" placeholder="Nombre"/>
                                     </div>
 
-                                    <div class="col-md-6 mb-4 boxWhite">
+                                    <div class="col-12 col-md-6 mb-4 boxWhite">
                                         <div class="form-outline">
                                             <input type="text" id="LastName" class="form-control form-control-lg" placeholder="Apellido"/>
                                         </div>
@@ -44,18 +44,18 @@
                                 </div>
 
                                 <div class="row mb-2">
-                                    <div class="md-6 form-outline mb-4 boxWhite">
+                                    <div class="col-12 md-6 form-outline mb-4 boxWhite">
                                         <input type="text" id="Email" class="form-control form-control-lg" placeholder="Correo Electronico"/>
                                     </div>
                                 </div>
 
                                 <div class="row mb-2">
 
-                                    <div class="col-md-6 mb-4 boxWhite">
+                                    <div class="col-12 col-md-6 mb-4 boxWhite">
                                         <input type="text" id="Password" class="form-control form-control-lg" placeholder="Contraseña"/>
                                     </div>
 
-                                    <div class="col-md-6 mb-4 boxWhite">
+                                    <div class="col-12 col-md-6 mb-4 boxWhite">
                                         <div class="form-outline">
                                             <input type="text" id="PasswordConfirm" class="form-control form-control-lg" placeholder="Repetir Contraseña"/>
                                         </div>
