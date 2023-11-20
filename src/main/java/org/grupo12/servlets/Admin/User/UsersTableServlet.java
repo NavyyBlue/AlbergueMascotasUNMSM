@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.grupo12.dao.UserDAO;
 import org.grupo12.models.User;
+import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
 import org.grupo12.util.Pagination;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class UsersTableServlet extends HttpServlet {
     private HikariDataSource dataSource = ConnectionDB.getDataSource();
     private UserDAO userDAO;
+    private int adminValue = 0;
     @Override
     public void init() throws ServletException {
         userDAO = new UserDAO(dataSource);
@@ -27,6 +29,15 @@ public class UsersTableServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Verificar la autenticación
+        if (!AuthenticationUtils.isAuthenticated(request)) {
+            return;
+        }
+        // Verificar la autorización de administrador
+        if (!AuthenticationUtils.isAdmin(request)) {
+            return;
+        }
+
         int userId = 0;
         int active = 1;
 
