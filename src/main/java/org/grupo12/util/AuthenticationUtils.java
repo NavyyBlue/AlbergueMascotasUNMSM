@@ -11,34 +11,33 @@ public class AuthenticationUtils {
     private static final int ADMIN_VALUE = 0;
     private static final String HOME_PATH = "/home";
 
-    public static boolean isAuthenticated(HttpServletRequest request) throws IOException {
+    public static boolean isAuthenticated(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = (User) request.getSession().getAttribute("user");
 
         if (user == null) {
-            redirectToHome(request);
+            redirectToHome(request, response);
             return false;
         }
 
         return true;
     }
 
-    public static boolean isAdmin(HttpServletRequest request) throws IOException {
-        if (!isAuthenticated(request)) {
+    public static boolean isAuthenticatedAsAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (!isAuthenticated(request, response)) {
             return false;
         }
 
         int userRole = ((User) request.getSession().getAttribute("user")).getUserRole();
 
         if (userRole != ADMIN_VALUE) {
-            redirectToHome(request);
+            redirectToHome(request, response);
             return false;
         }
 
         return true;
     }
 
-    private static void redirectToHome(HttpServletRequest request) throws IOException {
-        HttpServletResponse response = (HttpServletResponse) request.getAttribute("response");
+    private static void redirectToHome(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(request.getContextPath() + HOME_PATH);
     }
 }

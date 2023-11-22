@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-    private HikariDataSource dataSource = ConnectionDB.getDataSource();
+    private final HikariDataSource dataSource = ConnectionDB.getDataSource();
     private UserDAO userDAO;
 
     @Override
