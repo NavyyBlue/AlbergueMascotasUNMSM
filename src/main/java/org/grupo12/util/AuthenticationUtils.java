@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class AuthenticationUtils {
 
-    private static final int ADMIN_VALUE = 0;
+    public static final int ADMIN_VALUE = 0;
     private static final String HOME_PATH = "/home";
 
     public static boolean isAuthenticated(HttpServletRequest request, HttpServletResponse response) throws IOException {

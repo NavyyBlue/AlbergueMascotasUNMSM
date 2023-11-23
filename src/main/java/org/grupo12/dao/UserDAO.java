@@ -35,6 +35,7 @@ public class UserDAO {
                 user.setUserImage(result.getString("UserImage"));
                 user.setUserName(result.getString("UserName"));
                 user.setPhoneNumber(result.getString("PhoneNumber"));
+                user.setUserRole(result.getInt("UserRole"));
                 user.setActive(result.getBoolean("Active"));
             }
         } catch (SQLException e) {

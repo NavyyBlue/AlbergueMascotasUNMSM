@@ -59,8 +59,11 @@
             </thead>
             <tbody class="table-group-divider">
             <%
+                boolean isCurrentUser = false;
+                User currentUser = (User) request.getSession().getAttribute("user");
                 List<User> users = (List<User>) request.getAttribute("users");
                 for (User user : users) {
+                    isCurrentUser = user.getUserId() == currentUser.getUserId();
             %>
                     <tr>
                         <th scope="row"><%=user.getUserId()%></th>
@@ -85,11 +88,17 @@
                             </span>
                             <% String titleTooltip = user.isActive() ? "Eliminar" : "Restaurar"; %>
                             <span data-bs-toggle="tooltip" data-bs-placement="top" title="<%=titleTooltip%>">
-                                <% if(user.isActive()){%>
-                                    <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="<%=user.getUserId()%>"
-                                    >
-                                        <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
-                                    </a>
+                                <% if(user.isActive()){
+                                    //Verifico que el usuario que se quiere eliminar no sea el mismo que el que esta logueado
+                                    if(isCurrentUser){ %>
+                                         <a type="button" class="btn btn-danger btn-sm disabled" data-bs-toggle="tooltip" data-bs-placement="top" title="No puedes eliminar tu propio usuario" aria-disabled="true">
+                                            <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
+                                        </a>
+                                    <%}else{%>
+                                        <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="<%=user.getUserId()%>">
+                                            <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
+                                        </a>
+                                    <%}%>
                                 <%}else{%>
                                     <a type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#restoreModal" data-userid="<%=user.getUserId()%>">
                                         <img src="<%=request.getContextPath()%>/assets/svg/restore.svg" alt="restaurar">
@@ -139,7 +148,6 @@
                                 <option value="1">Usuario</option>
                             </select>
                         </div>
-
                         <input type="hidden" id="isNewUser" name="isNewUser" value="false">
                         <div class="modal-footer">
                             <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
