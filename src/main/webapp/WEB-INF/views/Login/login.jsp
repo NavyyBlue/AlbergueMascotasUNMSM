@@ -19,10 +19,10 @@
             <form method="post" action="${pageContext.request.contextPath}/login">
                 <input class="form-input" type="text" placeholder="username" name="username" required>
                 <input class="form-input" type="password" placeholder="Contraseña" name="password" required>
-                <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                <a href="<%=request.getContextPath()%>/resetpassword" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 <button type="submit" class="form-button">Iniciar Sesión</button>
                 <div class="form-group text-center">
-                    ¿Es un usuario nuevo? <a href="#" class="form-link">Registrarse</a>
+                    ¿Es un usuario nuevo? <a href="<%=request.getContextPath()%>/signup" class="form-link">Registrarse</a>
                 </div>
             </form>
         </div>

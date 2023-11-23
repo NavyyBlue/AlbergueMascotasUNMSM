@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.grupo12.dao.UserDAO;
 import org.grupo12.models.User;
 import org.grupo12.util.Pagination;
+import org.grupo12.util.PasswordEncryptionUtil;
 
 import java.util.List;
 
@@ -12,6 +13,15 @@ public class UserService {
 
     public UserService(UserDAO userDAO) {
         this.userDAO = userDAO;
+    }
+
+    public User getUserByUsernameAndPassword(String username, String password) {
+        String hashedPassword = userDAO.getHashedPasswordByUsername(username);
+        boolean isPasswordCorrect = PasswordEncryptionUtil.checkPassword(password, hashedPassword);
+
+        if(!isPasswordCorrect)
+            return null;
+        return userDAO.getUserByUsernameAndPassword(username, hashedPassword);
     }
 
     public List<User> getUsersPaginated(HttpServletRequest request) {
@@ -58,5 +68,22 @@ public class UserService {
 
     public boolean updateUser(User updatedUser) {
         return userDAO.updateUser(updatedUser);
+    }
+
+    public boolean createUser(User newUser) {
+        String plainPassword = newUser.getPassword();
+        String encryptedPassword = PasswordEncryptionUtil.encryptPassword(plainPassword);
+        newUser.setPassword(encryptedPassword);
+
+        return userDAO.createUser(newUser);
+    }
+
+    public boolean updateUserPassword(int userId, String newPassword) {
+        String encryptedPassword = PasswordEncryptionUtil.encryptPassword(newPassword);
+        return userDAO.updateUserPassword(userId, encryptedPassword);
+    }
+
+    public boolean verifyUserExistenceByEmail(String email){
+        return userDAO.verifyUserExistenceByEmail(email);
     }
 }
