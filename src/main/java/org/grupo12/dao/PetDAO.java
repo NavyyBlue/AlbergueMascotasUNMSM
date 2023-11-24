@@ -2,12 +2,10 @@ package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.models.Pet;
+import org.grupo12.models.User;
 import org.grupo12.util.ConnectionDB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,16 +45,19 @@ public class PetDAO {
         StringBuilder sqlBuilder = new StringBuilder("SELECT " +
                 "    p.PetId, " +
                 "    p.Name, " +
-                "    p.Age, " +
+                "    COALESCE(p.Age, '-') AS Age, " +
                 "    p.Age, " +
                 "    p.Gender, " +
-                "    p.Breed, " +
+                "    COALESCE(p.Breed, '-') AS Breed, " +
                 "    p.EntryDate, " +
+                "    p.AdoptionStatusId, " +
                 "    p.Location, " +
-                "    img.ImageUrl " +
+                "    img.ImageUrl, " +
+                "    p.Active " +
                 "FROM Pet p " +
                 "LEFT JOIN Image img ON img.PetId = p.PetId " +
                 "WHERE p.AdoptionStatusId = 1 AND p.Active = 1 ");
+
 
         List<Object> parameters = new ArrayList<>();
 
@@ -107,7 +108,12 @@ public class PetDAO {
                 pet.setName(result.getString("Name"));
                 pet.setAge(result.getInt("Age"));
                 pet.setGender(result.getString("Gender"));
+                pet.setBreed(result.getString("Breed"));
+                pet.setEntryDate(result.getDate("EntryDate"));
+                pet.setAdoptionStatusId(result.getInt("AdoptionStatusId"));
+                pet.setLocation(result.getInt("Location"));
                 pet.setImageUrl(result.getString("ImageUrl"));
+                pet.setActive(result.getInt("Active"));
                 pets.add(pet);
             }
         } catch (SQLException e) {
@@ -254,5 +260,31 @@ public class PetDAO {
             e.printStackTrace();
         }
         return petImages;
+    }
+
+        public boolean updatePet(Pet pet){
+        String sql = "UPDATE Pet SET Name = ?, Age = ?, SpeciesId = ?, Gender = ?, Description = ?, Breed = ?, Location = ?, EntryDate = ?, AdoptationStatusId = ?, Active = ? WHERE UserId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, pet.getName());
+            statement.setInt(2, pet.getAge());
+            statement.setInt(3, pet.getSpeciesId());
+            statement.setString(4, pet.getGender());
+            statement.setString(5, pet.getDescription());
+            statement.setString(6, pet.getBreed());
+            statement.setInt(7, pet.getLocation());
+            statement.setDate(8, (Date) pet.getEntryDate());
+            statement.setInt(9, pet.getAdoptionStatusId());
+            statement.setInt(10, pet.getActive());
+            statement.setInt(11, pet.getPetId());
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -19,6 +19,15 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
+<%
+    // Default speciesId if not present in the request
+    int defaultPetId = 0;
+    int petId = request.getParameter("petId") != null ?
+            Integer.parseInt(request.getParameter("petId")) : defaultPetId;
+    int active = request.getParameter("active") != null ?
+            Integer.parseInt(request.getParameter("active")) : 1;
+%>
+<jsp:include page="../../components/alerts.jsp"/>
 <jsp:include page="../../components/navBar.jsp"/>
 <div class="divMainPetTable">
     <div style="display: flex; flex-direction: column; justify-content: center; align-items: flex-end; width: 100%; margin: 0 0 20px 0;">
@@ -45,7 +54,6 @@
         <%
             List<Pet> pets = (List<Pet>) request.getAttribute("pets");
             for (Pet pet : pets) {
-                String petInfoUrl = "petinfo?petId=" + pet.getPetId();
         %>
 
         <tr>
@@ -74,12 +82,10 @@
                     int location = pet.getLocation();
                     if (location == 0) {
                         out.print("Ciudad Universitaria");
-                    } else if (speciesId == 2) {
-                        out.print("Gato");
-                    } else if (speciesId == 3) {
-                        out.print("Otro");
-                    } else {
-                        out.print("Desconocido");
+                    } else if (location == 1) {
+                        out.print("San Fernando");
+                    } else{
+                        out.print("Veterinaria");
                     }
                 %>
             </td>
@@ -98,7 +104,23 @@
                 %>
             </td>
             <td>
-                <img src="<%=request.getContextPath()%>/assets/icon/ic_home.svg">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <a type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" data-userid="<%=pet.getPetId()%>">
+                                    <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
+                                </a>
+                            </span>
+                <% String titleTooltip = pet.getActive()==1 ? "Eliminar" : "Restaurar"; %>
+                <span data-bs-toggle="tooltip" data-bs-placement="top" title="<%=titleTooltip%>">
+                                <% if(pet.getActive()==1){%>
+                                    <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="<%=pet.getPetId()%>">
+                                        <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
+                                    </a>
+                                <%}else{%>
+                                    <a type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#restoreModal" data-userid="<%=pet.getPetId()%>">
+                                        <img src="<%=request.getContextPath()%>/assets/svg/restore.svg" alt="restaurar">
+                                    </a>
+                                <%}%>
+                            </span>
             </td>
         </tr>
         <%
@@ -148,6 +170,83 @@
     </nav>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editModalLabel">Editar Mascota</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm" action="${pageContext.request.contextPath}/petTable" method="post">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="editName" name="editName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editAge" class="form-label">Edad</label>
+                        <input type="text" class="form-control" id="editAge" name="editAge">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSpeciesId">Especie</label>
+                        <select id="editSpeciesId" name="editSpeciesId" class="form-select" aria-label="Default select example" required>
+                            <option value="" disabled selected>Seleccione una especie</option>
+                            <option value="1">Perro</option>
+                            <option value="2">Gato</option>
+                            <option value="3">Otros</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editGender">Género</label>
+                        <select id="editGender" name="editGender" class="form-select" aria-label="Default select example" required>
+                            <option value="" disabled selected>Seleccione un género</option>
+                            <option value="Macho">Macho</option>
+                            <option value="Hembra">Hembra</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="editDescription" name="editDescription">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editAdoptionStatus">Estado de Adopción</label>
+                        <select id="editAdoptionStatus" name="editAdoptionStatus" class="form-select" aria-label="Default select example" required>
+                            <option value="" disabled selected>Seleccione un estado</option>
+                            <option value="1">Disponible</option>
+                            <option value="2">En proceso</option>
+                            <option value="3">Adoptado</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editBreed" class="form-label">Raza</label>
+                        <input type="text" class="form-control" id="editBreed" name="editBreed">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editLocation">Ubicación</label>
+                        <select id="editLocation" name="editLocation" class="form-select" aria-label="Default select example" required>
+                            <option value="" disabled selected>Seleccione una ubicación</option>
+                            <option value="0">Ciudad Universitaria</option>
+                            <option value="1">San Fernando</option>
+                            <option value="2">Veterinaria</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEntryDate">Start date:</label>
+                        <input type="date" id="editEntryDate" name="editEntryDate" value="2023-11-23" min="2018-01-01" max="2025-12-31" />
+                    </div>
+                    <input type="hidden" id="isNewPet" name="isNewPet" value="false">
+                    <div class="modal-footer">
+                        <input type="hidden" id="editUserId" name="editUserId" value="<%=petId%>">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -213,5 +312,86 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar Usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="deleteUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
+                <div class="modal-body">
+                    ¿Está seguro de eliminar el usuario?
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="deleteUserId" name="deleteUserId" value="<%=petId%>">
+                    <input type="hidden" name="_method" value="DELETE">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setIsNewUser(isNew) {
+        document.getElementById('isNewPet').value = isNew;
+    }
+
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Botón que activó el modal
+        let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+        $('#deleteUserId').val(userId);
+    });
+
+    $('#restoreModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Botón que activó el modal
+        let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+        $('#restoreUserId').val(userId);
+    });
+
+    $('#editModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget); // Botón que activó el modal
+        let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+
+        if(userId === 0){
+            $('#editModalLabel').text('Agregar Usuario');
+            // Clear modal fields
+            $('#editUserId').val('');
+            $('#editFirstName').val('');
+            $('#editLastName').val('');
+            $('#editEmail').val('');
+            $('#editUserName').val('');
+            $('#editPhoneNumber').val('');
+            $('#editUserRole').val('');
+        }else{
+            // Parse the JSON data from the attribute
+            let usersJson = '<%= request.getAttribute("usersJson") %>';
+            let users = JSON.parse(usersJson);
+            // Find the user with the corresponding userId
+            let user = users.find(function(u) {
+                return u.userId === userId;
+            });
+
+            $('#editUserId').val(user.userId);
+            // Update modal fields with user data
+            $('#editFirstName').val(user.firstName);
+            $('#editLastName').val(user.lastName);
+            $('#editEmail').val(user.email);
+            $('#editUserName').val(user.userName);
+            $('#editPhoneNumber').val(user.phoneNumber);
+            $('#editUserRole').val(user.userRole);
+        }
+        if (userId) {
+            setIsNewUser(false);
+        } else {
+            setIsNewUser(true);
+        }
+    });
+</script>
 </body>
 </html>
