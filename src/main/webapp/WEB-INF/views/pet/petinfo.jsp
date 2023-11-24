@@ -43,7 +43,7 @@
 %>
 <div class="divMainPet">
     <div class="divDetailsPet" style="align-items: center;">
-        <img style="width: 545px; height: 406px; border-radius: 30px;" src="<%=firstImageUrl%>">
+        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=firstImageUrl%>">
         <div class="divDescriptionPet">
             <div class="divDetailsPet" style="height: 71px; align-items: center">
                 <img style="width: 55.675px; height: 52.984px; transform: rotate(52.107deg); margin: 0 10px 0 0;" src="<%=request.getContextPath()%>/assets/img/petlist/pet_footprint.png">
@@ -60,6 +60,7 @@
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
+                <button type="button" class="btn btn-primary">Favorito</button>
             </div>
             <script>
                 const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');
@@ -90,9 +91,10 @@
 
 
     </div>
-    <div class="image-list">
+
+    <div class="text-center">
         <% for (Pet image : petImages) { %>
-        <img src="<%= image.getImageUrl() %>" alt="Imagen de la mascota">
+        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%= image.getImageUrl() %>" alt="Imagen de la mascota">
         <% } %>
     </div>
 

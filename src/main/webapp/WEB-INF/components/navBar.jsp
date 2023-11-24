@@ -71,7 +71,7 @@
                     <div class="dropdown">
                         <img class="imgUser" alt="imgUser-dropdown-toggle" src="<%=request.getContextPath()%>/assets/img/home/download.jpeg" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Usuario</a></li>
+                            <li><a class="dropdown-item" href="<%=request.getContextPath()%>/usuario">Usuario</a></li>
                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/logout">Cerrar Sesión</a></li>
                         </ul>
                     </div>
