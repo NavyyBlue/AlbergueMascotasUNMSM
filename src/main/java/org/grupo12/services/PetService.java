@@ -3,6 +3,7 @@ package org.grupo12.services;
 import jakarta.servlet.http.HttpServletRequest;
 import org.grupo12.dao.PetDAO;
 import org.grupo12.models.Pet;
+import org.grupo12.models.User;
 import org.grupo12.util.Pagination;
 
 import java.util.List;
@@ -52,5 +53,9 @@ public class PetService {
         request.setAttribute("pagination", pagination);
 
         return petDAO.getPetListBySpecies(speciesId, age, gender, searchKeyword,offset, limit);
+    }
+
+    public boolean updatePet(Pet updatedPet) {
+        return petDAO.updatePet(updatedPet);
     }
 }
