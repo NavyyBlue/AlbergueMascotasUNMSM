@@ -2,6 +2,8 @@ package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.models.User;
+import org.grupo12.util.PasswordEncryptionUtil;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,6 +37,7 @@ public class UserDAO {
                 user.setUserImage(result.getString("UserImage"));
                 user.setUserName(result.getString("UserName"));
                 user.setPhoneNumber(result.getString("PhoneNumber"));
+                user.setUserRole(result.getInt("UserRole"));
                 user.setActive(result.getBoolean("Active"));
             }
         } catch (SQLException e) {
@@ -42,6 +45,26 @@ public class UserDAO {
         }
 
         return user;
+    }
+
+    public String getHashedPasswordByUsername(String username) {
+        String sql = "SELECT Password FROM User WHERE UserName = ? AND Active = 1";
+        String hashedPassword = null;
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                hashedPassword = result.getString("Password");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return hashedPassword;
     }
 
     public List<User> getUsers(int userId, int active, int offset, int limit){
@@ -58,7 +81,6 @@ public class UserDAO {
                     " UserRole, " +
                     " Active " +
                     "FROM User ");
-//                "WHERE Active = ? ");
 
         List<Object> parameters = new ArrayList<>();
         if(active != 2){
@@ -198,7 +220,7 @@ public class UserDAO {
     }
 
     public boolean createUser(User user){
-        String sql = "INSERT INTO User (FirstName, LastName, Email, UserName, Password, PhoneNumber, UserRole) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO User (FirstName, LastName, Email, UserName, Password, PhoneNumber) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -208,12 +230,46 @@ public class UserDAO {
             statement.setString(4, user.getUserName());
             statement.setString(5, user.getPassword());
             statement.setString(6, user.getPhoneNumber());
-            statement.setInt(7, user.getUserRole());
 
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
 
         } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateUserPassword(int userId, String newPassword){
+        String sql = "UPDATE User SET Password = ? WHERE UserId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, newPassword);
+            statement.setInt(2, userId);
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean verifyUserExistenceByEmail(String email){
+        String sql = "SELECT COUNT(*) FROM User WHERE Email = ? AND Active = 1";
+
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, email);
+            ResultSet result = statement.executeQuery();
+            if(result.next()){
+                return result.getInt(1) > 0;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
             e.printStackTrace();
             return false;
         }
