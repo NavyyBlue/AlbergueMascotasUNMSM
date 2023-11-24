@@ -41,6 +41,7 @@ public class VerifyOTPServlet extends HttpServlet {
             if(resp) {
                 response.sendRedirect(request.getContextPath() + "/resetpassword");
                 request.getSession().setAttribute("otp", otp);
+                request.getSession().removeAttribute("userEmail");
             }
         }catch (Exception e) {
             request.getSession().setAttribute("errorOccurred", true);

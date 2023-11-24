@@ -40,7 +40,7 @@
                             </div>
                             <span>
                   ¿No has recibido el código de verificación?<br />
-                  Revisa tu bandeja de spam o <a href="#">Reenvia el Código</a>
+                  Revisa tu bandeja de spam o <a href="#" id="resendLink">Reenvia el Código</a>
                 </span>
                             <div class="mb-3 mt-3 d-grid">
                                 <button
@@ -58,5 +58,21 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById("resendLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        resendOtp();
+    });
+
+    function resendOtp() {
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = "${pageContext.request.contextPath}/resendotp";
+
+        document.body.appendChild(form);
+
+        form.submit();
+    }
+</script>
 </body>
 </html>

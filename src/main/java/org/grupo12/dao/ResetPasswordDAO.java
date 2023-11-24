@@ -13,7 +13,7 @@ public class ResetPasswordDAO {
         this.dataSource = dataSource;
     }
 
-    public String GenerateUniqueOTP(){
+    public String GenerateUniqueOTP() throws NoSuchAlgorithmException {
         String otp;
         do{
             otp = PasswordEncryptionUtil.generateOTP();
@@ -21,13 +21,14 @@ public class ResetPasswordDAO {
         return otp;
     }
 
-    public boolean OTPCodeExits(String otp){
+    public boolean OTPCodeExits(String otp) throws NoSuchAlgorithmException {
+        String hashOtp = PasswordEncryptionUtil.hashOTP(otp);
         String sql = "SELECT * FROM ResetPassword WHERE Otp = ?";
         boolean resp = false;
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, otp);
+            statement.setString(1, hashOtp);
             ResultSet result = statement.executeQuery();
             if(result.next()){
                 resp = true;

@@ -14,37 +14,29 @@ import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
 
-@WebServlet("/forgot-password")
-public class ForgotPasswordServlet extends HttpServlet {
+@WebServlet("/resendotp")
+public class ResendOtpServlet extends HttpServlet {
     private final HikariDataSource dataSource = ConnectionDB.getDataSource();
     private final PasswordRecoveryService recoveryService;
 
-    public ForgotPasswordServlet() {
+    public ResendOtpServlet() {
         String smtpHost = ConfigLoader.getProperty("email.smtp.host");
         String smtpPort = ConfigLoader.getProperty("email.smtp.port");
         String smtpUsername = ConfigLoader.getProperty("email.username");
         String smtpPassword = ConfigLoader.getProperty("email.password");
         this.recoveryService = new PasswordRecoveryService(new EmailService(smtpHost, smtpPort, smtpUsername, smtpPassword),
-                                                            new ResetPasswordDAO(dataSource));
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        getServletContext()
-                .getRequestDispatcher("/WEB-INF/views/Login/forgotpassword.jsp")
-                .forward(request, response);
+                new ResetPasswordDAO(dataSource));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try{
-            String email = request.getParameter("userEmail");
+            String email = (String) request.getSession().getAttribute("userEmail");
             recoveryService.sendOTPByEmail(email);
-            request.getSession().setAttribute("userEmail", email);
-            response.sendRedirect(request.getContextPath() + "/verifyotp");
         }catch (Exception e) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            System.out.println("error: " + e.getMessage());
+        }finally {
+            response.sendRedirect(request.getContextPath() + "/verifyotp");
         }
     }
-
 }
