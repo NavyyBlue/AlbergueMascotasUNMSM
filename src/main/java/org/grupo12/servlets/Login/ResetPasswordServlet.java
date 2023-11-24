@@ -59,7 +59,6 @@ public class ResetPasswordServlet extends HttpServlet {
                     response.sendRedirect(request.getRequestURI());
                 }
             }else{
-                System.out.println("Las contraseñas no coinciden");
                 request.getSession().setAttribute("alerts", Collections.singletonMap("warning","Las contraseñas no coinciden"));
                 response.sendRedirect(request.getRequestURI());
             }
