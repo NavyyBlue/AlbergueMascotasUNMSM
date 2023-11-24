@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
@@ -60,7 +62,18 @@
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
-                <button type="button" class="btn btn-primary">Favorito</button>
+                <button type="button" class="btn btn-success" id="btnFavorito">Favorito <i class="fa-regular fa-heart align-middle"></i></button>
+
+                <script>
+
+                    $(document).ready(function(){
+
+                        $('#btnFavorito').click(function(){
+
+                            $(this).find('i').toggleClass('fa-regular fa-solid');
+                        });
+                    });
+                </script>
             </div>
             <script>
                 const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');
