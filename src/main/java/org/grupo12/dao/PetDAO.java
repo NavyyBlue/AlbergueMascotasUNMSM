@@ -20,9 +20,9 @@ public class PetDAO {
         this.dataSource = dataSource;
     }
 
-    public List<Pet> getPetListBySpecies(int speciesId, int offset, int limit) {
+    public List<Pet> getPetListBySpecies(int speciesId, int age, String gender, String searchKeyword, int offset, int limit) {
         List<Pet> pets = new ArrayList<>();
-        String sql = "SELECT " +
+        StringBuilder sqlBuilder = new StringBuilder("SELECT " +
                 "    p.PetId, " +
                 "    p.Name, " +
                 "    p.Age, " +
@@ -30,19 +30,48 @@ public class PetDAO {
                 "    img.ImageUrl " +
                 "FROM Pet p " +
                 "LEFT JOIN Image img ON img.PetId = p.PetId " +
-                "WHERE p.AdoptionStatusId = 1 " +
-                (speciesId == 0 ? "" : "AND p.SpeciesId = ? ") +
-                "AND p.Active = 1 " +
-                "LIMIT ? OFFSET ?";
+                "WHERE p.AdoptionStatusId = 1 AND p.Active = 1 ");
+
+        List<Object> parameters = new ArrayList<>();
+
+        // Add speciesId filter
+        if (speciesId != 0) {
+            sqlBuilder.append("AND p.SpeciesId = ? ");
+            parameters.add(speciesId);
+        }
+
+        // Add age filter
+        if (age > 0) {
+            sqlBuilder.append("AND p.Age = ? ");
+            parameters.add(age);
+        }
+
+        // Add gender filter
+        if (gender != null && !gender.isEmpty()) {
+            sqlBuilder.append("AND p.Gender = ? ");
+            parameters.add(gender);
+        }
+
+        // Add searchKeyword filter
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            sqlBuilder.append("AND p.Name LIKE ? ");
+            parameters.add("%" + searchKeyword + "%");
+        }
+
+        // Add limit and offset
+        sqlBuilder.append("LIMIT ? OFFSET ?");
+        parameters.add(limit);
+        parameters.add(offset);
+
+        String sql = sqlBuilder.toString();
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
+            // Set parameters
             int paramIndex = 1;
-            if (speciesId != 0) {
-                statement.setInt(paramIndex++, speciesId);
+            for (Object parameter : parameters) {
+                statement.setObject(paramIndex++, parameter);
             }
-            statement.setInt(paramIndex++, limit);
-            statement.setInt(paramIndex, offset);
 
             ResultSet result = statement.executeQuery();
 
@@ -61,10 +90,36 @@ public class PetDAO {
         return pets;
     }
 
-    public int getTotalPetCount(int speciesId) {
+    public int getTotalPetCount(int speciesId, int age, String gender, String searchKeyword) {
         int total = 0;
-        String countSql = "SELECT COUNT(*) AS total FROM Pet WHERE AdoptionStatusId = 1 " +
-                (speciesId == 0 ? "" : "AND SpeciesId = ?");
+        StringBuilder sqlBuilder = new StringBuilder( "SELECT COUNT(*) AS total FROM Pet WHERE AdoptionStatusId = 1 AND Active = 1 ");
+
+        List<Object> parameters = new ArrayList<>();
+        // Add speciesId filter
+        if (speciesId != 0) {
+            sqlBuilder.append("AND SpeciesId = ? ");
+            parameters.add(speciesId);
+        }
+
+        // Add age filter
+        if (age > 0) {
+            sqlBuilder.append("AND Age = ? ");
+            parameters.add(age);
+        }
+
+        // Add gender filter
+        if (gender != null && !gender.isEmpty()) {
+            sqlBuilder.append("AND Gender = ? ");
+            parameters.add(gender);
+        }
+
+        // Add searchKeyword filter
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            sqlBuilder.append("AND Name LIKE ? ");
+            parameters.add("%" + searchKeyword + "%");
+        }
+
+        String countSql = sqlBuilder.toString();
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement countStatement = connection.prepareStatement(countSql)) {

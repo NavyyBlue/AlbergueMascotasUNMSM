@@ -19,22 +19,42 @@ public class PetListServlet extends HttpServlet {
     private HikariDataSource dataSource = ConnectionDB.getDataSource();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int speciesId = 0;
+        int age = 0;
+        String gender = "";
+        String searchKeyword = "";
+
         String speciesIdParam = request.getParameter("speciesId");
         if (speciesIdParam != null && !speciesIdParam.isEmpty())
             speciesId = Integer.parseInt(speciesIdParam);
 
+        String ageParam = request.getParameter("age");
+        if (ageParam != null && !ageParam.isEmpty()) {
+            age = Integer.parseInt(ageParam);
+        }
+
+        gender = request.getParameter("gender");
+        searchKeyword = request.getParameter("searchKeyword");
+
         Pagination pagination = new Pagination();
         PetDAO petDAO = new PetDAO(dataSource);
 
-        int offset = pagination.getOffset();
-        int limit = pagination.getLimit();
+        // Retrieve the requested page number from the request
+        String pageParam = request.getParameter("page");
+        int requestedPage = 1; // Default to page 1
+        if (pageParam != null && !pageParam.isEmpty()) {
+            requestedPage = Integer.parseInt(pageParam);
+        }
 
-        int total = petDAO.getTotalPetCount(speciesId);
+        int total = petDAO.getTotalPetCount(speciesId, age, gender, searchKeyword);
         pagination.setTotal(total);
         pagination.calculate();
-        pagination.setCurrentPage(1);
+        pagination.setCurrentPage(requestedPage);
 
-        List<Pet> pets = petDAO.getPetListBySpecies(speciesId, offset, limit);
+        int offset = pagination.calculateOffset(requestedPage);
+        int limit = pagination.getLimit();
+
+
+        List<Pet> pets = petDAO.getPetListBySpecies(speciesId, age, gender, searchKeyword,offset, limit);
 
         request.setAttribute("pagination", pagination);
         request.setAttribute("pets", pets);
