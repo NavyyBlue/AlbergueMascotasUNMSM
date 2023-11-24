@@ -14,5 +14,4 @@ public class User {
     private String userImage;
     private int userRole;
     private boolean active;
-    private int userRole;
 }

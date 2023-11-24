@@ -9,7 +9,11 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 @WebServlet("/usuario")
 public class UsuarioServlet extends HttpServlet {
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/usuario/usuario.jsp").forward(request, response);
+        getServletContext()
+                .getRequestDispatcher("/WEB-INF/views/usuario/usuario.jsp")
+                .forward(request, response);
     }
 }

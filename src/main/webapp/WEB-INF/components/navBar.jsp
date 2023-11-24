@@ -3,9 +3,6 @@
 <%@ page import="org.grupo12.models.User" %>
 <%@ page import="org.grupo12.util.AuthenticationUtils" %>
 <%User user = (User) session.getAttribute("user");%>
-<%
-    Map<String, String> errors = (Map<String, String>) request.getAttribute("errors");
-%>
 <body>
 <nav class="navbar navbar-expand-sm navbar-light ml-auto mx-5">
     <div class="container-fluid justify-content-between">
@@ -57,7 +54,7 @@
             </li>
             <%if(user != null && user.getUserRole() == AuthenticationUtils.ADMIN_VALUE){%>
                 <li class="nav-item dropdown me-3 me-lg-1">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Administrador
                     </a>
                     <ul class="dropdown-menu">
