@@ -171,17 +171,17 @@
                         <div class="mb-3">
                             <label for="especie">Especie:</label>
                             <select id="especie" name="especie" class="form-select" aria-label="Default select example" required>
-                                <option selected>Seleccione una especie</option>
-                                <option value="perro">Perro</option>
-                                <option value="gato">Gato</option>
-                                <option value="otros">Otros</option>
+                                <option value="" disabled selected>Seleccione una especie</option>
+                                <option value="1">Perro</option>
+                                <option value="2">Gato</option>
+                                <option value="3">Otros</option>
                             </select>
                         </div>
 
                     <div class="mb-3">
                         <label for="genderNewPet">Género</label>
                         <select id="genderNewPet" name="genderNewPet" class="form-select" aria-label="Default select example" required>
-                            <option selected>Seleccione un género</option>
+                            <option value="" disabled selected>Seleccione un género</option>
                             <option value="Macho">Macho</option>
                             <option value="Hembra">Hembra</option>
                         </select>
@@ -195,7 +195,7 @@
                     <div class="mb-3">
                         <label for="locationNewPet">Ubicación</label>
                         <select id="locationNewPet" name="locationNewPet" class="form-select" aria-label="Default select example" required>
-                            <option selected>Seleccione un género</option>
+                            <option value="" disabled selected>Seleccione una ubicación</option>
                             <option value="1">Ciudad Universitaria</option>
                             <option value="2">San Fernando</option>
                         </select>
@@ -206,7 +206,7 @@
                         <textarea class="form-control" id="descriptionNewPet" name="descriptionNewPet" rows="3"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Añadir</button>
 
                 </form>
             </div>

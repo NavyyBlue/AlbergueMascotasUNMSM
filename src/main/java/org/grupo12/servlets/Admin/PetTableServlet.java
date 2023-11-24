@@ -66,27 +66,28 @@ public class PetTableServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Obtener los valores del formulario
-        String nombre = request.getParameter("nameNewPet");
-        String edad = request.getParameter("ageNewPet");
+        String nameNewPet = request.getParameter("nameNewPet");
+        String ageNewPet = request.getParameter("ageNewPet");
         String especie = request.getParameter("especie");
-        String genero = request.getParameter("genderNewPet");
-        String raza = request.getParameter("breedNewPet");
-        String ubicacion = request.getParameter("locationNewPet");
-        String descripcion = request.getParameter("descriptionNewPet");
+        String genderNewPet = request.getParameter("genderNewPet");
+        String breedNewPet = request.getParameter("breedNewPet");
+        String locationNewPet = request.getParameter("locationNewPet");
+        String descriptionNewPet = request.getParameter("descriptionNewPet");
 
         // Puedes imprimir los valores para verificar que se están recibiendo correctamente
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Edad: " + edad);
+        System.out.println("Nombre: " + nameNewPet);
+        System.out.println("Edad: " + ageNewPet);
         System.out.println("Especie: " + especie);
-        System.out.println("Género: " + genero);
-        System.out.println("Raza: " + raza);
-        System.out.println("Ubicación: " + ubicacion);
-        System.out.println("Descripción: " + descripcion);
+        System.out.println("Género: " + genderNewPet);
+        System.out.println("Raza: " + breedNewPet);
+        System.out.println("Ubicación: " + locationNewPet);
+        System.out.println("Descripción: " + descriptionNewPet);
 
-        // Aquí puedes realizar las operaciones que necesites con los valores del formulario
+        PetDAO petDAO = new PetDAO(dataSource);
+        petDAO.insertPet(nameNewPet, ageNewPet, genderNewPet, descriptionNewPet, especie, breedNewPet, locationNewPet);
 
         // Redirigir a una nueva página o hacer cualquier otra acción
-//        response.sendRedirect("pagina-de-resultado.jsp");
+        response.sendRedirect(request.getContextPath() + "/petTable");
     }
 
 }

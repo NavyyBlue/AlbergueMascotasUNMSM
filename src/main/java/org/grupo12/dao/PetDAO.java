@@ -20,6 +20,28 @@ public class PetDAO {
         this.dataSource = dataSource;
     }
 
+    public void insertPet(String name, String age, String gender, String description, String speciesId, String breed, String location) {
+        String sql = "INSERT INTO Pet " +
+                "(Name, Age, SpeciesId, Gender, Description, EntryDate, AdoptionStatusId, Active, Breed, Location) " +
+                "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, 1, 1, ?, ?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+            statement.setInt(2, Integer.parseInt(age));
+            statement.setInt(3, Integer.parseInt(speciesId));
+            statement.setString(4, gender);
+            statement.setString(5, description);
+            statement.setString(6, breed);
+            statement.setInt(7, Integer.parseInt(location));
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public List<Pet> getPetListBySpecies(int speciesId, int age, String gender, String searchKeyword, int offset, int limit) {
         List<Pet> pets = new ArrayList<>();
         StringBuilder sqlBuilder = new StringBuilder("SELECT " +
