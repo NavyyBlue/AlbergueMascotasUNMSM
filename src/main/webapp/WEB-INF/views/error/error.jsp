@@ -14,7 +14,10 @@
     <div class="text-center">
         <h1 class="text-danger">Error</h1>
         <p class="lead">Lo sentimos, se ha producido un error en la aplicación.</p>
-        <p class="lead">Póngase en contacto con el soporte técnico para obtener asistencia.</p>
+        <p class="lead">Regrese a la vista principal.</p>
+        <a class="btn btn-primary" href="<%=request.getContextPath()%>/home">Volver</a>
+    </div>
+    <div class="mt-5 text-center">
         <img width="500px" alt="error" src="<%=request.getContextPath()%>/assets/img/cat_error.jpg"/>
     </div>
 </div>

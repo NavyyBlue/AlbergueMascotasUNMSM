@@ -17,6 +17,6 @@ public class LogoutServlet extends HttpServlet{
         if (session != null) {
             session.removeAttribute("user");
         }
-        request.getRequestDispatcher("/WEB-INF/views/home/home.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 }

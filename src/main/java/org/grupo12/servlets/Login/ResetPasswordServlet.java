@@ -11,6 +11,7 @@ import org.grupo12.services.implementation.PasswordRecoveryService;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @WebServlet("/resetpassword")
 public class ResetPasswordServlet extends HttpServlet {
@@ -25,6 +26,13 @@ public class ResetPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try{
+            String otp = (String) request.getSession().getAttribute("otp");
+            System.out.println("otp: " + otp);
+            if(otp == null) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
             getServletContext()
                     .getRequestDispatcher("/WEB-INF/views/Login/resetpassword.jsp")
                     .forward(request, response);
@@ -43,14 +51,21 @@ public class ResetPasswordServlet extends HttpServlet {
             String otp = (String) request.getSession().getAttribute("otp");
             if(password.equals(password2)){
                 boolean resp = passwordRecoveryService.resetPassword(otp, password);
-                if(resp) response.sendRedirect(request.getContextPath() + "/login");
+                if(resp){
+                    request.getSession().setAttribute("alerts", Collections.singletonMap("success","Contraseña cambiada correctamente"));
+                    response.sendRedirect(request.getContextPath() + "/login");
+                    request.getSession().removeAttribute("otp");
+                }else{
+                    request.getSession().setAttribute("alerts", Collections.singletonMap("danger","Error al cambiar la contraseña"));
+                    response.sendRedirect(request.getRequestURI());
+                }
             }else{
-                response.sendRedirect("resetpassword");
+                System.out.println("Las contraseñas no coinciden");
+                request.getSession().setAttribute("alerts", Collections.singletonMap("info","Las contraseñas no coinciden"));
+                response.sendRedirect(request.getRequestURI());
             }
         }catch (Exception e) {
             request.getSession().setAttribute("errorOccurred", true);
-        }finally {
-            request.getSession().removeAttribute("otp");
         }
     }
 }

@@ -13,6 +13,7 @@ import org.grupo12.util.ConfigLoader;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @WebServlet("/forgot-password")
 public class ForgotPasswordServlet extends HttpServlet {
@@ -39,10 +40,18 @@ public class ForgotPasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try{
             String email = request.getParameter("userEmail");
-            recoveryService.sendOTPByEmail(email);
-            request.getSession().setAttribute("userEmail", email);
-            response.sendRedirect(request.getContextPath() + "/verifyotp");
+            boolean resp = recoveryService.sendOTPByEmail(email);
+            if(resp){
+                request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Email enviado correctamente"));
+                request.getSession().setAttribute("userEmail", email);
+                response.sendRedirect(request.getContextPath() + "/verifyotp");
+            }else{
+                request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Verifique el email ingresado"));
+                response.sendRedirect(request.getRequestURI());
+            }
+
         }catch (Exception e) {
+            request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Error al enviar el email"));
             response.sendRedirect(request.getContextPath() + "/login");
         }
     }

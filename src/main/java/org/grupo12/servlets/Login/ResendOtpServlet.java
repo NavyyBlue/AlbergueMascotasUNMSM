@@ -13,6 +13,7 @@ import org.grupo12.util.ConfigLoader;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @WebServlet("/resendotp")
 public class ResendOtpServlet extends HttpServlet {
@@ -32,7 +33,13 @@ public class ResendOtpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try{
             String email = (String) request.getSession().getAttribute("userEmail");
-            recoveryService.sendOTPByEmail(email);
+            boolean resp = recoveryService.sendOTPByEmail(email);
+            if(!resp){
+                request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Error al enviar el email"));
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+            request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Código reenviado correctamente"));
         }catch (Exception e) {
             System.out.println("error: " + e.getMessage());
         }finally {

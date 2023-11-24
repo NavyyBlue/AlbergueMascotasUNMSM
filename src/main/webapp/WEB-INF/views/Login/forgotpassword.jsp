@@ -8,6 +8,7 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body style="background-color: #eeeeee">
+<jsp:include page="../../components/alerts.jsp"/>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center min-vh-100">
             <div class="col-12 col-md-8 col-lg-4">

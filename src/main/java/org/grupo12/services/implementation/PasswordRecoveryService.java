@@ -22,14 +22,16 @@ public class PasswordRecoveryService implements IPasswordRecoveryService {
     }
 
     @Override
-    public void sendOTPByEmail(String userEmail) throws NoSuchAlgorithmException {
+    public boolean sendOTPByEmail(String userEmail) throws NoSuchAlgorithmException {
         String otp = resetPasswordDAO.generateOTPForUser(userEmail);
         if(otp != null) {
             String subject = "Recuperación de Contraseña";
             String body = "Tu código OTP para recuperación de contraseña es: " + otp;
             assert emailService != null;
             emailService.sendEmail(userEmail, subject, body);
+            return true;
         }
+        return false;
     }
 
     @Override

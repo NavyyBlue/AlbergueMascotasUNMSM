@@ -9,6 +9,7 @@
 </head>
 <body style="background-color: #eeeeee">
 <div class="container mt-5">
+    <jsp:include page="../../components/alerts.jsp"/>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center min-vh-100">
             <div class="col-12 col-md-8 col-lg-4">
@@ -23,7 +24,7 @@
                         <div class="mb-4">
                             <p class="mb-2">
                                 Por favor, ingresar el código de verificación enviado al
-                                correo electronico correspondiente
+                                correo electronico <strong><%=request.getSession().getAttribute("userEmail")%></strong>
                             </p>
                         </div>
                         <form  action="${pageContext.request.contextPath}/verifyotp" method="post">
