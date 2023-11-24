@@ -12,6 +12,7 @@ import org.grupo12.services.UserService;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
@@ -43,8 +44,10 @@ public class SignUpServlet extends HttpServlet {
 
             boolean resp = userService.createUser(user);
             if(resp) {
+                request.getSession().setAttribute("alerts", Collections.singletonMap("success","Usuario creado correctamente"));
                 response.sendRedirect(request.getContextPath() + "/login");
             }else{
+                request.getSession().setAttribute("alerts", Collections.singletonMap("danger","Error al crear el usuario"));
                 response.sendRedirect("signup");
             }
         }catch (Exception e) {

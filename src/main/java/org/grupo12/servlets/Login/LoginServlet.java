@@ -13,6 +13,7 @@ import org.grupo12.services.UserService;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
+import java.util.Collections;
 
 
 @WebServlet("/login")
@@ -42,6 +43,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
+            request.getSession().setAttribute("alerts", Collections.singletonMap("danger","Usuario o contraseña incorrectos"));
             response.sendRedirect("login");
         }
     }
