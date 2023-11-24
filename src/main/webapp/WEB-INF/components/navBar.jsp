@@ -31,7 +31,7 @@
         </div>
         <ul class="navbar-nav flex-row d-none d-md-flex">
             <li class="nav-item me-3 me-lg-1 active">
-                <a href="<%=request.getContextPath()%>/petTable" class="nav-link active">
+                <a href="<%=request.getContextPath()%>/about" class="nav-link active">
                     Nosotros
                 </a>
             </li>
@@ -62,7 +62,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/userstable">Usuarios</a></li>
-                        <li><a class="dropdown-item" href="#">Mascotas</a></li>
+                        <li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/petTable">Mascotas</a></li>
                         <li><a class="dropdown-item" href="#">Noticias</a></li>
                     </ul>
                 </li>

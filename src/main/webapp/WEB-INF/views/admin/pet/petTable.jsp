@@ -17,6 +17,7 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <%
@@ -27,8 +28,8 @@
     int active = request.getParameter("active") != null ?
             Integer.parseInt(request.getParameter("active")) : 1;
 %>
-<jsp:include page="../../components/alerts.jsp"/>
-<jsp:include page="../../components/navBar.jsp"/>
+<jsp:include page="../../../components/alerts.jsp"/>
+<jsp:include page="../../../components/navBar.jsp"/>
 <div class="divMainPetTable">
     <div style="display: flex; flex-direction: column; justify-content: center; align-items: flex-end; width: 100%; margin: 0 0 20px 0;">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -38,19 +39,19 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Edad</th>
-            <th>Especie</th>
-            <th>Género</th>
-            <th>Raza</th>
-            <th>Fecha de Ingreso</th>
-            <th>Ubicación</th>
-            <th>Estado de Adopción</th>
-            <th>Editar</th>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Edad</th>
+            <th scope="col">Especie</th>
+            <th scope="col">Género</th>
+            <th scope="col">Raza</th>
+            <th scope="col">Fecha de Ingreso</th>
+            <th scope="col">Ubicación</th>
+            <th scope="col">Estado de Adopción</th>
+            <th scope="col">Editar</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider">
         <%
             List<Pet> pets = (List<Pet>) request.getAttribute("pets");
             for (Pet pet : pets) {
@@ -105,7 +106,7 @@
             </td>
             <td>
                             <span data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
-                                <a type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" data-userid="<%=pet.getPetId()%>">
+                                <a type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" data-petid="<%=pet.getPetId()%>">
                                     <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
                                 </a>
                             </span>
@@ -144,9 +145,9 @@
     %>
     <!-- Controles de paginacion -->
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-        <form id="paginationForm" action="<%=request.getContextPath()%>/petTable" method="get">
+        <form id="paginationForm" action="<%=request.getContextPath()%>/admin/petTable" method="get">
             <!-- Add hidden fields for other parameters if needed -->
-            <%--        <input type="hidden" name="speciesId" value="<%=speciesId%>" />--%>
+            <input type="hidden" name="petId" value="<%=petId%>" />
             <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
 
             <ul class="pagination">
@@ -180,7 +181,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editUserForm" action="${pageContext.request.contextPath}/petTable" method="post">
+                <form id="editPetForm" action="${pageContext.request.contextPath}/admin/petTable" method="post">
                     <div class="mb-3">
                         <label for="editName" class="form-label">Nombre</label>
                         <input type="text" class="form-control" id="editName" name="editName">
@@ -238,7 +239,7 @@
                     </div>
                     <input type="hidden" id="isNewPet" name="isNewPet" value="false">
                     <div class="modal-footer">
-                        <input type="hidden" id="editUserId" name="editUserId" value="<%=petId%>">
+                        <input type="hidden" id="editPetId" name="editPetId" value="<%=petId%>">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
@@ -257,7 +258,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="<%=request.getContextPath()%>/petTable" method="post">
+                <form action="<%=request.getContextPath()%>/admin/petTable" method="post">
                         <div class="mb-3">
                             <label for="nameNewPet" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nameNewPet" name="nameNewPet" aria-describedby="emailHelp" required>
@@ -344,22 +345,22 @@
 
     $('#deleteModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Botón que activó el modal
-        let userId = button.data('userid'); // Extraer el userId del atributo data-userid
-        $('#deleteUserId').val(userId);
+        let petId = button.data('petid'); // Extraer el userId del atributo data-userid
+        $('#deleteUserId').val(petId);
     });
 
     $('#restoreModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Botón que activó el modal
-        let userId = button.data('userid'); // Extraer el userId del atributo data-userid
-        $('#restoreUserId').val(userId);
+        let petId = button.data('petid'); // Extraer el userId del atributo data-userid
+        $('#restoreUserId').val(petId);
     });
 
     $('#editModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget); // Botón que activó el modal
-        let userId = button.data('userid'); // Extraer el userId del atributo data-userid
-
-        if(userId === 0){
-            $('#editModalLabel').text('Agregar Usuario');
+        let petId = button.data('petid'); // Extraer el userId del atributo data-userid
+        console.log("entrada al modal edit");
+        if(petId === 0){
+            $('#editModalLabel').text('Agregar Mascota');
             // Clear modal fields
             $('#editUserId').val('');
             $('#editFirstName').val('');
@@ -370,23 +371,27 @@
             $('#editUserRole').val('');
         }else{
             // Parse the JSON data from the attribute
-            let usersJson = '<%= request.getAttribute("usersJson") %>';
-            let users = JSON.parse(usersJson);
+            let petsJson = '<%= request.getAttribute("petsJson") %>';
+            let pets = JSON.parse(petsJson);
             // Find the user with the corresponding userId
-            let user = users.find(function(u) {
-                return u.userId === userId;
+            let pet = pets.find(function(u) {
+                return u.petId === petId;
             });
-
-            $('#editUserId').val(user.userId);
+            console.log("editar");
+            $('#editPetId').val(pet.petId);
             // Update modal fields with user data
-            $('#editFirstName').val(user.firstName);
-            $('#editLastName').val(user.lastName);
-            $('#editEmail').val(user.email);
-            $('#editUserName').val(user.userName);
-            $('#editPhoneNumber').val(user.phoneNumber);
-            $('#editUserRole').val(user.userRole);
+            $('#editName').val(pet.name);
+            $('#editAge').val(pet.age);
+            $('#editSpeciesId').val(pet.speciesId);
+            $('#editGender').val(pet.gender);
+            $('#editDescription').val(pet.description);
+            $('#editAdoptionStatus').val(pet.adoptionStatusId);
+            $('#editBreed').val(pet.breed);
+            $('#editLocation').val(pet.location);
+            //$('#editEntryDate').val(pet.entryDate);
+
         }
-        if (userId) {
+        if (petId) {
             setIsNewUser(false);
         } else {
             setIsNewUser(true);
