@@ -27,7 +27,6 @@ public class ResetPasswordServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try{
             String otp = (String) request.getSession().getAttribute("otp");
-            System.out.println("otp: " + otp);
             if(otp == null) {
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
@@ -61,7 +60,7 @@ public class ResetPasswordServlet extends HttpServlet {
                 }
             }else{
                 System.out.println("Las contraseñas no coinciden");
-                request.getSession().setAttribute("alerts", Collections.singletonMap("info","Las contraseñas no coinciden"));
+                request.getSession().setAttribute("alerts", Collections.singletonMap("warning","Las contraseñas no coinciden"));
                 response.sendRedirect(request.getRequestURI());
             }
         }catch (Exception e) {
