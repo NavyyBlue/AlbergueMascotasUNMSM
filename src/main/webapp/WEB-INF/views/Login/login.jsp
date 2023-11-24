@@ -24,7 +24,12 @@
                 <div class="form-group text-center">
                     ¿Es un usuario nuevo? <a href="<%=request.getContextPath()%>/signup" class="form-link">Registrarse</a>
                 </div>
+                <%--Volver al home--%>
+                <div class="form-group text-center">
+                    <a href="<%=request.getContextPath()%>/home" class="form-link">Volver al Home</a>
+                </div>
             </form>
+
         </div>
     </div>
     <div class="image-container">
