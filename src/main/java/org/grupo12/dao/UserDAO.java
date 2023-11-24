@@ -2,7 +2,6 @@ package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.models.User;
-import org.grupo12.util.PasswordEncryptionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

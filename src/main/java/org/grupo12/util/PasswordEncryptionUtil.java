@@ -10,8 +10,12 @@ public class PasswordEncryptionUtil {
         return BCrypt.checkpw(password, hashedPassword);
     }
 
+    public static String hashOTP(String otp){
+        return BCrypt.hashpw(otp, BCrypt.gensalt());
+    }
+
     public static String generateOTP() {
-        int randomPin   =(int) (Math.random()*9000)+1000;
+        int randomPin = (int) (Math.random()*9000)+1000;
         return String.valueOf(randomPin);
     }
 }
