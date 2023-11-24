@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.grupo12.dao.ResetPasswordDAO;
 import org.grupo12.services.implementation.EmailService;
 import org.grupo12.services.implementation.PasswordRecoveryService;
@@ -40,6 +41,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         try{
             String email = request.getParameter("userEmail");
             recoveryService.sendOTPByEmail(email);
+            response.sendRedirect(request.getContextPath() + "/verifyotp");
         }catch (Exception e) {
             System.out.println("error otp: " + e.getMessage());
         }finally {

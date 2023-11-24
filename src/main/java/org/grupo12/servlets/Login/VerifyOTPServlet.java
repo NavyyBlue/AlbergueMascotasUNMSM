@@ -3,6 +3,9 @@ package org.grupo12.servlets.Login;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.grupo12.dao.ResetPasswordDAO;
 import org.grupo12.services.implementation.PasswordRecoveryService;
 import org.grupo12.util.ConnectionDB;
@@ -16,12 +19,16 @@ public class VerifyOTPServlet extends HttpServlet {
         this.recoveryService = new PasswordRecoveryService(new ResetPasswordDAO(dataSource));
     }
 
+
     @Override
-    protected void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws java.io.IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws java.io.IOException {
         try{
-            String otp = request.getParameter("otp");
+            String otp = request.getParameter("otpCode");
             boolean resp = recoveryService.verifyOtp(otp);
-            if(resp) response.sendRedirect(request.getContextPath() + "/resetpassword");
+            if(resp) {
+                response.sendRedirect(request.getContextPath() + "/resetpassword");
+                request.getSession().setAttribute("otp", otp);
+            }
         }catch (Exception e) {
             request.getSession().setAttribute("errorOccurred", true);
             response.sendRedirect(request.getContextPath() + "/error");
