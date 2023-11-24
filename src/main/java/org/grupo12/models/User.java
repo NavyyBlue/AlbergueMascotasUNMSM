@@ -12,6 +12,7 @@ public class User {
     private String password;
     private String phoneNumber;
     private String userImage;
+    private int userRole;
     private boolean active;
     private int userRole;
 }

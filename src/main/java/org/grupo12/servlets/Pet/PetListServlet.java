@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.grupo12.dao.PetDAO;
 import org.grupo12.models.Pet;
+import org.grupo12.services.PetService;
 import org.grupo12.util.ConnectionDB;
 import org.grupo12.util.Pagination;
 
@@ -16,48 +17,26 @@ import java.util.List;
 
 @WebServlet("/petlist")
 public class PetListServlet extends HttpServlet {
-    private HikariDataSource dataSource = ConnectionDB.getDataSource();
+    private final HikariDataSource dataSource = ConnectionDB.getDataSource();
+
+    private PetService petService;
+
+    @Override
+    public void init() throws ServletException {
+        petService = new PetService(new PetDAO(dataSource));
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int speciesId = 0;
-        int age = 0;
-        String gender = "";
-        String searchKeyword = "";
+        try{
+            List<Pet> pets = petService.getPetPaginated(request);
 
-        String speciesIdParam = request.getParameter("speciesId");
-        if (speciesIdParam != null && !speciesIdParam.isEmpty())
-            speciesId = Integer.parseInt(speciesIdParam);
-
-        String ageParam = request.getParameter("age");
-        if (ageParam != null && !ageParam.isEmpty()) {
-            age = Integer.parseInt(ageParam);
+            request.setAttribute("pets", pets);
+            request.getRequestDispatcher("/WEB-INF/views/pet/petlist.jsp").forward(request, response);
+        }catch (Exception e) {
+            request.getSession().setAttribute("errorOccurred", true);
+            response.sendRedirect(request.getContextPath() + "/error");
         }
 
-        gender = request.getParameter("gender");
-        searchKeyword = request.getParameter("searchKeyword");
-
-        Pagination pagination = new Pagination();
-        PetDAO petDAO = new PetDAO(dataSource);
-
-        // Retrieve the requested page number from the request
-        String pageParam = request.getParameter("page");
-        int requestedPage = 1; // Default to page 1
-        if (pageParam != null && !pageParam.isEmpty()) {
-            requestedPage = Integer.parseInt(pageParam);
-        }
-
-        int total = petDAO.getTotalPetCount(speciesId, age, gender, searchKeyword);
-        pagination.setTotal(total);
-        pagination.calculate();
-        pagination.setCurrentPage(requestedPage);
-
-        int offset = pagination.calculateOffset(requestedPage);
-        int limit = pagination.getLimit();
-
-
-        List<Pet> pets = petDAO.getPetListBySpecies(speciesId, age, gender, searchKeyword,offset, limit);
-
-        request.setAttribute("pagination", pagination);
-        request.setAttribute("pets", pets);
-        request.getRequestDispatcher("/WEB-INF/views/pet/petlist.jsp").forward(request, response);
     }
 }

@@ -6,43 +6,51 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.grupo12.models.User;
 import org.grupo12.dao.UserDAO;
+import org.grupo12.models.User;
 import org.grupo12.services.UserService;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
 
-
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/signup")
+public class SignUpServlet extends HttpServlet {
     private final HikariDataSource dataSource = ConnectionDB.getDataSource();
     private UserService userService;
+
     @Override
     public void init() throws ServletException {
         userService = new UserService(new UserDAO(dataSource));
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         getServletContext()
-                .getRequestDispatcher("/WEB-INF/views/Login/login.jsp")
+                .getRequestDispatcher("/WEB-INF/views/Login/signup.jsp")
                 .forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String username = request.getParameter("username");
-        String pass = request.getParameter("password");
+        try{
+            User user = new User();
+            user.setUserName(request.getParameter("userName"));
+            user.setPassword(request.getParameter("password"));
+            user.setFirstName(request.getParameter("firstName"));
+            user.setLastName(request.getParameter("lastName"));
+            user.setEmail(request.getParameter("email"));
+            user.setPhoneNumber(request.getParameter("phoneNumber"));
 
-        User user = userService.getUserByUsernameAndPassword(username, pass);
-
-        if (user != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/home");
-        } else {
-            response.sendRedirect("login");
+            boolean resp = userService.createUser(user);
+            if(resp) {
+                response.sendRedirect(request.getContextPath() + "/login");
+            }else{
+                response.sendRedirect("signup");
+            }
+        }catch (Exception e) {
+            request.getSession().setAttribute("errorOccurred", true);
+            response.sendRedirect(request.getContextPath() + "/error");
         }
     }
+
 }

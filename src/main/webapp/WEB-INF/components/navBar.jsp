@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@page import="java.util.Map" %>
 <%@ page import="org.grupo12.models.User" %>
+<%@ page import="org.grupo12.util.AuthenticationUtils" %>
 <%User user = (User) session.getAttribute("user");%>
 <%
     Map<String, String> errors = (Map<String, String>) request.getAttribute("errors");
@@ -54,6 +55,18 @@
                     Noticias
                 </a>
             </li>
+            <%if(user != null && user.getUserRole() == AuthenticationUtils.ADMIN_VALUE){%>
+                <li class="nav-item dropdown me-3 me-lg-1">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Administrador
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/userstable">Usuarios</a></li>
+                        <li><a class="dropdown-item" href="#">Mascotas</a></li>
+                        <li><a class="dropdown-item" href="#">Noticias</a></li>
+                    </ul>
+                </li>
+            <%}%>
         </ul>
         <ul class="navbar-nav flex-row align-items-center">
             <li class="nav-item me-3 me-lg-1">
