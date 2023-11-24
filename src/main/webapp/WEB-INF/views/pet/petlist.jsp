@@ -65,11 +65,14 @@
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
+                    // Imagen por defecto si no tiene
+                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) ?
+                                    request.getContextPath() + "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                     <div class="card mb-4">
                         <a href="<%= petInfoUrl %>" class="card-link">
-                            <img src="<%= pet.getImageUrl() %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+                            <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
                             <div class="card-img-overlay infoCardImg">
                                 <h3 class="card-text"><%= pet.getName() %>
                                 </h3>

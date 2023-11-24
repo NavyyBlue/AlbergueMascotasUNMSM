@@ -73,3 +73,16 @@
     margin: 0 31px;
     text-align: center;
 }
+
+.donar-button{
+    width: 251px;
+    height: 64px;
+    border-radius: 30px;
+    background: #94C11F;
+    color: #FFF;
+    margin: 10px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 64px;
+}

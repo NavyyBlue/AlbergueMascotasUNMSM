@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <a href="<%=request.getContextPath()%>/FormDonation" style="width: 251px; height: 64px;border-radius: 30px; background: #94C11F; color: #FFF; margin: 10px 0">DONAR</a>
+        <a href="<%=request.getContextPath()%>/FormDonation" class="donar-button">DONAR</a>
     </div>
 
 </main>

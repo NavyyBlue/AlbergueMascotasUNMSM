@@ -3,7 +3,6 @@
 <%@ page import="org.grupo12.models.User" %>
 <%@ page import="org.grupo12.util.AuthenticationUtils" %>
 <%User user = (User) session.getAttribute("user");%>
-<body>
 <nav class="navbar navbar-expand-sm navbar-light ml-auto mx-5">
     <div class="container-fluid justify-content-between">
         <div class="d-flex">
@@ -96,4 +95,3 @@
 
     </div>
 </nav>
-</body>
