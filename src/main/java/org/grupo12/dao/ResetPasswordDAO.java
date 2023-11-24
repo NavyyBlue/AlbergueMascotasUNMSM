@@ -3,10 +3,8 @@ package org.grupo12.dao;
 import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.util.PasswordEncryptionUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.*;
 
 public class ResetPasswordDAO {
     private HikariDataSource dataSource;
@@ -40,7 +38,7 @@ public class ResetPasswordDAO {
         return resp;
     }
 
-    public String generateOTPForUser(String email){
+    public String generateOTPForUser(String email) throws NoSuchAlgorithmException {
         String CHECK_USER_QUERY  = "SELECT UserId FROM User WHERE Email = ? LIMIT 1";
 
         String GET_ACTIVE_RESET_PASSWORD_QUERY = "SELECT ResetPasswordId FROM ResetPassword " +
@@ -120,15 +118,17 @@ public class ResetPasswordDAO {
             PreparedStatement updateUserPasswordStatement = connection.prepareStatement(UPDATE_USER_PASSWORD_QUERY);
             PreparedStatement updateExpiredResetPasswordStatement = connection.prepareStatement(UPDATE_EXPIRED_RESET_PASSWORD_QUERY)){
 
+
             selectResetPasswordStatement.setString(1, otp);
             ResultSet selectResetPasswordResult = selectResetPasswordStatement.executeQuery();
 
             if(selectResetPasswordResult.next()){
+
                 int resetPasswordId = selectResetPasswordResult.getInt("ResetPasswordId");
                 int userId = selectResetPasswordResult.getInt("UserId");
-                String expirationDate = selectResetPasswordResult.getString("ExpirationDate");
-
-                if(expirationDate.compareTo("NOW()") > 0){
+                Timestamp expirationDate = selectResetPasswordResult.getTimestamp("ExpirationDate");
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                if(expirationDate.after(now)){
                     updateUserPasswordStatement.setString(1, newPassword);
                     updateUserPasswordStatement.setInt(2, userId);
                     updateUserPasswordStatement.executeUpdate();

@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.grupo12.dao.ResetPasswordDAO;
-import org.grupo12.dao.UserDAO;
-import org.grupo12.services.UserService;
 import org.grupo12.services.implementation.PasswordRecoveryService;
 import org.grupo12.util.ConnectionDB;
 
@@ -17,18 +15,24 @@ import java.io.IOException;
 @WebServlet("/resetpassword")
 public class ResetPasswordServlet extends HttpServlet {
     private final HikariDataSource dataSource = ConnectionDB.getDataSource();
-    private PasswordRecoveryService passwordRecoveryService;
+    private final PasswordRecoveryService passwordRecoveryService;
 
-    @Override
-    public void init() throws ServletException {
-        passwordRecoveryService = new PasswordRecoveryService(new ResetPasswordDAO(dataSource));
+    public ResetPasswordServlet() {
+        this.passwordRecoveryService = new PasswordRecoveryService(new ResetPasswordDAO(dataSource));
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        getServletContext()
-                .getRequestDispatcher("/WEB-INF/views/Login/resetpassword.jsp")
-                .forward(request, response);
+        try{
+            getServletContext()
+                    .getRequestDispatcher("/WEB-INF/views/Login/resetpassword.jsp")
+                    .forward(request, response);
+        } catch (Exception e) {
+            request.getSession().setAttribute("errorOccurred", true);
+            response.sendRedirect(request.getContextPath() + "/error");
+        }
+
     }
 
     @Override
@@ -45,7 +49,6 @@ public class ResetPasswordServlet extends HttpServlet {
             }
         }catch (Exception e) {
             request.getSession().setAttribute("errorOccurred", true);
-            response.sendRedirect(request.getContextPath() + "/error");
         }finally {
             request.getSession().removeAttribute("otp");
         }

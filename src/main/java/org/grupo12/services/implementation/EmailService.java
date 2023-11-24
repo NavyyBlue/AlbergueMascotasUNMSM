@@ -22,9 +22,6 @@ public class EmailService implements IEmailService {
 
     @Override
     public void sendEmail(String to, String subject, String body) {
-        System.out.println("username: " + username);
-        System.out.println("password: " + password);
-
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", port);
