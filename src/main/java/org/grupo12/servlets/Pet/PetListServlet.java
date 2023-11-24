@@ -17,6 +17,15 @@ import java.util.List;
 @WebServlet("/petlist")
 public class PetListServlet extends HttpServlet {
     private HikariDataSource dataSource = ConnectionDB.getDataSource();
+
+    private PetDAO petDAO;
+
+    @Override
+    public void init() throws ServletException {
+        petDAO = new PetDAO(dataSource);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int speciesId = 0;
         int age = 0;
@@ -36,7 +45,6 @@ public class PetListServlet extends HttpServlet {
         searchKeyword = request.getParameter("searchKeyword");
 
         Pagination pagination = new Pagination();
-        PetDAO petDAO = new PetDAO(dataSource);
 
         // Retrieve the requested page number from the request
         String pageParam = request.getParameter("page");

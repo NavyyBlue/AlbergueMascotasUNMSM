@@ -11,22 +11,39 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <link href="<%=request.getContextPath()%>/assets/css/petlist.css" rel="stylesheet"/>
+    <link href="<%=request.getContextPath()%>/assets/css/adminUser.css" rel="stylesheet"/>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/navbar.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
-<jsp:include page="../../../components/navBar.jsp"/>
 <body>
     <%
         // Default speciesId if not present in the request
         int defaultUserId = 0;
         int userId = request.getParameter("userId") != null ?
                 Integer.parseInt(request.getParameter("userId")) : defaultUserId;
+        int active = request.getParameter("active") != null ?
+                Integer.parseInt(request.getParameter("active")) : 1;
     %>
-    <div class="table-responsive m-5">
+    <jsp:include page="../../../components/alerts.jsp"/>
+    <jsp:include page="../../../components/navBar.jsp"/>
+
+<%--    <a type="button" class="btn btn-success btn-sm ms-5 mt-2" data-bs-toggle="modal" data-bs-target="#editModal"  data-userid="0" onclick="setIsNewUser(true)">--%>
+<%--        <b>+ Agregar Usuario</b>--%>
+<%--    </a>--%>
+    <!--Droplist to change between active and not active users -->
+    <div class="dropdown ms-5 mt-2">
+        <label for="activeFilter" class="visually-hidden">Filtrar por estado de usuario</label>
+        <select class="btn btn-secondary" id="activeFilter" onchange="window.location.href=this.value">
+            <option value="<%=request.getContextPath()%>/admin/userstable?active=2" <%=active == 2 ? "selected" : ""%> >Todos</option>
+            <option value="<%=request.getContextPath()%>/admin/userstable?active=1" <%=active == 1 ? "selected" : ""%> >Activos</option>
+            <option value="<%=request.getContextPath()%>/admin/userstable?active=0" <%=active == 0 ? "selected" : ""%> >Inactivos</option>
+        </select>
+    </div>
+
+    <div class="table-responsive mt-3 m-5">
         <table class="table">
             <thead>
             <tr>
@@ -44,7 +61,6 @@
             <%
                 List<User> users = (List<User>) request.getAttribute("users");
                 for (User user : users) {
-                    String userInfoUrl = "/admin/users/" + user.getUserId();
             %>
                     <tr>
                         <th scope="row"><%=user.getUserId()%></th>
@@ -62,12 +78,24 @@
                             %>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" data-userid="<%=user.getUserId()%>">
-                                <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
-                            </a>
-                            <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
-                            </a>
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <a type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal" data-userid="<%=user.getUserId()%>">
+                                    <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
+                                </a>
+                            </span>
+                            <% String titleTooltip = user.isActive() ? "Eliminar" : "Restaurar"; %>
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="<%=titleTooltip%>">
+                                <% if(user.isActive()){%>
+                                    <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="<%=user.getUserId()%>"
+                                    >
+                                        <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
+                                    </a>
+                                <%}else{%>
+                                    <a type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#restoreModal" data-userid="<%=user.getUserId()%>">
+                                        <img src="<%=request.getContextPath()%>/assets/svg/restore.svg" alt="restaurar">
+                                    </a>
+                                <%}%>
+                            </span>
                         </td>
                     </tr>
                 <%}%>
@@ -83,7 +111,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editUserForm" enctype="multipart/form-data" action="<%=request.getContextPath()%>/admin/userstable" method="post">
+                    <form id="editUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
                         <div class="mb-3">
                             <label for="editFirstName" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="editFirstName" name="editFirstName">
@@ -111,28 +139,82 @@
                                 <option value="1">Usuario</option>
                             </select>
                         </div>
+
+                        <input type="hidden" id="isNewUser" name="isNewUser" value="false">
                         <div class="modal-footer">
-                            <input type="hidden" id="editUserId" name="editUserId" value="">
+                            <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" onclick="saveUser()">Guardar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
-        <%
-            Pagination pagination = (Pagination) request.getAttribute("pagination");
-            int start = pagination.getStartPage();
-            int end = pagination.getEndPage();
-            int totalPages = pagination.getTotalPages(); //Total de páginas
-            int currentPage = pagination.getCurrentPage();
-            if(totalPages > 0){
-        %>
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Eliminar Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="deleteUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
+                    <div class="modal-body">
+                        ¿Está seguro de eliminar el usuario?
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="deleteUserId" name="deleteUserId" value="<%=userId%>">
+                        <input type="hidden" name="_method" value="DELETE">
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Restore Modal -->
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="restoreModalLabel">Restaurar Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="restoreUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
+                    <div class="modal-body">
+                        ¿Está seguro de restaurar el usuario?
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="restoreUserId" name="restoreUserId" value="<%=userId%>">
+                        <input type="hidden" name="_method" value="PATCH">
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Restaurar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitPage(page) {
+            document.getElementById('currentPage').value = page;
+            document.getElementById('paginationForm').submit();
+        }
+    </script>
+    <%
+        Pagination pagination = (Pagination) request.getAttribute("pagination");
+        int start = pagination.getStartPage();
+        int end = pagination.getEndPage();
+        int totalPages = pagination.getTotalPages(); //Total de páginas
+        int currentPage = pagination.getCurrentPage();
+        if(totalPages > 0){
+    %>
     <!-- Controles de paginacion -->
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-        <form id="paginationForm" action="<%=request.getContextPath()%>/petlist" method="get">
+        <form id="paginationForm" action="<%=request.getContextPath()%>/admin/userstable" method="get">
             <!-- Add hidden fields for other parameters if needed -->
             <input type="hidden" name="userId" value="<%=userId%>" />
             <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>" />
@@ -156,52 +238,62 @@
             </ul>
         </form>
     </nav>
-        <%}%>
+    <%}%>
     <script>
-        $('#editModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Botón que activó el modal
-            var userId = button.data('userid'); // Extraer el userId del atributo data-userid
-
-            // Parse the JSON data from the attribute
-            var usersJson = '<%= request.getAttribute("usersJson") %>';
-            var users = JSON.parse(usersJson);
-            // Find the user with the corresponding userId
-            var user = users.find(function(u) {
-                return u.userId === userId;
-            });
-
-            $('#editUserId').val(user.userId);
-            // Update modal fields with user data
-            $('#editFirstName').val(user.firstName);
-            $('#editLastName').val(user.lastName);
-            $('#editEmail').val(user.email);
-            $('#editUserName').val(user.userName);
-            $('#editPhoneNumber').val(user.phoneNumber);
-            $('#editUserRole').val(user.userRole);
-        });
-
-        function saveUser() {
-            // Obtén el formulario y su contenido
-            var formData = new FormData(document.getElementById("editUserForm"));
-
-            // Realiza una solicitud AJAX
-            $.ajax({
-                type: "POST",
-                url: "<%=request.getContextPath()%>/admin/userstable",  // Reemplaza con la URL de tu servlet
-                data: formData,
-                processData: false,  // Indica a jQuery que no procese los datos
-                contentType: false,  // Indica a jQuery que no configure el tipo de contenido
-                success: function(response) {
-                    // Maneja la respuesta del servidor si es necesario
-                    console.log(response);
-                },
-                error: function(error) {
-                    // Maneja los errores de la solicitud AJAX
-                    console.error(error);
-                }
-            });
+        function setIsNewUser(isNew) {
+            document.getElementById('isNewUser').value = isNew;
         }
 
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget); // Botón que activó el modal
+            let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+            $('#deleteUserId').val(userId);
+        });
+
+        $('#restoreModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget); // Botón que activó el modal
+            let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+            $('#restoreUserId').val(userId);
+        });
+
+        $('#editModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget); // Botón que activó el modal
+            let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+
+            if(userId === 0){
+                $('#editModalLabel').text('Agregar Usuario');
+                // Clear modal fields
+                $('#editUserId').val('');
+                $('#editFirstName').val('');
+                $('#editLastName').val('');
+                $('#editEmail').val('');
+                $('#editUserName').val('');
+                $('#editPhoneNumber').val('');
+                $('#editUserRole').val('');
+            }else{
+                // Parse the JSON data from the attribute
+                let usersJson = '<%= request.getAttribute("usersJson") %>';
+                let users = JSON.parse(usersJson);
+                // Find the user with the corresponding userId
+                let user = users.find(function(u) {
+                    return u.userId === userId;
+                });
+
+                $('#editUserId').val(user.userId);
+                // Update modal fields with user data
+                $('#editFirstName').val(user.firstName);
+                $('#editLastName').val(user.lastName);
+                $('#editEmail').val(user.email);
+                $('#editUserName').val(user.userName);
+                $('#editPhoneNumber').val(user.phoneNumber);
+                $('#editUserRole').val(user.userRole);
+            }
+            if (userId) {
+                setIsNewUser(false);
+            } else {
+                setIsNewUser(true);
+            }
+        });
     </script>
 </body>
 </html>
