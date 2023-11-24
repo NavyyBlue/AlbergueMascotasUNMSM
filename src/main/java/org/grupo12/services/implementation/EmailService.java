@@ -22,19 +22,19 @@ public class EmailService implements IEmailService {
 
     @Override
     public void sendEmail(String to, String subject, String body) {
+        System.out.println("username: " + username);
+        System.out.println("password: " + password);
+
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", port);
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-
-        Authenticator authenticator = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+        Session session = Session.getInstance(properties, new jakarta.mail.Authenticator() {
+            protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new jakarta.mail.PasswordAuthentication(username, password);
             }
-        };
-
-        Session session = Session.getInstance(properties, authenticator);
+        });
 
         try {
             Message message = new MimeMessage(session);
@@ -44,7 +44,9 @@ public class EmailService implements IEmailService {
             message.setText(body);
 
             Transport.send(message);
+            System.out.println("Correo electrónico enviado");
         } catch (MessagingException e) {
+            System.out.println("Error al enviar el correo electrónico");
             throw new RuntimeException(e);
         }
     }
