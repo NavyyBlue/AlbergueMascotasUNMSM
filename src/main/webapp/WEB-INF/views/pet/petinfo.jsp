@@ -60,6 +60,7 @@
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
+                <button type="button" class="btn btn-primary">Favorito</button>
             </div>
             <script>
                 const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');

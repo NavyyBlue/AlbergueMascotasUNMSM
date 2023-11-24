@@ -53,7 +53,7 @@
                         </p>
 
                         <div class="d-flex justify-content-center mb-2">
-                            <button type="button" class="btn btn-primary">Cerrar sesion</button>
+                            <a href="<%=request.getContextPath()%>/logout" class="btn btn-primary">Cerrar Sesion</a>
                         </div>
                     </div>
                 </div>
