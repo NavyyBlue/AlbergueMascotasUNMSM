@@ -48,7 +48,6 @@
             <form id="searchForm" action="<%= request.getContextPath() %>/petlist" method="get">
                 <div class="input-wrapper">
                     <input type="search" class="input" placeholder="Buscar por nombre" name="searchKeyword" value="<%= searchKeyword %>">
-
                     <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" width="51" height="50" viewBox="0 0 51 50"
                          fill="none">
                         <path d="M38.25 22.9166C38.25 30.9707 31.5902 37.4999 23.375 37.4999C15.1598 37.4999 8.5 30.9707 8.5 22.9166C8.5 14.8624 15.1598 8.33325 23.375 8.33325C31.5902 8.33325 38.25 14.8624 38.25 22.9166Z"
@@ -66,11 +65,14 @@
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
+                    // Imagen por defecto si no tiene
+                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) ?
+                                    request.getContextPath() + "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                     <div class="card mb-4">
                         <a href="<%= petInfoUrl %>" class="card-link">
-                            <img src="<%= pet.getImageUrl() %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+                            <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
                             <div class="card-img-overlay infoCardImg">
                                 <h3 class="card-text"><%= pet.getName() %>
                                 </h3>
