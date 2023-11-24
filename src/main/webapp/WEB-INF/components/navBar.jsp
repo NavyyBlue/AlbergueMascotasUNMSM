@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@page import="java.util.Map" %>
 <%@ page import="org.grupo12.models.User" %>
 <%@ page import="org.grupo12.util.AuthenticationUtils" %>
 <%User user = (User) session.getAttribute("user");%>
@@ -71,7 +70,7 @@
                 </a>
             </li>
             <li class="nav-item me-3 me-lg-1">
-                <% if (user != null) { %>
+                <% if (user != null) {%>
                 <div class="nav-link d-sm-flex align-items-sm-center">
                     <p class="m-0 me-2">
                         Hola,<br>
