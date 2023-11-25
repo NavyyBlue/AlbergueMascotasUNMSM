@@ -91,6 +91,7 @@
 
 .card:hover {
     background-color: rgba(0, 123, 255, 0.3); /* Color de resaltado transparente */
+    border-radius: 10px;
 }
 
 #card-details {
@@ -141,22 +142,27 @@
     position: relative;
     display: block;
     overflow: hidden;
+    border-radius: 10px;
 }
 
 .card-img {
     transition: transform 0.3s ease-in-out;
+    border-radius: 10px;
 }
 
 .card-link:hover .card-img {
     transform: scale(1.1);
+    border-radius: 10px;
 }
 
 .card-img-overlay.infoCardImg {
     display: none;
+    border-radius: 10px;
 }
 
 .card.mb-4:hover .bd-placeholder-img .bd-placeholder-img-lg .petImg{
     opacity: 0.5;
+    border-radius: 10px;
 }
 
 .card.mb-4:hover .card-img-overlay.infoCardImg {
@@ -166,8 +172,8 @@
     align-items: center;
     border-radius: 10px;
     background-color: rgba(148, 193, 31, 0.5);
-    margin: 20px;
     color: white;
+
 }
 
 .imgEmpty {
@@ -181,4 +187,19 @@
     font-weight: 900;
     margin-bottom: 50px;
     text-align: center;
+}
+
+.text-card{
+    text-decoration: none;
+    color: white;
+    text-align: center;
+}
+.favorite-img{
+    transition: transform 0.3s;
+    transform: scale(1.8);
+}
+
+.favorite-img:hover{
+    content: url("../svg/favorite-2.svg");
+    transform: scale(2.0);
 }
