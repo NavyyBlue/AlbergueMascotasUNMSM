@@ -16,6 +16,7 @@ import org.grupo12.util.ConnectionDB;
 import org.grupo12.util.Pagination;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/petlist")
@@ -34,6 +35,7 @@ public class PetListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
             List<Pet> pets = petService.getPetPaginatedBySpecies(request);
+            List<Pet> petsWithFavorites = new ArrayList<>();
 
             //Obtener favoritos
             User user = (User) request.getSession().getAttribute("user");
