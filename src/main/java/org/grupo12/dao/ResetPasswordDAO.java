@@ -110,39 +110,25 @@ public class ResetPasswordDAO {
     }
 
     public boolean updatePassword(String otp, String newPassword){
-        String SELECT_RESET_PASSWORD_QUERY = "SELECT ResetPasswordId, UserId, ExpirationDate FROM ResetPassword WHERE Otp = ? LIMIT 1";
-        String UPDATE_USER_PASSWORD_QUERY = "UPDATE User SET Password = ? WHERE UserId = ?";
-        String UPDATE_EXPIRED_RESET_PASSWORD_QUERY = "UPDATE ResetPassword SET ExpirationDate = NOW() WHERE ResetPasswordId = ?";
+        String UPDATE_PASSWORD_QUERY = "UPDATE User " +
+                "SET Password = ? " +
+                "WHERE UserId = (SELECT UserId FROM ResetPassword WHERE Otp = ? AND ExpirationDate > NOW() LIMIT 1)";
 
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement selectResetPasswordStatement = connection.prepareStatement(SELECT_RESET_PASSWORD_QUERY);
-            PreparedStatement updateUserPasswordStatement = connection.prepareStatement(UPDATE_USER_PASSWORD_QUERY);
-            PreparedStatement updateExpiredResetPasswordStatement = connection.prepareStatement(UPDATE_EXPIRED_RESET_PASSWORD_QUERY)){
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement updatePasswordStatement = connection.prepareStatement(UPDATE_PASSWORD_QUERY)) {
 
+            updatePasswordStatement.setString(1, newPassword);
+            updatePasswordStatement.setString(2, otp);
 
-            selectResetPasswordStatement.setString(1, otp);
-            ResultSet selectResetPasswordResult = selectResetPasswordStatement.executeQuery();
+            int rowsAffected = updatePasswordStatement.executeUpdate();
 
-            if(selectResetPasswordResult.next()){
+            return rowsAffected > 0;
 
-                int resetPasswordId = selectResetPasswordResult.getInt("ResetPasswordId");
-                int userId = selectResetPasswordResult.getInt("UserId");
-                Timestamp expirationDate = selectResetPasswordResult.getTimestamp("ExpirationDate");
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                if(expirationDate.after(now)){
-                    updateUserPasswordStatement.setString(1, newPassword);
-                    updateUserPasswordStatement.setInt(2, userId);
-                    updateUserPasswordStatement.executeUpdate();
-
-                    updateExpiredResetPasswordStatement.setInt(1, resetPasswordId);
-                    updateExpiredResetPasswordStatement.executeUpdate();
-
-                    return true;
-                }
-            }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
+
 }
