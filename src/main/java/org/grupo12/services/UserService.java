@@ -17,6 +17,8 @@ public class UserService {
 
     public User getUserByUsernameAndPassword(String username, String password) {
         String hashedPassword = userDAO.getHashedPasswordByUsername(username);
+        if(hashedPassword == null)
+            return null;
         boolean isPasswordCorrect = PasswordEncryptionUtil.checkPassword(password, hashedPassword);
 
         if(!isPasswordCorrect)
