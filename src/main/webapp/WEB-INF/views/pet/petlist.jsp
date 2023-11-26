@@ -20,7 +20,9 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
     <script>
         // Establecer la conexión WebSocket
-        let socket = new WebSocket("ws://localhost:8085/AlberguedeMascotas_war_exploded/petfavorites");
+        // let socket = new WebSocket("ws://localhost:8085/AlberguedeMascotas_war_exploded/petfavorites");
+
+        let socket = new WebSocket("ws://35.232.40.228:8085/AlberguedeMascotas/petfavorites"); //TO DEPLOY
 
         // Escuchar eventos WebSocket
         socket.onmessage = function(event) {
