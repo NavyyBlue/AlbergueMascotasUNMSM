@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="org.grupo12.models.User" %>
+
 <%User user = (User) session.getAttribute("user");%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -13,6 +14,8 @@
     <title>Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link href="<%=request.getContextPath()%>/assets/css/home.css" rel="stylesheet"/>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/navbar.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,9 +24,16 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
+<%
+    // Default speciesId if not present in the request
+    int defaultUserId = 0;
+    int userId = request.getParameter("userId") != null ?
+            Integer.parseInt(request.getParameter("userId")) : defaultUserId;
+%>
+
 <jsp:include page="../../components/navBar.jsp"/>
 
 <section style="background-color: #eee;">
@@ -55,6 +65,54 @@
                         <div class="d-flex justify-content-center mb-2">
                             <a href="<%=request.getContextPath()%>/logout" class="btn btn-primary">Cerrar Sesion</a>
                         </div>
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModalLabel">
+                            <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
+                            <a>Editar Usuario</a>
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="editModalLabel" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="editModalLabel">Editar Usuario</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="editUserForm" action="${pageContext.request.contextPath}/usuario" method="post">
+                                            <div class="mb-3">
+                                                <label for="editFirstName" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="editFirstName" name="editFirstName">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editLastName" class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" id="editLastName" name="editLastName">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editEmail" class="form-label">Email</label>
+                                                <input type="text" class="form-control" id="editEmail" name="editEmail">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editUserName" class="form-label">Nombre de Usuario</label>
+                                                <input type="text" class="form-control" id="editUserName" name="editUserName">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editPhoneNumber" class="form-label">Telefono</label>
+                                                <input type="text" class="form-control" id="editPhoneNumber" name="editPhoneNumber">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -171,8 +229,29 @@
     </div>
 
 
+        <script>
+            function setIsNewUser(isNew) {
+                document.getElementById('isNewUser').value = isNew;
+            }
+
+            $('#editModal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget); // Botón que activó el modal
+                let userId = button.data('userid'); // Extraer el userId del atributo data-userid
+
+                if(userId === <%= user.getUserName()%>){
+                    $('#editUserId').val(user.userId);
+                    // Update modal fields with user data
+                    $('#editFirstName').val(user.firstName);
+                    $('#editLastName').val(user.lastName);
+                    $('#editEmail').val(user.email);
+                    $('#editUserName').val(user.userName);
+                    $('#editPhoneNumber').val(user.phoneNumber);
+                    $('#editUserRole').val(user.userRole);
+                }
+            });
+        </script>
+
 
 </section>
-
 </body>
 </html>
