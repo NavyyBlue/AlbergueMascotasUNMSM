@@ -18,4 +18,5 @@ public class Pet {
     private String imageUrl;
     private String petStatusName;
     private int active;
+    private int totalFavorites;
 }

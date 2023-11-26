@@ -8,4 +8,5 @@ public interface IFavoriteService {
     boolean updateFavorite(int userId, int petId, int isFavorite);
     int isFavorite(int userId, int petId);
     List<Integer> getFavoritePetsByUser(int userId);
+    int getTotalFavoritesByPet(int userId);
 }
