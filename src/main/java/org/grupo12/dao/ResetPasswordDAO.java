@@ -109,20 +109,41 @@ public class ResetPasswordDAO {
         return false;
     }
 
-    public boolean updatePassword(String otp, String newPassword){
-        String UPDATE_PASSWORD_QUERY = "UPDATE User " +
-                "SET Password = ? " +
-                "WHERE UserId = (SELECT UserId FROM ResetPassword WHERE Otp = ? AND ExpirationDate > NOW() LIMIT 1)";
+    public boolean updatePassword(String otp, String newPassword) {
+        String UPDATE_PASSWORD_QUERY =
+                "UPDATE User " +
+                        "SET Password = ? " +
+                        "WHERE UserId = (SELECT UserId FROM ResetPassword WHERE Otp = ? AND ExpirationDate > NOW() LIMIT 1)";
+
+        String UPDATE_EXPIRED_RESET_PASSWORD_QUERY =
+                "UPDATE ResetPassword " +
+                        "SET ExpirationDate = NOW() " +
+                        "WHERE Otp = ? AND ExpirationDate > NOW() LIMIT 1";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement updatePasswordStatement = connection.prepareStatement(UPDATE_PASSWORD_QUERY)) {
+             PreparedStatement updatePasswordStatement = connection.prepareStatement(UPDATE_PASSWORD_QUERY);
+             PreparedStatement updateExpiredResetPasswordStatement = connection.prepareStatement(UPDATE_EXPIRED_RESET_PASSWORD_QUERY)) {
+
+            connection.setAutoCommit(false);  // Iniciar transacción
 
             updatePasswordStatement.setString(1, newPassword);
             updatePasswordStatement.setString(2, otp);
 
-            int rowsAffected = updatePasswordStatement.executeUpdate();
+            int rowsAffectedPassword = updatePasswordStatement.executeUpdate();
 
-            return rowsAffected > 0;
+            if (rowsAffectedPassword > 0) {
+                // Actualizar la fecha de expiración del OTP solo si la actualización de la contraseña fue exitosa
+                updateExpiredResetPasswordStatement.setString(1, otp);
+                int rowsAffectedResetPassword = updateExpiredResetPasswordStatement.executeUpdate();
+
+                if (rowsAffectedResetPassword > 0) {
+                    connection.commit();
+                    return true;
+                }
+            }
+
+            connection.rollback();
+            connection.setAutoCommit(true);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -130,5 +151,6 @@ public class ResetPasswordDAO {
 
         return false;
     }
+
 
 }
