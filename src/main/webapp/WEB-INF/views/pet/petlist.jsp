@@ -2,7 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.grupo12.util.Pagination" %>
 <%@ page import="org.grupo12.models.User" %>
+<%@ page import="java.util.Properties" %>
+<%@ page import="org.grupo12.util.ConfigLoader" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String webSocketUrl = ConfigLoader.getWebSocketUrl();
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,7 +25,7 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
     <script>
         // Establecer la conexión WebSocket
-        let socket = new WebSocket("ws://localhost:8085/AlberguedeMascotas_war_exploded/petfavorites");
+        let socket = new WebSocket("<%=webSocketUrl%>/petfavorites");
 
         // Escuchar eventos WebSocket
         socket.onmessage = function(event) {
