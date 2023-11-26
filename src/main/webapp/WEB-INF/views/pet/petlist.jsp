@@ -1,6 +1,7 @@
 <%@ page import="org.grupo12.models.Pet" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.grupo12.util.Pagination" %>
+<%@ page import="org.grupo12.models.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
@@ -15,9 +16,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <body>
-
 <jsp:include page="../../components/navBar.jsp"/>
 <main>
     <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 32.7px">
@@ -26,6 +27,7 @@
 
     </div>
         <%
+            User user = (User) request.getSession().getAttribute("user");
             // Default speciesId if not present in the request
             int defaultSpeciesId = 0;
             int speciesId = request.getParameter("speciesId") != null ?
@@ -63,24 +65,32 @@
         <div class="row" id="card-row">
             <%
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
+                List<Integer> favoritePets = (List<Integer>) request.getAttribute("favoritePets");
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
                     // Imagen por defecto si no tiene
                     String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) ?
                                     request.getContextPath() + "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
+                    boolean isFavorite = favoritePets != null && favoritePets.contains(pet.getPetId());
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                    <div class="card mb-4">
-                        <a href="<%= petInfoUrl %>" class="card-link">
-                            <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
-                            <div class="card-img-overlay infoCardImg">
-                                <h3 class="card-text"><%= pet.getName() %>
-                                </h3>
+                <div class="card mb-4 position-relative">
+                    <div class="card-link">
+                        <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+                        <div class="card-img-overlay infoCardImg">
+                            <%if(user != null){%>
+                                <a class="card-text position-absolute top-0 end-0 pe-4 pt-3 favorite-pet-<%=pet.getPetId()%>" onclick="handleFavorite('<%=pet.getPetId()%>')">
+                                    <img src="<%=request.getContextPath()%>/assets/svg/favorite-<%= isFavorite ? '2' : '1'%>.svg" alt="fav" class="favorite-img">
+                                </a>
+                            <%}%>
+                            <a href="<%= petInfoUrl %>" class="text-card">
+                                <h3 class="card-text"><%= pet.getName() %></h3>
                                 <p class="card-text">Sexo: <%= pet.getGender() %>
                                 <p class="card-text">Edad: <%= pet.getAge() %> años</p>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
+                </div>
             </div>
             <%
                 }
@@ -134,6 +144,30 @@
         <%}%>
     </div>
     <jsp:include page="../../components/footer.jsp"/>
+
+    <script>
+           function handleFavorite(petId) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "${pageContext.request.contextPath}/petfavorite", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState === 4 && xhr.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        let favoriteImg = document.querySelector(".favorite-pet-" + petId).querySelector(".favorite-img");
+                        if (response.isFavorite) {
+                            console.log("es favorito")
+                            favoriteImg.src = "${pageContext.request.contextPath}/assets/svg/favorite-2.svg";
+                        } else {
+                            console.log("no es favorito")
+                            favoriteImg.src = "${pageContext.request.contextPath}/assets/svg/favorite-1.svg";
+                        }
+                    }
+                }
+            }
+            xhr.send("petId=" + petId);
+        }
+    </script>
 </body>
 </html>
 

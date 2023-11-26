@@ -267,7 +267,7 @@ public class PetDAO {
     }
 
         public boolean updatePet(Pet pet){
-        String sql = "UPDATE Pet SET Name = ?, Age = ?, SpeciesId = ?, Gender = ?, Description = ?, Breed = ?, Location = ?, AdoptionStatusId = ?, Active = ? WHERE PetId = ?";
+        String sql = "UPDATE Pet SET Name = ?, Age = ?, SpeciesId = ?, Gender = ?, Description = ?, Breed = ?, Location = ?, AdoptionStatusId = ? WHERE PetId = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -279,8 +279,7 @@ public class PetDAO {
             statement.setString(6, pet.getBreed());
             statement.setInt(7, pet.getLocation());
             statement.setInt(8, pet.getAdoptionStatusId());
-            statement.setInt(9, pet.getActive());
-            statement.setInt(10, pet.getPetId());
+            statement.setInt(9, pet.getPetId());
 
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
