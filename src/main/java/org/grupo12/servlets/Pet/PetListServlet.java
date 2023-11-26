@@ -33,7 +33,7 @@ public class PetListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try{
-            List<Pet> pets = petService.getPetPaginated(request);
+            List<Pet> pets = petService.getPetPaginatedBySpecies(request);
 
             //Obtener favoritos
             User user = (User) request.getSession().getAttribute("user");
