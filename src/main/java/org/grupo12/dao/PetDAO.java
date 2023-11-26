@@ -18,25 +18,95 @@ public class PetDAO {
         this.dataSource = dataSource;
     }
 
-    public void insertPet(String name, String age, String gender, String description, String speciesId, String breed, String location) {
+    public boolean insertPet(Pet pet) {
         String sql = "INSERT INTO Pet " +
-                "(Name, Age, SpeciesId, Gender, Description, EntryDate, AdoptionStatusId, Active, Breed, Location) " +
-                "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, 1, 1, ?, ?)";
+                "(Name, Age, SpeciesId, Gender, Description, EntryDate, Breed, Active, AdoptionStatusId, Location) " +
+                "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, 1, ?, ?)";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, name);
-            statement.setInt(2, Integer.parseInt(age));
-            statement.setInt(3, Integer.parseInt(speciesId));
-            statement.setString(4, gender);
-            statement.setString(5, description);
-            statement.setString(6, breed);
-            statement.setInt(7, Integer.parseInt(location));
+            statement.setString(1, pet.getName());
+            statement.setInt(2, pet.getAge());
+            statement.setInt(3, pet.getSpeciesId());
+            statement.setString(4, pet.getGender());
+            statement.setString(5, pet.getDescription());
+            statement.setString(6, pet.getBreed());
+            statement.setInt(7, pet.getAdoptionStatusId());
+            statement.setInt(8, pet.getLocation());
 
-            statement.executeUpdate();
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public List<Pet> getPets (int petId, int active, int offset, int limit){
+        List<Pet> pets = new ArrayList<>();
+        StringBuilder sqlBuilder = new StringBuilder("SELECT " +
+                "    p.PetId, " +
+                "    p.Name, " +
+                "    COALESCE(p.Age, '-') AS Age, " +
+                "    p.Age, " +
+                "    p.SpeciesId, " +
+                "    p.Gender, " +
+                "    COALESCE(p.Breed, '-') AS Breed, " +
+                "    p.Description, " +
+                "    p.EntryDate, " +
+                "    p.AdoptionStatusId, " +
+                "    p.Location, " +
+                "    p.Active " +
+                "FROM Pet p ");
+
+        List<Object> parameters = new ArrayList<>();
+        if(active != 2){
+            sqlBuilder.append("WHERE Active = ? ");
+            parameters.add(active);
+        }else {
+            sqlBuilder.append("WHERE Active = 1 OR Active = 0 ");
+        }
+
+        if(petId != 0){
+            sqlBuilder.append("AND PetId = ? ");
+            parameters.add(petId);
+        }
+        // Add limit and offset
+        sqlBuilder.append("LIMIT ? OFFSET ?");
+        parameters.add(limit);
+        parameters.add(offset);
+        String sql = sqlBuilder.toString();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            // Set parameters
+            int paramIndex = 1;
+            for (Object parameter : parameters) {
+                statement.setObject(paramIndex++, parameter);
+            }
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                Pet pet = new Pet();
+                pet.setPetId(result.getInt("PetId"));
+                pet.setName(result.getString("Name"));
+                pet.setAge(result.getInt("Age"));
+                pet.setSpeciesId(result.getInt("SpeciesId"));
+                pet.setGender(result.getString("Gender"));
+                pet.setBreed(result.getString("Breed"));
+                pet.setDescription(result.getString("Description"));
+                pet.setEntryDate(result.getDate("EntryDate"));
+                pet.setAdoptionStatusId(result.getInt("AdoptionStatusId"));
+                pet.setLocation(result.getInt("Location"));
+                pet.setActive(result.getInt("Active"));
+                pets.add(pet);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return pets;
     }
 
 
@@ -280,6 +350,38 @@ public class PetDAO {
             statement.setInt(7, pet.getLocation());
             statement.setInt(8, pet.getAdoptionStatusId());
             statement.setInt(9, pet.getPetId());
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deletePet(int petId){
+        String sql = "UPDATE Pet SET Active = 0 WHERE PetId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, petId);
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean restorePet(int petId){
+        String sql = "UPDATE Pet SET Active = 1 WHERE PetId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, petId);
 
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
