@@ -38,7 +38,6 @@
                 favoriteCountElement.textContent = newFavoriteCount;
 
                 const isFavorite = favoriteImgElement.src.includes("favorite-2.svg");
-                console.log("isFavorite: ", isFavorite)
                 if (isFavorite) {
                     favoriteImgElement.src = "${pageContext.request.contextPath}/assets/svg/favorite-2.svg";
                 } else {
