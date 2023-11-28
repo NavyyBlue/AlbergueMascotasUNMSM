@@ -13,12 +13,13 @@
     <title>Formulario de Donación</title>
 </head>
 <body>
+<jsp:include page="../../components/alerts.jsp"/>
 <jsp:include page="../../components/navBar.jsp"/>
 <main>
     <div class="container">
         <div class="form-container">
             <h1>Formulario de Donación</h1>
-            <form id="donationForm" action="procesar_donacion.php" method="post">
+            <form id="donationForm" action="${pageContext.request.contextPath}/FormDonation" method="post">
                 <label for="fullname">Nombre Completo:</label>
                 <input type="text" id="fullname" name="fullname" required>
 
@@ -29,19 +30,12 @@
                 <input type="number" id="amount" name="amount" required>
 
                 <label for="payment-method">Método de Pago:</label>
-                <select id="payment-method" name="payment-method" required>
-                    <option value="yape">Yape</option>
-                    <option value="plin">Plin</option>
-                    <option value="transferencia">Transferencia BCP</option>
+                <select id="payment-method" name="paymentMethod" required>
+                    <option value="1">Yape</option>
+                    <option value="2">Plin</option>
+                    <option value="3">Transferencia BCP</option>
                 </select>
-
-                <label for="number-to-donate">Número a Donar:</label>
-                <input type="text" id="number-to-donate" name="number-to-donate" value="123456789" readonly>
-
-                <label for="payment-date">Fecha de Pago:</label>
-                <input type="date" id="payment-date" name="payment-date" required>
-
-                <button type="submit">Donar</button>
+                <button type="submit" class="mt-4">Donar</button>
              </form>
         </div>
         <div class="image-container">
