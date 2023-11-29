@@ -3,6 +3,7 @@
 <%@ page import="org.grupo12.util.Pagination" %>
 <%@ page import="org.grupo12.models.Donation" %>
 <%@ page import="org.grupo12.util.PaymentMethodUtil" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -25,9 +26,9 @@
     int defaultDonationId = 0;
     int donationId = request.getParameter("donationId") != null ?
             Integer.parseInt(request.getParameter("donationId")) : defaultDonationId;
-    System.out.println("donationId: " + donationId);
     int active = request.getParameter("active") != null ?
             Integer.parseInt(request.getParameter("active")) : 1;
+    Map<Integer, String> paymentMethods = PaymentMethodUtil.getPaymentMethods();
 %>
 <jsp:include page="../../../components/alerts.jsp"/>
 <jsp:include page="../../../components/navBar.jsp"/>
@@ -117,9 +118,9 @@
                     <div class="mb-3">
                         <label for="methodPaymentId">Método de Pago:</label>
                         <select id="methodPaymentId" name="methodPaymentId">
-                            <option value="1">Yape</option>
-                            <option value="2">Plin</option>
-                            <option value="3">Transferencia Bancaria</option>
+                            <% for (Map.Entry<Integer, String> entry : paymentMethods.entrySet()) { %>
+                            <option value="<%= entry.getKey() %>"><%= entry.getValue() %></option>
+                            <% } %>
                         </select>
                     </div>
                     <div class="mb-3">

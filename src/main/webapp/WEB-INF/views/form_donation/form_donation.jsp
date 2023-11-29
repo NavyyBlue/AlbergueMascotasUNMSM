@@ -1,3 +1,7 @@
+<%@ page import="org.grupo12.util.PaymentMethodUtil" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Collections" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -18,6 +22,9 @@
 <body>
 <jsp:include page="../../components/alerts.jsp"/>
 <jsp:include page="../../components/navBar.jsp"/>
+<%
+    Map<Integer, String> paymentMethods = PaymentMethodUtil.getPaymentMethods();
+%>
 <main>
     <div class="container">
         <div class="form-container">
@@ -34,9 +41,9 @@
 
                 <label for="payment-method">Método de Pago:</label>
                 <select id="payment-method" name="paymentMethod" required>
-                    <option value="1">Yape</option>
-                    <option value="2">Plin</option>
-                    <option value="3">Transferencia Bancaria</option>
+                    <% for (Map.Entry<Integer, String> entry : paymentMethods.entrySet()) { %>
+                    <option value="<%= entry.getKey() %>"><%= entry.getValue() %></option>
+                    <% } %>
                 </select>
                 <button type="submit" class="mt-4">Donar</button>
              </form>
