@@ -47,6 +47,12 @@ public class FormDonationServlet extends HttpServlet {
             float amount = Float.parseFloat(request.getParameter("amount"));
             int methodPaymentId = Integer.parseInt(request.getParameter("paymentMethod"));
 
+            if(phoneNumberDonator.length() != 9){
+                request.getSession().setAttribute("alerts", Collections.singletonMap("warning", "Ingrese un número de teléfono válido para Perú"));
+                response.sendRedirect(request.getRequestURI());
+                return;
+            }
+
             Donation donation = new Donation();
             donation.setFullNameDonator(fullNameDonator);
             donation.setPhoneNumberDonator(phoneNumberDonator);
@@ -56,7 +62,7 @@ public class FormDonationServlet extends HttpServlet {
             boolean resp = donationService.addDonation(donation);
 
             if(resp){
-                request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Donación enviada correctamente"));
+                request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Donación enviada correctamente, nos comunicaremos con usted a la brevedad"));
                 response.sendRedirect(request.getRequestURI());
             }else{
                 request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Verifique los datos ingresados"));

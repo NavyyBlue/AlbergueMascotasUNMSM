@@ -46,6 +46,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function() {
             $('.fade-alert').alert('close');
-        }, 2000);
+        }, 3000);
     });
 </script>
