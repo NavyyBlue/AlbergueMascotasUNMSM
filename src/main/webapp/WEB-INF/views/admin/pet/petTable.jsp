@@ -244,6 +244,10 @@
                             <option value="2">Veterinaria</option>
                         </select>
                     </div>
+                    <div class="mb-3" id="entryDateOption">
+                        <label for="editEntryDate" class="form-label">Fecha de Ingreso</label>
+                        <input type="datetime-local" class="form-control" id="editEntryDate" name="editEntryDate" required>
+                    </div>
                     <input type="hidden" id="isNewPet" name="isNewPet" value="false">
                     <div class="modal-footer">
                         <input type="hidden" id="editPetId" name="editPetId" value="<%=petId%>">
@@ -406,6 +410,7 @@
             $('#editAdoptionStatus').val("");
             $('#editBreed').val("");
             $('#editLocation').val("");
+            $('#entryDateOption').hide();
         } else {
             // Parse the JSON data from the attribute
             let petsJson = '<%= request.getAttribute("petsJson") %>';
@@ -414,6 +419,7 @@
             let pet = pets.find(function (u) {
                 return u.petId === petId;
             });
+            console.log("pet: ", pet)
             console.log("editar");
             $('#editPetId').val(pet.petId);
             // Update modal fields with user data
@@ -425,6 +431,7 @@
             $('#editAdoptionStatus').val(pet.adoptionStatusId);
             $('#editBreed').val(pet.breed);
             $('#editLocation').val(pet.location);
+            $('#editEntryDate').val(pet.entryDate);
 
         }
         if (petId) {

@@ -97,7 +97,7 @@ public class PetDAO {
                 pet.setGender(result.getString("Gender"));
                 pet.setBreed(result.getString("Breed"));
                 pet.setDescription(result.getString("Description"));
-                pet.setEntryDate(result.getDate("EntryDate"));
+                pet.setEntryDate(result.getString("EntryDate"));
                 pet.setAdoptionStatusId(result.getInt("AdoptionStatusId"));
                 pet.setLocation(result.getInt("Location"));
                 pet.setActive(result.getInt("Active"));
@@ -183,7 +183,7 @@ public class PetDAO {
                 pet.setGender(result.getString("Gender"));
                 pet.setBreed(result.getString("Breed"));
                 pet.setDescription(result.getString("Description"));
-                pet.setEntryDate(result.getDate("EntryDate"));
+                pet.setEntryDate(result.getString("EntryDate"));
                 pet.setAdoptionStatusId(result.getInt("AdoptionStatusId"));
                 pet.setLocation(result.getInt("Location"));
                 pet.setImageUrl(result.getString("ImageUrl"));
@@ -337,7 +337,7 @@ public class PetDAO {
     }
 
         public boolean updatePet(Pet pet){
-        String sql = "UPDATE Pet SET Name = ?, Age = ?, SpeciesId = ?, Gender = ?, Description = ?, Breed = ?, Location = ?, AdoptionStatusId = ? WHERE PetId = ?";
+        String sql = "UPDATE Pet SET Name = ?, Age = ?, SpeciesId = ?, Gender = ?, Description = ?, Breed = ?, Location = ?, EntryDate = ? ,AdoptionStatusId = ? WHERE PetId = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -348,8 +348,9 @@ public class PetDAO {
             statement.setString(5, pet.getDescription());
             statement.setString(6, pet.getBreed());
             statement.setInt(7, pet.getLocation());
-            statement.setInt(8, pet.getAdoptionStatusId());
-            statement.setInt(9, pet.getPetId());
+            statement.setString(8, pet.getEntryDate());
+            statement.setInt(9, pet.getAdoptionStatusId());
+            statement.setInt(10, pet.getPetId());
 
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;

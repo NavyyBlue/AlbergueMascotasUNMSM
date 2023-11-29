@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.grupo12.dao.PetDAO;
 import org.grupo12.models.Pet;
 import org.grupo12.services.PetService;
+import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
@@ -30,9 +31,9 @@ public class PetTableServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-//            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
-//                return;
-//            }
+            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
+                return;
+            }
 
             List<Pet> pets = petService.getPetPaginated(request);
             Gson gson = new Gson();
@@ -51,7 +52,6 @@ public class PetTableServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String method = request.getParameter("_method");
-        System.out.println("METODO: "+method);
         if ("DELETE".equalsIgnoreCase(method)) {
             handleDeleteRequest(request, response);
         } else if ("PATCH".equalsIgnoreCase(method)) {
@@ -116,7 +116,7 @@ public class PetTableServlet extends HttpServlet {
         int editAdoptionStatus = Integer.parseInt(request.getParameter("editAdoptionStatus"));
         String editBreed = request.getParameter("editBreed");
         int editLocation = Integer.parseInt(request.getParameter("editLocation"));
-        //String editEntryDate = request.getParameter("editEntryDate");
+        String editEntryDate = request.getParameter("editEntryDate");
 
 
         Pet updatedPet = new Pet();
@@ -129,6 +129,7 @@ public class PetTableServlet extends HttpServlet {
         updatedPet.setAdoptionStatusId(editAdoptionStatus);
         updatedPet.setBreed(editBreed);
         updatedPet.setLocation(editLocation);
+        updatedPet.setEntryDate(editEntryDate);
 
         boolean success = petService.updatePet(updatedPet);
 
