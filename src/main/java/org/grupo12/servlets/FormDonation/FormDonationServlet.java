@@ -46,18 +46,12 @@ public class FormDonationServlet extends HttpServlet {
             String phoneNumberDonator = request.getParameter("phone");
             float amount = Float.parseFloat(request.getParameter("amount"));
             int methodPaymentId = Integer.parseInt(request.getParameter("paymentMethod"));
-            System.out.println("methodPaymentId: " + methodPaymentId);
-            System.out.println("amount: " + amount);
-            System.out.println("phoneNumberDonator: " + phoneNumberDonator);
-            System.out.println("fullNameDonator: " + fullNameDonator);
 
             Donation donation = new Donation();
             donation.setFullNameDonator(fullNameDonator);
             donation.setPhoneNumberDonator(phoneNumberDonator);
             donation.setAmount(amount);
             donation.setMethodPaymentId(methodPaymentId);
-
-            System.out.println("donation: " + donation);
 
             boolean resp = donationService.addDonation(donation);
 
