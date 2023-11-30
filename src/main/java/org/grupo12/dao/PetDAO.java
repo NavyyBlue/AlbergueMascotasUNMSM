@@ -125,6 +125,8 @@ public class PetDAO {
                 "    p.AdoptionStatusId, " +
                 "    p.Location, " +
                 "    img.ImageUrl, " +
+                "    img.IsMainImage, " +
+                "    img.Active AS IsImageActive, " +
                 "    p.Active " +
                 "FROM Pet p " +
                 "LEFT JOIN Image img ON img.PetId = p.PetId " +
@@ -187,6 +189,8 @@ public class PetDAO {
                 pet.setAdoptionStatusId(result.getInt("AdoptionStatusId"));
                 pet.setLocation(result.getInt("Location"));
                 pet.setImageUrl(result.getString("ImageUrl"));
+                pet.setMainImage(result.getBoolean("IsMainImage"));
+                pet.setImageActive(result.getBoolean("IsImageActive"));
                 pet.setActive(result.getInt("Active"));
                 pets.add(pet);
             }
@@ -316,7 +320,9 @@ public class PetDAO {
         List<Pet> petImages = new ArrayList<>();
         String sql = "SELECT " +
                     " img.ImageId, " +
-                    " img.ImageUrl " +
+                    " img.ImageUrl, " +
+                    " img.IsMainImage, " +
+                    " img.Active AS IsImageActive" +
                     "FROM Pet p " +
                     "JOIN Image img ON img.PetId = p.PetId " +
                     "WHERE p.PetId = ? AND p.Active = 1 AND img.Active = 1 ";
@@ -328,6 +334,8 @@ public class PetDAO {
             while(result.next()){
                 Pet pet = new Pet();
                 pet.setImageUrl(result.getString("ImageUrl"));
+                pet.setMainImage(result.getBoolean("IsMainImage"));
+                pet.setImageActive(result.getBoolean("IsImageActive"));
                 petImages.add(pet);
             }
         }catch (SQLException e) {

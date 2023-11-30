@@ -107,8 +107,8 @@
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
                     // Imagen por defecto si no tiene
-                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) ?
-                                    request.getContextPath() + "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
+                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) || !pet.isImageActive() ?
+                                    "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
                     boolean isFavorite = favoritePets != null && favoritePets.contains(pet.getPetId());
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">

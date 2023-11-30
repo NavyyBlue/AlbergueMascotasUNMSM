@@ -68,7 +68,6 @@
             </div>
             <script>
                 const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');
-                console.log("etiquetas: ", etiquetasMascota);
 
                 // Obtén la referencia al elemento ul donde se mostrarán las etiquetas
                 const listaEtiquetas = document.getElementById("etiquetasMascota");
