@@ -18,6 +18,27 @@ public class ProductDAO {
         this.dataSource = dataSource;
     }
 
+    public boolean createProduct(Product product){
+        String sql = "INSERT INTO Products " +
+                "(Name, Price, Stock, Description, Category, Active) " +
+                "VALUES(?, ?, ?, ?, ?, 1);";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getName());
+            statement.setDouble(2, product.getPrice());
+            statement.setInt(3, product.getStock());
+            statement.setString(4, product.getDescription());
+            statement.setInt(5, product.getCategory());
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<Product> getProducts (int productId, int active, int offset, int limit){
         List<Product> products = new ArrayList<>();
 
@@ -73,6 +94,60 @@ public class ProductDAO {
             e.printStackTrace();
         }
         return products;
+    }
+
+    public boolean updateProduct(Product product){
+        String sql = "UPDATE Products " +
+                "SET Name= ?, Price= ?, Stock= ?, Description= ?, Category= ?, Active= 1 WHERE ProductId= ?;";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getName());
+            statement.setDouble(2, product.getPrice());
+            statement.setInt(3, product.getStock());
+            statement.setString(4, product.getDescription());
+            statement.setInt(5, product.getCategory());
+            statement.setInt(6, product.getProductId());
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteProduct(int productId){
+        String sql = "UPDATE Products SET Active = 0 WHERE ProductId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean restoreProduct(int productId){
+        String sql = "UPDATE Products SET Active = 1 WHERE ProductId = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public int getTotalCountProducts(int active){

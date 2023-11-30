@@ -47,4 +47,14 @@ public class ProductService {
 
         return productDAO.getProducts(productId, active, offset, limit);
     }
+
+    public boolean createProduct(Product product){
+        return productDAO.createProduct(product);
+    }
+    public boolean updateProduct(Product product) {
+        return productDAO.updateProduct(product);
+    }
+
+    public boolean deleteProduct(int productId) {return productDAO.deleteProduct(productId);}
+    public boolean restoreProduct(int productId) {return productDAO.restoreProduct(productId);}
 }
