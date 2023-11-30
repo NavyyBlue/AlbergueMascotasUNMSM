@@ -9,5 +9,6 @@ public interface IImagePetService {
     Image getMainPetImage(int petId);
     List<Image> getPetImages(int petId);
     boolean uploadPetImage(int petId, String imageUrl, boolean isMainImage);
-    boolean deletePetImage(int petId, String imageUrl);
+    boolean updatePetImage(int imageId, String imageUrl, boolean isMainImage);
+    boolean deletePetImage(int imageId);
 }

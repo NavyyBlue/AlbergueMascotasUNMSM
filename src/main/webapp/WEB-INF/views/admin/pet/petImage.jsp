@@ -4,8 +4,7 @@
 <html>
 <head>
     <title>Cambiar o agregar imagen mascota</title>
-    <link href="<%=request.getContextPath()%>/assets/css/petTable.css" rel="stylesheet"/>
-    <link href="<%=request.getContextPath()%>/assets/css/petlist.css" rel="stylesheet"/>
+    <link href="<%=request.getContextPath()%>/assets/css/petImage.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/navbar.css">
@@ -25,93 +24,91 @@
 
         Image mainImage = (Image) request.getAttribute("mainImage");
         List<Image> images = (List<Image>) request.getAttribute("images");
-
-        String petTableUrl = "petTable";
     %>
     <div class="container p-5">
-        <form id="uploadImageForm" action="${pageContext.request.contextPath}/admin/petImage" method="post" enctype="multipart/form-data">
+        <form id="uploadImageForm" action="${pageContext.request.contextPath}/admin/sendSingleImage" method="post" enctype="multipart/form-data">
             <input type="hidden" id="uploadPetId" name="uploadPetId" value="<%=petId%>">
+            <input type="hidden" id="imageId" name="imageId" value="">
             <!-- Subir imagen principal -->
             <div class="mb-3">
                 <label for="uploadImage" class="form-label">Imagen Principal</label>
-                <input type="file" class="form-control" id="uploadImage" name="uploadImage">
-                <%if(mainImage != null){%>
-                    <img src="<%=request.getContextPath() + mainImage.getImageUrl()%>" alt="petImage" class="img-thumbnail" width="200"/>
-                <%}%>
+                <div class="d-flex">
+                    <input type="file" class="form-control" id="uploadImage" name="uploadImage" accept="image/*" <%=mainImage == null ? "required" : "" %>>
+                    <button type="submit" class="btn btn-primary" onclick="checkFile()">Subir</button>
+                </div>
             </div>
-            <div class="main-image-preview" id="main-image-preview"></div>
-            <!--Subir imagenes secundarias -->
-            <div class="mb-3">
-                <label for="uploadImages" class="form-label">Imagenes Secundarias</label>
-                <input type="file" class="form-control" id="uploadImages" name="uploadImages" multiple>
-            </div>
-            <%if(images != null){
-                for(Image image : images){%>
-                <div class="image-preview d-flex flex-wrap" id="imagePreview">
-                    <div class="image-container">
-                        <img src="<%=request.getContextPath() + image.getImageUrl()%>" class="img-thumbnail" width="200" height="200"/>
-                        <button type="button" class="btn btn-danger btn-sm remove-image">Eliminar</button>
+            <%if(mainImage != null){%>
+                <div class="image-preview d-flex" id="imagePreview">
+                    <div class="image-container position-relative">
+                        <img src="<%=request.getContextPath() + mainImage.getImageUrl()%>" alt="petImage" class="img-thumbnail" width="200"/>
+                        <a class="position-absolute top-0 end-0 delete-button" onclick="deleteImage('<%=mainImage.getImageId()%>', '<%=mainImage.getImageUrl()%>', '<%=mainImage.getPetId()%>')">
+                            <img src="<%=request.getContextPath()%>/assets/svg/delete-red.svg" class="remove-image text-danger" width="30" height="30" alt="delete"/>
+                        </a>
                     </div>
                 </div>
-            <%}}%>
-            <div class="image-preview d-flex flex-wrap" id="imagePreview"></div>
-            <div class="modal-footer">
-                <a href="<%= petTableUrl %>" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</a>
-                <button type="submit" class="btn btn-primary">Subir</button>
+            <%}%>
+        </form>
+            <!--Subir imagenes secundarias -->
+        <form id="uploadMultipleImagesForm" action="${pageContext.request.contextPath}/admin/sendMultipleImage" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="uploadPetId2" name="uploadPetId2" value="<%=petId%>">
+            <div class="mb-3">
+                <label for="uploadImages" class="form-label">Imagenes Secundarias</label>
+                <div class="d-flex">
+                    <input type="file" class="form-control" id="uploadImages" name="uploadImages" multiple>
+                    <button type="submit" class="btn btn-primary">Subir</button>
+                </div>
             </div>
+            <%if(images != null){%>
+                <div class="grid" style="--bs-columns: 6;">
+                    <%for(Image image : images){%>
+                        <div class="image-preview d-flex" id="imagePreview">
+                            <div class="image-container position-relative">
+                                <img src="<%=request.getContextPath() + image.getImageUrl()%>" class="img-thumbnail" width="200" height="200" alt="imagenes"/>
+                                <a class="position-absolute top-0 end-0 delete-button" onclick="deleteImage('<%= image.getImageId() %>', '<%=image.getImageUrl()%>', '<%=image.getPetId()%>')">
+                                    <img src="<%=request.getContextPath()%>/assets/svg/delete-red.svg" class="remove-image text-danger" width="30" height="30" alt="delete"/>
+                                </a>
+                            </div>
+                        </div>
+                    <%}%>
+                </div>
+            <%}%>
+            <div class="image-preview d-flex flex-wrap" id="imagePreview"></div>
         </form>
     </div>
-    <%--<script>
+    <script>
+        function checkFile() {
+            var fileInput = document.getElementById('uploadImage');
+            var imageIdInput = document.getElementById('imageId');
 
-        $(document).ready(function () {
-            $('#uploadImages').on('change', function (e) {
-                // Obtén el contenedor de previsualización de imágenes
-                let imagePreview = $('#imagePreview');
-
-                // Limpia la previsualización anterior
-                imagePreview.html('');
-
-                // Lee los archivos seleccionados
-                let files = e.target.files;
-
-                // Itera sobre los archivos y agrega previsualización
-                $.each(files, function (i, file) {
-                    let reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        // Agrega la imagen al contenedor de previsualización
-                        imagePreview.append('<div class="image-container"><img src="' + e.target.result + '" class="img-thumbnail" width="200" height="200"/><button type="button" class="btn btn-danger btn-sm remove-image">Eliminar</button></div>');
-
-                        // Actualiza el valor del input
-                        updateInputValue();
-                    };
-
-                    // Lee el archivo como URL de datos
-                    reader.readAsDataURL(file);
-                });
-
-                // Agrega un manejador de eventos para el botón de eliminación
-                imagePreview.on('click', '.remove-image', function () {
-                    $(this).parent().remove();
-                    updateInputValue();
-                });
-            });
-
-            function updateInputValue() {
-                let imagePreview = $('#imagePreview');
-                let imageCount = imagePreview.find('.image-container').length;
-
-                // Crea un nuevo objeto FileList simulado
-                let simulatedFileList = [];
-                for (let i = 0; i < imageCount; i++) {
-                    simulatedFileList.push(new File([""], "image" + i + ".png"));
-                }
-
-                // Asigna el nuevo objeto FileList al input
-                $('#uploadImages').prop('files', new DataTransfer().items.add(simulatedFileList));
+            // Verifica si se ha seleccionado un archivo
+            if (fileInput.files.length > 0) {
+                console.log("Se ha seleccionado un archivo");
+                imageIdInput.value =  "<%=mainImage != null ? mainImage.getImageId() : -1 %>";
+            } else {
+                console.log("No se ha seleccionado un archivo");
+                imageIdInput.value = "-1";
             }
+        }
 
-        });
-    </script>--%>
+        function deleteImage(imageId, imageUrl, petId) {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/admin/deleteImage",
+                type: "POST",
+                data: {
+                    imageId: imageId,
+                    imageUrl: imageUrl,
+                    petId: petId
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response == "true") {
+                        location.reload();
+                    }
+                }
+            });
+        }
+    </script>
+
+
 </body>
 </html>

@@ -12,8 +12,8 @@ import org.apache.commons.fileupload2.jakarta.JakartaServletFileUpload;
 import org.grupo12.dao.PetImageDAO;
 import org.grupo12.models.Image;
 import org.grupo12.services.implementation.ImagePetService;
-import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
+import org.grupo12.util.ImageUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,40 +21,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@WebServlet("/admin/petImage")
-public class PetImageServlet extends HttpServlet {
+@WebServlet("/admin/sendMultipleImage")
+public class SendMultipleImageServlet extends HttpServlet {
     private HikariDataSource dataSource = ConnectionDB.getDataSource();
     private final ImagePetService petImageService;
 
-    public PetImageServlet() {
+    public SendMultipleImageServlet() {
         this.petImageService = new ImagePetService(new PetImageDAO(dataSource));
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
-                return;
-            }
-            if (!request.getParameterMap().containsKey("petId")) {
-                response.sendRedirect(request.getContextPath() + "/admin/petTable");
-                return;
-            }
-
-            int petId = Integer.parseInt(request.getParameter("petId"));
-            Image mainImage = petImageService.getMainPetImage(petId);
-            List<Image> images = petImageService.getPetImages(petId);
-
-            request.setAttribute("petId", petId);
-            request.setAttribute("mainImage", mainImage);
-            request.setAttribute("images", images);
-
-            request.getRequestDispatcher("/WEB-INF/views/admin/pet/petImage.jsp").forward(request, response);
-        } catch (Exception e) {
-            response.sendRedirect(request.getContextPath() + "/admin/petTable");
-        }
-    }
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Verificar si la solicitud es de tipo 'multipart'
         if (JakartaServletFileUpload.isMultipartContent(request)) {
@@ -70,7 +46,6 @@ public class PetImageServlet extends HttpServlet {
 
                 boolean isMainImage = false;
                 int petId = -1;
-                int imageId = -1;
                 String relativePath = null;
                 String filePath = null;
 
@@ -78,25 +53,19 @@ public class PetImageServlet extends HttpServlet {
                 for (DiskFileItem item : formItems) {
                     if (item.isFormField()) {
                         // Si es un campo de formulario normal
-                        if ("uploadPetId".equals(item.getFieldName())) {
+                        if ("uploadPetId2".equals(item.getFieldName())) {
                             petId = Integer.parseInt(item.getString());
                         }
-                        if ("imageId".equals(item.getFieldName())) {
-                            imageId = Integer.parseInt(item.getString());
-                        }
                     } else {
-                        isMainImage = "uploadImage".equals(item.getFieldName());
                         String fileName = new File(item.getName()).getName();
                         if(fileName.isEmpty()) continue;
-                        relativePath = File.separator + "assets" + File.separator + "uploads" + File.separator + "petImages" + File.separator + fileName;
+
+                        String uniqueName = ImageUtil.generateUniqueImageName(fileName);
+
+                        relativePath = "/assets/uploads/petImages/" + uniqueName;
                         filePath = getServletContext().getRealPath("") + relativePath;
                         File storeFile = new File(filePath);
                         item.write(storeFile.toPath());
-
-                        if(imageId != -1){
-                            petImageService.updatePetImage(imageId, relativePath, isMainImage);
-                            continue;
-                        }
 
                         //Set data to image
                         Image data = new Image();
@@ -119,7 +88,6 @@ public class PetImageServlet extends HttpServlet {
                 request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Ocurrió un error al subir la imagen"));
             }
         }
-        System.out.println("uploadPetId" + request.getParameter("uploadPetId"));
         response.sendRedirect(request.getContextPath() + "/admin/petImage?petId=" + request.getParameter("uploadPetId"));
     }
 }

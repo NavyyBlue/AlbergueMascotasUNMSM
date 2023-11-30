@@ -96,7 +96,7 @@
 
     </div>
 
-    <div class="text-center">
+    <div class="text-center mt-3 mb-5 d-flex flex-wrap gap-5">
         <% for (Pet image : petImages) { %>
         <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + image.getImageUrl() %>" alt="Imagen de la mascota">
         <% } %>
