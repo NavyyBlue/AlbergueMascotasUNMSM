@@ -128,7 +128,7 @@ public class PetDAO {
                 "    p.Active " +
                 "FROM Pet p " +
                 "LEFT JOIN Image img ON img.PetId = p.PetId " +
-                "WHERE p.AdoptionStatusId = 1 AND p.Active = 1 ");
+                "WHERE p.AdoptionStatusId = 1 AND p.Active = 1 AND img.IsMainImage = 1 ");
 
 
         List<Object> parameters = new ArrayList<>();

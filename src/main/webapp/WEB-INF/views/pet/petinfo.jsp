@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
@@ -43,7 +47,7 @@
 %>
 <div class="divMainPet">
     <div class="divDetailsPet" style="align-items: center;">
-        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=firstImageUrl%>">
+        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + firstImageUrl%>">
         <div class="divDescriptionPet">
             <div class="divDetailsPet" style="height: 71px; align-items: center">
                 <img style="width: 55.675px; height: 52.984px; transform: rotate(52.107deg); margin: 0 10px 0 0;" src="<%=request.getContextPath()%>/assets/img/petlist/pet_footprint.png">
@@ -94,7 +98,7 @@
 
     <div class="text-center">
         <% for (Pet image : petImages) { %>
-        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%= image.getImageUrl() %>" alt="Imagen de la mascota">
+        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + image.getImageUrl() %>" alt="Imagen de la mascota">
         <% } %>
     </div>
 

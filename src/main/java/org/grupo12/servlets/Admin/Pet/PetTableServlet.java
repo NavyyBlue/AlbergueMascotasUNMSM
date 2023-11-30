@@ -35,12 +35,15 @@ public class PetTableServlet extends HttpServlet {
                 return;
             }
 
+            //Pass the list of pets to the view
             List<Pet> pets = petService.getPetPaginated(request);
             Gson gson = new Gson();
             String petsJson = gson.toJson(pets);
 
+
             request.setAttribute("pets", pets);
             request.setAttribute("petsJson", petsJson);
+
             request.getRequestDispatcher("/WEB-INF/views/admin/pet/petTable.jsp").forward(request, response);
 
         } catch (Exception e) {

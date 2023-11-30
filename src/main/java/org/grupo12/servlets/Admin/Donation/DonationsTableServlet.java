@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.grupo12.dao.DonationDAO;
 import org.grupo12.models.Donation;
 import org.grupo12.services.implementation.DonationService;
+import org.grupo12.services.implementation.EmailService;
 import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
 

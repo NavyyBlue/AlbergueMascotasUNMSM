@@ -111,7 +111,7 @@
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card mb-4 position-relative">
                     <div class="card-link">
-                        <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+                        <img src="<%=request.getContextPath() + imgUrl%>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
                         <div class="card-img-overlay infoCardImg">
                             <%if(user != null){%>
                                 <a class="card-text position-absolute top-0 end-0 pe-4 pt-3 favorite-pet-<%=pet.getPetId()%>" onclick="handleFavorite('<%=pet.getPetId()%>')">
