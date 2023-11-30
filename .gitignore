@@ -1,5 +1,5 @@
 target/
-!/target/AlbergueMascotas/assets/uploads/
+!target/AlbergueMascotas/assets/uploads/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
