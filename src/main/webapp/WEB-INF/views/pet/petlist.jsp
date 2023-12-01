@@ -2,7 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.grupo12.util.Pagination" %>
 <%@ page import="org.grupo12.models.User" %>
+<%@ page import="java.util.Properties" %>
+<%@ page import="org.grupo12.util.ConfigLoader" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String webSocketUrl = ConfigLoader.getWebSocketUrl();
+%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,7 +21,40 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
+    <script>
+        // Establecer la conexión WebSocket
+        let socket = new WebSocket("<%=webSocketUrl%>/petfavorites");
+
+        // Escuchar eventos WebSocket
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.event === "favoriteChange") {
+                updateFavoriteCount(data.petId, data.newFavoriteCount);
+            }
+        };
+
+        // Función para actualizar la cantidad de favoritos en la interfaz de usuario
+        function updateFavoriteCount(petId, newFavoriteCount) {
+            const favoriteCountElement = document.querySelector(".favorite-count-" + petId);
+            const favoriteImgElement = document.querySelector(".favorite-pet-" + petId).querySelector(".favorite-img");
+            if (favoriteCountElement) {
+                favoriteCountElement.textContent = newFavoriteCount;
+
+                const isFavorite = favoriteImgElement.src.includes("favorite-2.svg");
+                if (isFavorite) {
+                    favoriteImgElement.src = "${pageContext.request.contextPath}/assets/svg/favorite-2.svg";
+                } else {
+                    favoriteImgElement.src = "${pageContext.request.contextPath}/assets/svg/favorite-1.svg";
+                }
+            }
+
+        }
+    </script>
 </head>
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
@@ -69,24 +107,25 @@
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
                     // Imagen por defecto si no tiene
-                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) ?
-                                    request.getContextPath() + "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
+                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) || !pet.isImageActive() ?
+                                    "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
                     boolean isFavorite = favoritePets != null && favoritePets.contains(pet.getPetId());
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card mb-4 position-relative">
                     <div class="card-link">
-                        <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+                        <img src="<%=request.getContextPath() + imgUrl%>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
                         <div class="card-img-overlay infoCardImg">
                             <%if(user != null){%>
                                 <a class="card-text position-absolute top-0 end-0 pe-4 pt-3 favorite-pet-<%=pet.getPetId()%>" onclick="handleFavorite('<%=pet.getPetId()%>')">
                                     <img src="<%=request.getContextPath()%>/assets/svg/favorite-<%= isFavorite ? '2' : '1'%>.svg" alt="fav" class="favorite-img">
                                 </a>
+                                <h5 class="card-text position-absolute top-0 end-0 pe-4 mt-5 favorite-count-<%=pet.getPetId()%>"><%=pet.getTotalFavorites()%></h5>
                             <%}%>
                             <a href="<%= petInfoUrl %>" class="text-card">
-                                <h3 class="card-text"><%= pet.getName() %></h3>
-                                <p class="card-text">Sexo: <%= pet.getGender() %>
-                                <p class="card-text">Edad: <%= pet.getAge() %> años</p>
+                                <h2 class="card-text"><%= pet.getName() %></h2>
+                                <p class="card-text fs-6">Sexo: <%= pet.getGender() %> </p>
+                                <p class="card-text fs-6">Edad: <%= pet.getAge() %> años</p>
                             </a>
                         </div>
                     </div>
@@ -156,16 +195,18 @@
                     if (response.success) {
                         let favoriteImg = document.querySelector(".favorite-pet-" + petId).querySelector(".favorite-img");
                         if (response.isFavorite) {
-                            console.log("es favorito")
                             favoriteImg.src = "${pageContext.request.contextPath}/assets/svg/favorite-2.svg";
                         } else {
-                            console.log("no es favorito")
                             favoriteImg.src = "${pageContext.request.contextPath}/assets/svg/favorite-1.svg";
                         }
+                        // Envía un mensaje de WebSocket después de actualizar el estado de favoritos
+                        socket.send(JSON.stringify({ petId: petId, favoriteCount: response.favoriteCount }));
                     }
                 }
             }
             xhr.send("petId=" + petId);
+
+
         }
     </script>
 </body>

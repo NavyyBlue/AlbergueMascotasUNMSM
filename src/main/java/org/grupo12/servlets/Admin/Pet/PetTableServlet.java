@@ -8,19 +8,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.grupo12.dao.PetDAO;
-import org.grupo12.dao.UserDAO;
 import org.grupo12.models.Pet;
-import org.grupo12.models.User;
 import org.grupo12.services.PetService;
-import org.grupo12.services.UserService;
 import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
-import org.grupo12.util.Pagination;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet("/admin/petTable")
 public class PetTableServlet extends HttpServlet {
@@ -35,16 +31,19 @@ public class PetTableServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-//            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
-//                return;
-//            }
+            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
+                return;
+            }
 
+            //Pass the list of pets to the view
             List<Pet> pets = petService.getPetPaginated(request);
             Gson gson = new Gson();
             String petsJson = gson.toJson(pets);
 
+
             request.setAttribute("pets", pets);
             request.setAttribute("petsJson", petsJson);
+
             request.getRequestDispatcher("/WEB-INF/views/admin/pet/petTable.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -57,12 +56,57 @@ public class PetTableServlet extends HttpServlet {
             throws ServletException, IOException {
         String method = request.getParameter("_method");
         if ("DELETE".equalsIgnoreCase(method)) {
-            //handleDeleteRequest(request, response);
+            handleDeleteRequest(request, response);
         } else if ("PATCH".equalsIgnoreCase(method)) {
-            //handleRestoreRequest(request, response);
+            handleRestoreRequest(request, response);
         } else {
-            handleUpdateRequest(request, response);
+            String editPetId = request.getParameter("editPetId");
+            if (Objects.equals(editPetId, "")){
+                handleInsertRequest(request, response);
+            }else{
+                handleUpdateRequest(request, response);
+            }
         }
+    }
+
+    private void handleInsertRequest(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        String editName = request.getParameter("editName");
+        int editAge = Integer.parseInt(request.getParameter("editAge"));
+        int editSpeciesId = Integer.parseInt(request.getParameter("editSpeciesId"));
+        String editGender = request.getParameter("editGender");
+        String editDescription = request.getParameter("editDescription");
+        int editAdoptionStatus = Integer.parseInt(request.getParameter("editAdoptionStatus"));
+        String editBreed = request.getParameter("editBreed");
+        int editLocation = Integer.parseInt(request.getParameter("editLocation"));
+
+
+        Pet insertPet = new Pet();
+        insertPet.setName(editName);
+        insertPet.setAge(editAge);
+        insertPet.setSpeciesId(editSpeciesId);
+        insertPet.setGender(editGender);
+        insertPet.setDescription(editDescription);
+        insertPet.setAdoptionStatusId(editAdoptionStatus);
+        insertPet.setBreed(editBreed);
+        insertPet.setLocation(editLocation);
+
+        boolean success = petService.insertPet(insertPet);
+
+        handleOperationResult(success, request, response);
+    }
+
+    private void handleDeleteRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int petId = Integer.parseInt(request.getParameter("deletePetId"));
+        boolean success = petService.deletePet(petId);
+
+        handleOperationResult(success, request, response);
+    }
+
+    private void handleRestoreRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int petId = Integer.parseInt(request.getParameter("restorePetId"));
+        boolean success = petService.restorePet(petId);
+
+        handleOperationResult(success, request, response);
     }
 
     private void handleUpdateRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -75,7 +119,7 @@ public class PetTableServlet extends HttpServlet {
         int editAdoptionStatus = Integer.parseInt(request.getParameter("editAdoptionStatus"));
         String editBreed = request.getParameter("editBreed");
         int editLocation = Integer.parseInt(request.getParameter("editLocation"));
-        //String editEntryDate = request.getParameter("editEntryDate");
+        String editEntryDate = request.getParameter("editEntryDate");
 
 
         Pet updatedPet = new Pet();
@@ -88,7 +132,7 @@ public class PetTableServlet extends HttpServlet {
         updatedPet.setAdoptionStatusId(editAdoptionStatus);
         updatedPet.setBreed(editBreed);
         updatedPet.setLocation(editLocation);
-        //updatedPet.setEntryDate(editEntryDate);
+        updatedPet.setEntryDate(editEntryDate);
 
         boolean success = petService.updatePet(updatedPet);
 

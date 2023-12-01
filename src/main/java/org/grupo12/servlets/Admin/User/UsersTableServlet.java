@@ -12,7 +12,6 @@ import org.grupo12.models.User;
 import org.grupo12.services.UserService;
 import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
-import org.grupo12.util.Pagination;
 
 import java.io.IOException;
 import java.util.Collections;

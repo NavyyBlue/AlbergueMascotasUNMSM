@@ -52,6 +52,8 @@ public class PetFavoriteServlet extends HttpServlet {
             int petId = Integer.parseInt(request.getParameter("petId"));
 
             int isFavorite = petFavoriteService.isFavorite(userId, petId);
+            //total de favoritos por mascota
+            int totalFavorites;
             boolean resp;
 
             //Remover de favoritos
@@ -61,7 +63,8 @@ public class PetFavoriteServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": false}");
                     return;
                 }
-                response.getWriter().write("{\"success\": true, \"isFavorite\": false}");
+                totalFavorites = petFavoriteService.getTotalFavoritesByPet(petId);
+                response.getWriter().write("{\"success\": true, \"isFavorite\": false, \"favoriteCount\": " + totalFavorites + "}");
             }
             //Actualizar favoritos
             else if(isFavorite == 0){
@@ -70,7 +73,8 @@ public class PetFavoriteServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": false}");
                     return;
                 }
-                response.getWriter().write("{\"success\": true, \"isFavorite\": true}");
+                totalFavorites = petFavoriteService.getTotalFavoritesByPet(petId);
+                response.getWriter().write("{\"success\": true, \"isFavorite\": true, \"favoriteCount\": " + totalFavorites + "}");
 
             }
             //Agregar a favoritos
@@ -80,7 +84,8 @@ public class PetFavoriteServlet extends HttpServlet {
                     response.getWriter().write("{\"success\": false}");
                     return;
                 }
-                response.getWriter().write("{\"success\": true, \"isFavorite\": true}");
+                totalFavorites = petFavoriteService.getTotalFavoritesByPet(petId);
+                response.getWriter().write("{\"success\": true, \"isFavorite\": true, \"favoriteCount\": " + totalFavorites + "}");
 
             }
 

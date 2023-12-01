@@ -106,4 +106,24 @@ public class PetFavoriteDAO {
             return null;
         }
     }
+
+    public int getTotalFavoritesByPet(int petId) {
+        String sql = "SELECT COUNT(*) AS Total FROM UserPet WHERE PetId = ? AND IsFavorite = 1";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, petId);
+
+            var result = statement.executeQuery();
+            int total = 0;
+            if (result.next()) {
+                total = result.getInt("Total");
+            }
+            return total;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }

@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.getSession().setAttribute("alerts", Collections.singletonMap("danger","Usuario o contraseña incorrectos"));
-            response.sendRedirect("login");
+            response.sendRedirect(request.getRequestURI());
         }
     }
 }
