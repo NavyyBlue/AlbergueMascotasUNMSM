@@ -60,6 +60,7 @@
                         <li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/petTable">Mascotas</a></li>
                         <li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/productsTable">Productos</a></li>
                         <li><a class="dropdown-item" href="#">Noticias</a></li>
+                        <li><a class="dropdown-item" href="<%=request.getContextPath()%>/admin/donationstable">Donaciones</a></li>
                     </ul>
                 </li>
             <%}%>
