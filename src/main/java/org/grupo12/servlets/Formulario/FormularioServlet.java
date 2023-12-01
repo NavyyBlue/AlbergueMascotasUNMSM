@@ -10,7 +10,8 @@ import java.io.IOException;
 @WebServlet("/formulario")
 public class FormularioServlet extends HttpServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/formulario/formulario.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/formulario/formulario.jsp")
+                .forward(request, response);
     }
 }
 

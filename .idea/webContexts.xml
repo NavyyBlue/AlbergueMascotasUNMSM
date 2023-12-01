@@ -3,8 +3,7 @@
   <component name="WebContextManager">
     <option name="state">
       <map>
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/forgotPassword/forgotPasswordSend.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/forgotPassword" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/home/home.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/home" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/components/navBar.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/components" />
       </map>
     </option>
   </component>

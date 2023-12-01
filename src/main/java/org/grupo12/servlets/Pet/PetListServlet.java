@@ -6,58 +6,75 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.websocket.Session;
 import org.grupo12.dao.PetDAO;
+import org.grupo12.dao.PetFavoriteDAO;
 import org.grupo12.models.Pet;
+import org.grupo12.models.User;
+import org.grupo12.services.PetService;
+import org.grupo12.services.implementation.PetFavoriteService;
 import org.grupo12.util.ConnectionDB;
 import org.grupo12.util.Pagination;
+import org.grupo12.websockets.notifiers.PetFavoriteNotifier;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/petlist")
 public class PetListServlet extends HttpServlet {
-    private HikariDataSource dataSource = ConnectionDB.getDataSource();
+    private final HikariDataSource dataSource = ConnectionDB.getDataSource();
+
+    private PetService petService;
+    private final PetFavoriteService petFavoriteService = new PetFavoriteService(new PetFavoriteDAO(dataSource));
+
+    @Override
+    public void init() throws ServletException {
+        petService = new PetService(new PetDAO(dataSource));
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int speciesId = 0;
-        int age = 0;
-        String gender = "";
-        String searchKeyword = "";
+        try{
+            List<Pet> pets = petService.getPetPaginatedBySpecies(request);
+            List<Pet> petsWithFavorites = new ArrayList<>();
 
-        String speciesIdParam = request.getParameter("speciesId");
-        if (speciesIdParam != null && !speciesIdParam.isEmpty())
-            speciesId = Integer.parseInt(speciesIdParam);
+            //Obtener favoritos
+            User user = (User) request.getSession().getAttribute("user");
+            if(user != null){
+                int userId = user.getUserId();
+                List<Integer> favoritePets = petFavoriteService.getFavoritePetsByUser(userId);
+                request.setAttribute("favoritePets", favoritePets);
 
-        String ageParam = request.getParameter("age");
-        if (ageParam != null && !ageParam.isEmpty()) {
-            age = Integer.parseInt(ageParam);
+                //Obtener total de favoritos por mascota
+                for (Pet pet : pets) {
+                    int totalFavorites = petFavoriteService.getTotalFavoritesByPet(pet.getPetId());
+                    pet.setTotalFavorites(totalFavorites);
+                    petsWithFavorites.add(pet);
+                }
+
+                System.out.println("petsWithFavorites: " + petsWithFavorites);
+
+                handleFavoriteChange(petsWithFavorites, user);
+            }
+
+            request.setAttribute("pets", pets);
+            request.getRequestDispatcher("/WEB-INF/views/pet/petlist.jsp").forward(request, response);
+        }catch (Exception e) {
+            request.getSession().setAttribute("errorOccurred", true);
+            response.sendRedirect(request.getContextPath() + "/error");
         }
 
-        gender = request.getParameter("gender");
-        searchKeyword = request.getParameter("searchKeyword");
+    }
 
-        Pagination pagination = new Pagination();
-        PetDAO petDAO = new PetDAO(dataSource);
+    private void handleFavoriteChange(List<Pet> pets, User user) {
+        for (Pet pet : pets) {
+            int petId = pet.getPetId();
+            int oldFavoriteCount = pet.getTotalFavorites();
 
-        // Retrieve the requested page number from the request
-        String pageParam = request.getParameter("page");
-        int requestedPage = 1; // Default to page 1
-        if (pageParam != null && !pageParam.isEmpty()) {
-            requestedPage = Integer.parseInt(pageParam);
+            PetFavoriteNotifier.notifyFavoritesChanged(petId, oldFavoriteCount, user.getSession());
+            int newFavoriteCount = petFavoriteService.getTotalFavoritesByPet(petId);
+            pet.setTotalFavorites(newFavoriteCount);
         }
-
-        int total = petDAO.getTotalPetCount(speciesId, age, gender, searchKeyword);
-        pagination.setTotal(total);
-        pagination.calculate();
-        pagination.setCurrentPage(requestedPage);
-
-        int offset = pagination.calculateOffset(requestedPage);
-        int limit = pagination.getLimit();
-
-
-        List<Pet> pets = petDAO.getPetListBySpecies(speciesId, age, gender, searchKeyword,offset, limit);
-
-        request.setAttribute("pagination", pagination);
-        request.setAttribute("pets", pets);
-        request.getRequestDispatcher("/WEB-INF/views/pet/petlist.jsp").forward(request, response);
     }
 }

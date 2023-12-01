@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
@@ -22,14 +26,20 @@
         Pet petInfo = (Pet) request.getAttribute("petInfo");
         List<Pet> petStatus = (List<Pet>) request.getAttribute("petStatus");
         List<Pet> petImages = (List<Pet>) request.getAttribute("petImages");
-        String firstImageUrl = null;
-        // Verificar si la lista no está vacía
-        if (!petImages.isEmpty()) {
-            // Obtener el primer elemento de la lista
-            Pet firstPetImage = petImages.get(0);
 
-            // Obtener la propiedad imgUrl del primer elemento
-            firstImageUrl = firstPetImage.getImageUrl();
+        String firstImageUrl = null;
+
+        for(Pet pet : petImages){
+            if(pet.isMainImage() && pet.getImageUrl() != null && pet.isImageActive()){
+                firstImageUrl = pet.getImageUrl();
+                //Quitar la imagen principal de la lista
+                petImages.remove(pet);
+                break;
+            }
+        }
+
+        if(firstImageUrl == null){
+            firstImageUrl = "/assets/img/petlist/pet_footprint.png";
         }
 
         // Crear un array de strings con los valores de petStatusName
@@ -43,7 +53,7 @@
 %>
 <div class="divMainPet">
     <div class="divDetailsPet" style="align-items: center;">
-        <img style="width: 545px; height: 406px; border-radius: 30px;" src="<%=firstImageUrl%>">
+        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + firstImageUrl%>">
         <div class="divDescriptionPet">
             <div class="divDetailsPet" style="height: 71px; align-items: center">
                 <img style="width: 55.675px; height: 52.984px; transform: rotate(52.107deg); margin: 0 10px 0 0;" src="<%=request.getContextPath()%>/assets/img/petlist/pet_footprint.png">
@@ -60,10 +70,10 @@
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
+                <button type="button" class="btn btn-primary">Favorito</button>
             </div>
             <script>
                 const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');
-                console.log("etiquetas: ", etiquetasMascota);
 
                 // Obtén la referencia al elemento ul donde se mostrarán las etiquetas
                 const listaEtiquetas = document.getElementById("etiquetasMascota");
@@ -90,9 +100,16 @@
 
 
     </div>
-    <div class="image-list">
-        <% for (Pet image : petImages) { %>
-        <img src="<%= image.getImageUrl() %>" alt="Imagen de la mascota">
+
+    <div class="row text-center mx-5 mt-3">
+        <% for (Pet image : petImages) {
+            if(image.getImageUrl() == null || !image.isImageActive()){
+                continue;
+            }
+        %>
+            <div class="col-md-4 mb-5">
+                <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + image.getImageUrl() %>" alt="Imagen de la mascota">
+            </div>
         <% } %>
     </div>
 

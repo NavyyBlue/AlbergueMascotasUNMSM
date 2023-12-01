@@ -1,5 +1,6 @@
 package org.grupo12.models;
 
+import jakarta.websocket.Session;
 import lombok.Data;
 
 @Data
@@ -12,5 +13,7 @@ public class User {
     private String password;
     private String phoneNumber;
     private String userImage;
+    private int userRole;
     private boolean active;
+    private Session session;
 }

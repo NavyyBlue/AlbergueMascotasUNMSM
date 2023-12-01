@@ -15,7 +15,7 @@ import java.util.List;
 
 @WebServlet("/petinfo")
 public class PetInfoServlet extends HttpServlet {
-    private HikariDataSource dataSource = ConnectionDB.getDataSource();
+    private final HikariDataSource dataSource = ConnectionDB.getDataSource();
     private PetDAO petDAO;
 
     @Override
