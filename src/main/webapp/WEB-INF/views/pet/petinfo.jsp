@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Arrays" %>
+<%@ page import="org.grupo12.models.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,7 +22,12 @@
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
 <%
+    User user = (User) request.getSession().getAttribute("user");
     String petIdParam = request.getParameter("petId");
+
+    int userId = user.getUserId();
+    int petId = Integer.parseInt(petIdParam);
+
     if (petIdParam != null && !petIdParam.isEmpty()) {
         Pet petInfo = (Pet) request.getAttribute("petInfo");
         List<Pet> petStatus = (List<Pet>) request.getAttribute("petStatus");
@@ -101,7 +107,7 @@
     </div>
     <div class="divButtonsPet">
         <button class="buttonPetDetails">APADRINAR</button>
-        <button class="buttonPetDetails">ADOPTAR</button>
+        <button class="buttonPetDetails" onclick="sendRequestAdoption('<%=userId%>', '<%=petId%>')">ADOPTAR</button>
     </div>
     <div style="width: 1251px; height: 70px; display: flex; align-items: center;justify-content: flex-start;">
         <div style="width: 300px; height: 47px; display: flex; flex-direction: row; align-items: center; justify-content: center; background: #BBD478; border-radius: 30px">
@@ -128,5 +134,20 @@
 <%} else {%>
 <h1>No se encontró la mascota</h1>
 <%}%>
+<script>
+    function sendRequestAdoption(userId, petId) {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/adoption",
+            type: "POST",
+            data: {
+                userId: userId,
+                petId: petId
+            },
+            success: function (response) {
+              location.reload();
+            },
+        });
+    }
+</script>
 </body>
 </html>
