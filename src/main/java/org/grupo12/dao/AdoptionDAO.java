@@ -1,6 +1,7 @@
 package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.grupo12.models.Adoption;
 import org.grupo12.util.AdoptionUtil;
 
 import java.sql.Connection;
@@ -145,7 +146,7 @@ public class AdoptionDAO {
                                     }
                                 }
                             }
-
+                            connection.commit();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -217,6 +218,7 @@ public class AdoptionDAO {
                                         }
                                     }
                                 }
+                                connection.commit();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -271,4 +273,85 @@ public class AdoptionDAO {
         }
         return null;
     }
+
+    public List<Adoption> getAdoptionsPaginated(int offset, int limit, int statusId) {
+        List<Adoption> adoptions = new ArrayList<>();
+        StringBuilder sqlBuilder = new StringBuilder(
+                "SELECT " +
+                    " up.UserPetId, " +
+                    " up.UserId, " +
+                    " up.PetId, " +
+                    " p.Name AS PetName, " +
+                    " CONCAT(u.FirstName, ' ', u.LastName) AS UserFullName, " +
+                    " COALESCE(up.AdoptionDate, '-') AS AdoptionDate, " +
+                    " p.AdoptionStatusId " +
+                    "FROM UserPet up " +
+                    "JOIN User u ON u.UserId = up.UserId " +
+                    "JOIN Pet p ON p.PetId = up.PetId  " +
+                "WHERE p.AdoptionStatusId = ? AND up.Type = " + AdoptionUtil.ADOPTAR + " ");
+
+        List<Object> parameters = new ArrayList<>();
+
+        parameters.add(statusId);
+
+        sqlBuilder.append("ORDER BY UserPetId DESC ");
+        sqlBuilder.append("LIMIT ? OFFSET ?");
+        parameters.add(limit);
+        parameters.add(offset);
+
+        String sql = sqlBuilder.toString();
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            int paramIndex = 1;
+            for (Object parameter : parameters) {
+                preparedStatement.setObject(paramIndex++, parameter);
+            }
+
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+                Adoption adoption = new Adoption();
+                adoption.setUserPetId(result.getInt("UserPetId"));
+                adoption.setUserId(result.getInt("UserId"));
+                adoption.setPetId(result.getInt("PetId"));
+                adoption.setPetName(result.getString("PetName"));
+                adoption.setUserFullName(result.getString("UserFullName"));
+                adoption.setAdoptionDate(result.getString("AdoptionDate"));
+                adoption.setStatusId(result.getInt("AdoptionStatusId"));
+                adoptions.add(adoption);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return adoptions;
+    }
+
+    public int getTotalCountAdoption(int statusId) {
+        int total = 0;
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) AS total FROM UserPet up " +
+                "JOIN Pet p ON p.PetId = up.PetId " +
+                "WHERE p.AdoptionStatusId = ? AND up.Type = " + AdoptionUtil.ADOPTAR + " ");
+        List<Object> parameters = new ArrayList<>();
+        parameters.add(statusId);
+
+        String countSql = sqlBuilder.toString();
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(countSql)) {
+                int paramIndex = 1;
+                for (Object parameter : parameters) {
+                    preparedStatement.setObject(paramIndex++, parameter);
+                }
+                ResultSet result = preparedStatement.executeQuery();
+                if (result.next()) {
+                    total = result.getInt("total");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        return total;
+    }
+
 }

@@ -1,8 +1,12 @@
 package org.grupo12.services.implementation;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.grupo12.dao.AdoptionDAO;
+import org.grupo12.models.Adoption;
 import org.grupo12.services.interfaces.IAdoptionService;
 import org.grupo12.services.interfaces.IEmailService;
+import org.grupo12.util.AdoptionUtil;
+import org.grupo12.util.Pagination;
 
 import java.security.PublicKey;
 import java.util.List;
@@ -60,5 +64,33 @@ public class AdoptionService implements IAdoptionService {
             return true;
         }
         return false;
+    }
+
+    public List<Adoption> getAdoptionsPaginated(HttpServletRequest request) {
+        int petStatusId = AdoptionUtil.EN_PROCESO;
+
+        String petStatusIdParam = request.getParameter("adoptionStatusId");
+        if (petStatusIdParam != null && !petStatusIdParam.isEmpty())
+            petStatusId = Integer.parseInt(petStatusIdParam);
+
+        Pagination pagination = new Pagination();
+
+        String pageParam = request.getParameter("page");
+        int requestedPage = 1; // Default to page 1
+        if (pageParam != null && !pageParam.isEmpty()) {
+            requestedPage = Integer.parseInt(pageParam);
+        }
+
+        int total = adoptionDAO.getTotalCountAdoption(petStatusId);
+        pagination.setTotal(total);
+        pagination.calculate();
+        pagination.setCurrentPage(requestedPage);
+
+        int offset = pagination.calculateOffset(requestedPage);
+        int limit = pagination.getLimit();
+
+        request.setAttribute("pagination", pagination);
+
+        return adoptionDAO.getAdoptionsPaginated(offset, limit, petStatusId);
     }
 }
