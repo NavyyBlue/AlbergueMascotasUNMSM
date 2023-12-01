@@ -46,18 +46,34 @@ public class AdoptionService implements IAdoptionService {
         }
         return false;
     }
-//
-//    public boolean requestSponsor(int userId, int petId, double amount, int methodPayment){
-//        String email = adoptionDAO.requestSponsor(userId, petId, amount, methodPayment);
-//        String petName = adoptionDAO.getPetName(petId);
-//        if(email != null) {
-//            String subject= "Mascota Apadrinada";
-//            String body = "La mascota "+petName+" fue apadrinada exitosamente!";
-//            emailService.sendEmail(email, subject, body);
-//            return true;
-//        }
-//        return false;
-//    }
+
+    public boolean requestSponsor(int userId, int petId, double amount, int methodPayment){
+        String email = adoptionDAO.requestSponsor(userId, petId, amount, methodPayment);
+        String petName = adoptionDAO.getPetName(petId);
+        String paymentMethod = null;
+        switch (methodPayment) {
+            case 0:
+                paymentMethod = "Yape";
+                break;
+            case 1:
+                paymentMethod = "Plin";
+                break;
+            case 2:
+                paymentMethod = "Transferencia Bancaria (BCP)";
+                break;
+            default:
+                // Manejar un caso por defecto si methodPayment no es 0, 1 ni 2.
+                System.out.println("Método de pago no válido");
+                break;
+        }
+        if(email != null) {
+            String subject= "Mascota Apadrinada";
+            String body = "La mascota "+petName+" fue apadrinada exitosamente!\nMonto: S./"+amount+"\nMétodo de pago: "+paymentMethod;
+            emailService.sendEmail(email, subject, body);
+            return true;
+        }
+        return false;
+    }
 
     public boolean rejectAdoption(int userId, int petId, int userPetId) {
         List<String> emails = adoptionDAO.rejectAdoption(userPetId, petId, userPetId);

@@ -191,7 +191,7 @@
 </div>
 
 
-<!-- Delete Modal -->
+<!-- Sponsor Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -206,30 +206,39 @@
             </div>
 
             <div class="divMainPet" style="margin: 0 15px 0 15px">
-                <p style="text-align: center; margin: 0">Cada aporte va directo al cuidado de LA mascotas. Si sobrepasamos las necesidades de una, el excedente beneficia a las demás. Tu contribución hace la diferencia en sus vidas. ¡Gracias por ser parte de nuestro compromiso con el bienestar animal! 🐾 </p>
+                <p style="text-align: center; margin: 0">Cada aporte va directo al cuidado de la mascota. Si sobrepasamos las necesidades de una, el excedente beneficia a las demás. Tu contribución hace la diferencia en sus vidas. ¡Gracias por ser parte de nuestro compromiso con el bienestar animal! 🐾 </p>
             </div>
             <div class="modal-body">
-                <form id="deletePetForm" action="${pageContext.request.contextPath}/admin/petTable" method="post">
+                <form id="deletePetForm" action="${pageContext.request.contextPath}/sponsor" method="post">
 
                     <div class="mb-3" style="justify-content: center;">
                         <label class="form-label">Monto</label>
                         <br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment1" value="option1">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment1" value="10">
                             <label class="form-check-label" for="inlineRadioPayment1">S./10</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment2" value="option2">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment2" value="15">
                             <label class="form-check-label" for="inlineRadioPayment2">S./15</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment3" value="option3">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment3" value="20">
                             <label class="form-check-label" for="inlineRadioPayment3">S./20</label>
                         </div>
                     </div>
-                    <div class="modal-footer" style="justify-content: center;">
-                        <%--                    <input type="hidden" id="deletePetId" name="deletePetId" value="<%=petId%>">--%>
-                        <%--                    <input type="hidden" name="_method" value="DELETE">--%>
+
+                    <select id="sponsorMethodPayment" name="sponsorMethodPayment" class="form-select"
+                            aria-label="Default select example" required>
+                        <option value="" disabled selected>Seleccione un método de Pago</option>
+                        <option value="0">Yape (+51 972 194 681)</option>
+                        <option value="1">Plin (+51 972 194 681)</option>
+                        <option value="2">Transferencia Bancaria BCP (0011-1561561-15521561)</option>
+                    </select>
+
+                    <div class="modal-footer" style="justify-content: center; margin: 20px 0 0 0;">
+                        <input type="hidden" id="SponsorPetId" name="SponsorPetId" value="<%=petId%>">
+                        <input type="hidden" id="SponsorUserId" name="SponsorUserId" value="<%=user.getUserId()%>"/>
 
                         <button type="submit" class="btn btn-primary" style="margin: 0 10px 0 0; background: #94C11F; border-color: #94C11F; width: 150px;">Apadrinar</button>
                     </div>
@@ -249,6 +258,12 @@
 
     function openRequestAdoptionModal() {
         $('#modalRequestAdoption').modal('show');
+    }
+    function sendRequestSponsor(){
+        $('input[name="inlineRadioOptions"]:checked').val();
+        $('#sponsorMethodPayment').val();
+        $('#SponsorPetId').val("");
+        $('#SponsorUserId').val("");
     }
 </script>
 </body>

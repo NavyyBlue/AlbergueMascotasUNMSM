@@ -30,27 +30,17 @@ public class PetInfoServlet extends HttpServlet {
 
     @Override
     protected  void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        try{
+        int petId = Integer.parseInt(request.getParameter("petId"));
+        Pet petInfo = petService.getPetInfo(petId);
+        List<Pet> petImages = petService.getPetImages(petId);
+        List<Pet> petStatus = petService.getPetStatus(petId);
 
-//            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
-//                return;
-//            }
-            int petId = Integer.parseInt(request.getParameter("petId"));
-            Pet petInfo = petService.getPetInfo(petId);
-            List<Pet> petImages = petService.getPetImages(petId);
-            List<Pet> petStatus = petService.getPetStatus(petId);
+        request.setAttribute("petInfo", petInfo);
+        request.setAttribute("petImages", petImages);
+        request.setAttribute("petStatus", petStatus);
 
-            request.setAttribute("petInfo", petInfo);
-            request.setAttribute("petImages", petImages);
-            request.setAttribute("petStatus", petStatus);
+        request.getRequestDispatcher("/WEB-INF/views/pet/petinfo.jsp").forward(request, response);
 
-            request.getRequestDispatcher("/WEB-INF/views/pet/petinfo.jsp").forward(request, response);
-
-
-        }catch (Exception e){
-            request.getSession().setAttribute("errorOccurred", true);
-            response.sendRedirect(request.getContextPath() + "/error");
-        }
 
     }
 

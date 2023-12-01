@@ -14,7 +14,7 @@ import org.grupo12.util.ConnectionDB;
 import java.io.IOException;
 import java.util.Collections;
 
-
+@WebServlet("/sponsor")
 public class SponsorServlet extends HttpServlet {
 
     private final HikariDataSource dataSource = ConnectionDB.getDataSource();
@@ -32,14 +32,18 @@ public class SponsorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try{
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            int petId = Integer.parseInt(request.getParameter("petId"));
-            //int
-            boolean success = true;
+            int userId = Integer.parseInt(request.getParameter("SponsorUserId"));
+            int petId = Integer.parseInt(request.getParameter("SponsorPetId"));
+            int amount = Integer.parseInt(request.getParameter("inlineRadioOptions"));
+            int methodPayment = Integer.parseInt(request.getParameter("sponsorMethodPayment"));
+            System.out.println(userId);
+            System.out.println(amount);
+            System.out.println(methodPayment);
+            boolean success = adoptionService.requestSponsor(userId, petId, amount, methodPayment);
             if(success){
-                request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Se ha registrado la solicitud de adopción de la mascota"));
+                request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Se ha registrado el apadrinamiento a la mascota"));
             }else{
-                request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "No se ha podido registrar la solicitud de adopción de la mascota"));
+                request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "No se ha podido registrar apadrinamiento a la mascota"));
             }
             response.sendRedirect(request.getContextPath() + "/petinfo?petId=" + petId);
         }catch (Exception e){

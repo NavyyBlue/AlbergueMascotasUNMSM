@@ -118,8 +118,8 @@ public class AdoptionDAO {
                                 preparedStatement1.setInt(1, userPetId);
                                 preparedStatement1.setDouble(2, amount);
                                 preparedStatement1.setInt(3, methodPayment);
-                                ResultSet resultSet1 = preparedStatement1.executeQuery();
-                                if (resultSet1.next()){
+                                int rowsAffected1 = preparedStatement1.executeUpdate();
+                                if (rowsAffected1 > 0){
                                     try(PreparedStatement preparedStatement3 = connection.prepareStatement(getEmailToSent)){
                                         preparedStatement3.setInt(1, userId);
                                         ResultSet resultSet2 = preparedStatement3.executeQuery();
@@ -200,9 +200,7 @@ public class AdoptionDAO {
         }
     }
 
-    public List<String> rejectAdoption(int userPetId) {
-        String getUserAndPet = "SELECT UserId, PetId FROM UserPet WHERE UserPetId = ?";
-        String updateAdoption = "UPDATE UserPet SET Type = ? WHERE UserPetId = ?";
+
     public List<String> completeAdoption(int userId, int petId, int userPetId) {
         String updateAdoption = "UPDATE UserPet SET AdoptionDate = NOW() WHERE UserPetId = ?";
         String changeAdoptionStatus = "UPDATE Pet SET AdoptionStatusId = ? WHERE PetId = ?";
@@ -284,62 +282,62 @@ public class AdoptionDAO {
 
         try(Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
-                try (PreparedStatement preparedStatement1 = connection.prepareStatement(updateAdoption)) {
-                    preparedStatement1.setInt(1, AdoptionUtil.RECHAZAR);
-                    preparedStatement1.setInt(2, userPetId);
+            try (PreparedStatement preparedStatement1 = connection.prepareStatement(updateAdoption)) {
+                preparedStatement1.setInt(1, AdoptionUtil.RECHAZAR);
+                preparedStatement1.setInt(2, userPetId);
 
-                    int rowsAffected = preparedStatement1.executeUpdate();
-                    if (rowsAffected > 0) {
-                        try (PreparedStatement preparedStatement = connection.prepareStatement(changeAdoptionStatus)) {
-                            preparedStatement.setInt(1, AdoptionUtil.DISPONIBLE);
-                            preparedStatement.setInt(2, petId);
+                int rowsAffected = preparedStatement1.executeUpdate();
+                if (rowsAffected > 0) {
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(changeAdoptionStatus)) {
+                        preparedStatement.setInt(1, AdoptionUtil.DISPONIBLE);
+                        preparedStatement.setInt(2, petId);
 
-                            int rowsAffected1 = preparedStatement.executeUpdate();
-                            if (rowsAffected1 > 0) {
-                                try (PreparedStatement preparedStatement2 = connection.prepareStatement(getAllUsersToNotify)) {
-                                    preparedStatement2.setInt(1, petId);
-                                    preparedStatement2.setInt(2, userId);
+                        int rowsAffected1 = preparedStatement.executeUpdate();
+                        if (rowsAffected1 > 0) {
+                            try (PreparedStatement preparedStatement2 = connection.prepareStatement(getAllUsersToNotify)) {
+                                preparedStatement2.setInt(1, petId);
+                                preparedStatement2.setInt(2, userId);
 
-                                    ResultSet resultSet1 = preparedStatement2.executeQuery();
-                                    while (resultSet1.next()) {
-                                        int userIdToNotify = resultSet1.getInt("UserId");
-                                        try (PreparedStatement preparedStatement3 = connection.prepareStatement(insertNotification)) {
-                                            preparedStatement3.setInt(1, userIdToNotify);
+                                ResultSet resultSet1 = preparedStatement2.executeQuery();
+                                while (resultSet1.next()) {
+                                    int userIdToNotify = resultSet1.getInt("UserId");
+                                    try (PreparedStatement preparedStatement3 = connection.prepareStatement(insertNotification)) {
+                                        preparedStatement3.setInt(1, userIdToNotify);
 
-                                            int rowsAffected2 = preparedStatement3.executeUpdate();
-                                            if (rowsAffected2 > 0) {
-                                                try (PreparedStatement preparedStatement4 = connection.prepareStatement(getAllEmailsToSent)) {
-                                                    preparedStatement4.setInt(1, userIdToNotify);
+                                        int rowsAffected2 = preparedStatement3.executeUpdate();
+                                        if (rowsAffected2 > 0) {
+                                            try (PreparedStatement preparedStatement4 = connection.prepareStatement(getAllEmailsToSent)) {
+                                                preparedStatement4.setInt(1, userIdToNotify);
 
-                                                    ResultSet resultSet2 = preparedStatement4.executeQuery();
-                                                    if (resultSet2.next()) {
-                                                        String email = resultSet2.getString("Email");
-                                                        connection.commit();
-                                                        emailsToSend.add(email);
-                                                    } else {
-                                                        connection.rollback();
-                                                        return Collections.emptyList();
-                                                    }
+                                                ResultSet resultSet2 = preparedStatement4.executeQuery();
+                                                if (resultSet2.next()) {
+                                                    String email = resultSet2.getString("Email");
+                                                    connection.commit();
+                                                    emailsToSend.add(email);
+                                                } else {
+                                                    connection.rollback();
+                                                    return Collections.emptyList();
                                                 }
-                                            } else {
-                                                connection.rollback();
-                                                return Collections.emptyList();
                                             }
+                                        } else {
+                                            connection.rollback();
+                                            return Collections.emptyList();
                                         }
                                     }
                                 }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            connection.rollback();
-                            return Collections.emptyList();
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        connection.rollback();
+                        return Collections.emptyList();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    connection.rollback();
-                    return Collections.emptyList();
                 }
+            }catch (Exception e){
+                e.printStackTrace();
+                connection.rollback();
+                return Collections.emptyList();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return Collections.emptyList();
