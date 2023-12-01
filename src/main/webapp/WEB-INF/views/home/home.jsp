@@ -45,7 +45,7 @@
 
     <section id="fotos">
         <div class="container text-center">
-            <div class="row2 align-items-start no-gutters">
+            <div class="row align-items-start no-gutters">
 
                 <div class="col">
                     <img src="<%=request.getContextPath()%>/assets/img/home/Rectangle 4226.png" class="img-fluid"
