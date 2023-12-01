@@ -28,10 +28,7 @@ public class NewsTableServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        try{
-            if (!AuthenticationUtils.isAuthenticatedAsAdmin(request, response)) {
-                return;
-            }
+
 
             //Pass the list of pets to the view
             List<News> newsArr = newsService.getNewsPaginated(request);
@@ -44,10 +41,7 @@ public class NewsTableServlet extends HttpServlet {
 
             request.getRequestDispatcher("/WEB-INF/views/admin/news/newsTable.jsp").forward(request, response);
 
-        } catch (Exception e) {
-            request.getSession().setAttribute("errorOccurred", true);
-            response.sendRedirect(request.getContextPath() + "/error");
-        }
+
     }
 
     @Override

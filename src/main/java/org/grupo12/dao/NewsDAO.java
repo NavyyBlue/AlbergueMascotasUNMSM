@@ -31,7 +31,7 @@ public class NewsDAO {
 
             newsStatement = connection.prepareStatement(insertNewsSQL, Statement.RETURN_GENERATED_KEYS);
 
-            newsStatement.setString(1, news.getTittle());
+            newsStatement.setString(1, news.getTitle());
             newsStatement.setString(2, news.getDescription());
             newsStatement.setInt(3, news.getUserId());
             newsStatement.setInt(4, news.getNewsType());
@@ -87,7 +87,7 @@ public class NewsDAO {
         List<News> newsArr = new ArrayList<>();
         StringBuilder sqlBuilder = new StringBuilder("SELECT " +
                 "    n.NewsId, " +
-                "    n.Tittle, " +
+                "    n.Title, " +
                 "    n.Description, " +
                 "    n.CreationDate, " +
                 "    n.UserId, " +
@@ -129,12 +129,12 @@ public class NewsDAO {
             while (result.next()) {
                 News news = new News();
                 news.setNewsId(result.getInt("NewsId"));
-                news.setTittle(result.getString("Tittle"));
+                news.setTitle(result.getString("Title"));
                 news.setDescription(result.getString("Description"));
                 news.setCreationDate(result.getString("CreationDate"));
                 news.setUserId(result.getInt("UserId"));
                 news.setNewsType(result.getInt("NewsType"));
-                news.setActive(result.getBoolean("Active"));
+                news.setActive(result.getInt("Active"));
                 newsArr.add(news);
             }
         } catch (SQLException e) {
@@ -178,7 +178,7 @@ public class NewsDAO {
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, news.getTittle());
+            statement.setString(1, news.getTitle());
             statement.setString(2, news.getDescription());
             statement.setString(3, news.getImage());
             statement.setString(8, news.getCreationDate());

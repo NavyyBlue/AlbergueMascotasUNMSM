@@ -5,12 +5,12 @@ import lombok.Data;
 @Data
 public class News {
     private int newsId;
-    private String tittle;
+    private String title;
     private String description;
     private String image;
     private String creationDate;
     private int userId;
     private int newsType;
-    private boolean active;
+    private int active;
 
 }

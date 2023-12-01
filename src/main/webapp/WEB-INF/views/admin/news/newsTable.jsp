@@ -6,7 +6,7 @@
 <html lang="es">
 <head>
     <title>Tabla de Noticias</title>
-    <link href="<%=request.getContextPath()%>/assets/css/newsTable.css" rel="stylesheet"/>
+    <link href="<%=request.getContextPath()%>/assets/css/petTable.css" rel="stylesheet"/>
     <link href="<%=request.getContextPath()%>/assets/css/newslist.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -50,17 +50,19 @@
         </thead>
         <tbody class="table-group-divider">
         <%
-            List<News> newsArr = (List<News>) request.getAttribute("news");
+            List<News> news = (List<News>) request.getAttribute("news");
+            for (News notice : news) {
+//                String petImageUrl = "petImage?petId=" + notice.getNewsId();
         %>
 
         <tr>
-            <td><%= news.getNewsId() %></td>
-            <td><%= news.getTittle() %></td>
-            <td><%= news.getDescription() %></td>
-            <td><%= pet.getCreationDate() %></td>
+            <td><%= notice.getNewsId() %></td>
+            <td><%= notice.getTitle() %></td>
+            <td><%= notice.getDescription() %></td>
+            <td><%= notice.getCreationDate() %></td>
             <td>
                 <%
-                    int newsType = news.getNewsType();
+                    int newsType = notice.getNewsType();
                     if (newsType == 1) {
                         out.print("Eventos");
                     } else if (newsType == 2) {
@@ -74,25 +76,25 @@
             <td>
                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                         <a type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal"
-                           data-bs-target="#editModal" data-petid="<%=news.getNewsId()%>">
+                           data-bs-target="#editModal" data-petid="<%=notice.getNewsId()%>">
                             <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
                         </a>
                     </span>
                 <span data-bs-toggle="tooltip" data-bs-placement="top" title="Subir imagen">
-                         <a href="<%= petImageUrl %>" class="btn btn-info btn-sm me-2">
+<%--                         <a href="<%= petImageUrl %>" class="btn btn-info btn-sm me-2">--%>
                             <img src="<%=request.getContextPath()%>/assets/svg/upload.svg" alt="upload">
                         </a>
                     </span>
-                <% String titleTooltip = news.getActive() == 1 ? "Eliminar" : "Restaurar"; %>
+                <% String titleTooltip = notice.getActive() == 1 ? "Eliminar" : "Restaurar"; %>
                 <span data-bs-toggle="tooltip" data-bs-placement="top" title="<%=titleTooltip%>">
-                        <% if (news.getActive() == 1) {%>
+                        <% if (notice.getActive() == 1) {%>
                             <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                               data-bs-target="#deleteModal" data-petid="<%=news.getNewsId()%>">
+                               data-bs-target="#deleteModal" data-petid="<%=notice.getNewsId()%>">
                                 <img src="<%=request.getContextPath()%>/assets/svg/delete.svg" alt="eliminar">
                             </a>
                         <%} else {%>
                             <a type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                               data-bs-target="#restoreModal" data-petid="<%=news.getNewsId()%>">
+                               data-bs-target="#restoreModal" data-petid="<%=notice.getNewsId()%>">
                                 <img src="<%=request.getContextPath()%>/assets/svg/restore.svg" alt="restaurar">
                             </a>
                         <%}%>
