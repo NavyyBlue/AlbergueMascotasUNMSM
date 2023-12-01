@@ -76,7 +76,6 @@
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
-                <button type="button" class="btn btn-success" id="btnFavorito">Favorito <i class="fa-regular fa-heart align-middle"></i></button>
 
                 <script>
 
@@ -109,14 +108,10 @@
         <button type="button" style="margin: 0 10px 0 0; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal" data-petid="0">
             APADRINAR
         </button>
-        <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal" data-petid="0">
-            ADOPTAR
-        </button>
-        <button class="buttonPetDetails">APADRINAR</button>
         <% if(user != null){%>
-            <button class="buttonPetDetails" onclick="openRequestAdoptionModal()">ADOPTAR</button>
+            <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" onclick="openRequestAdoptionModal()">ADOPTAR</button>
         <%} else {%>
-            <button class="buttonPetDetails" onclick="sendToLogin()">ADOPTAR</button>
+            <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" onclick="sendToLogin()">ADOPTAR</button>
         <%}%>
 
     </div>
@@ -149,9 +144,22 @@
                     <h1 class="modal-title fs-5" id="modalRequestAdoptionLabel">Adopción de mascota</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div style="border: 1px solid #4e3838; border-radius: 30px; margin: 10px 30px 10px 30px;  padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h1 style="font-size: 48px; margin: 0;"><%= petInfo.getName() %></h1>
+                </div>
+
+                <div class="divMainPet" style="margin: 0 15px 0 15px">
+                    <p>¡Gracias por abrir su hogar! 🐾 Estamos emocionados de que se una a nuestra familia. Su decisión de adoptar trae alegría y amor a las vidas de las mascotas.</p>
+
+                    <p>Pronto nos pondremos en contacto para organizar los detalles y asegurarnos de que la transición sea lo más suave posible para todos. ¡No podemos esperar para comenzar esta increíble aventura juntos!</p>
+
+                    <p>Una vez más, agradecemos su generosidad y estamos emocionados por el futuro que le espera con su nueva mascota. 🏡</p>
+
+                    <p>IMPORTANTE: Revise su correo como confirmación de la solicitud de adopción</p>
+
+                </div>
                 <form id="modalRequestAdoptiontForm" action="${pageContext.request.contextPath}/adoption" method="post">
                     <div class="modal-body">
-                        Adopción de mascota
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="userId" name="userId" value="<%=user.getUserId()%>"/>
