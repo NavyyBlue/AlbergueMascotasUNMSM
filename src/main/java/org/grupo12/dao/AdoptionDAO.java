@@ -2,6 +2,8 @@ package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.models.Adoption;
+import org.grupo12.models.Pet;
+import org.grupo12.models.UserPet;
 import org.grupo12.util.AdoptionUtil;
 
 import java.sql.Connection;
@@ -326,8 +328,8 @@ public class AdoptionDAO {
                                         }
                                     }
                                 }
-                                connection.commit();
                             }
+                            connection.commit();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -335,9 +337,8 @@ public class AdoptionDAO {
                         return Collections.emptyList();
                     }
                 }
-            }catch (Exception e){
+            } catch (SQLException e) {
                 e.printStackTrace();
-                connection.rollback();
                 return Collections.emptyList();
             }
         } catch (SQLException e) {
@@ -480,6 +481,32 @@ public class AdoptionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public List<UserPet> getPetAdoptionsByUser(int userId){
+        String sql = "SELECT up.UserPetId, up.UserId, p.PetId, p.Name AS PetName FROM UserPet up JOIN Pet p ON p.PetId = up.PetId WHERE up.UserId = ? AND up.Type = " + AdoptionUtil.ADOPTAR + " AND p.AdoptionStatusId = " + AdoptionUtil.ADOPTADO + " ";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+
+            var result = statement.executeQuery();
+            List<UserPet> pets = new ArrayList<>();
+            while (result.next()) {
+                UserPet userPet = new UserPet();
+
+                userPet.setUserPetId(result.getInt("UserPetId"));
+                userPet.setUserId(result.getInt("UserId"));
+                userPet.setPetId(result.getInt("PetId"));
+                userPet.setPetName(result.getString("PetName"));
+                pets.add(userPet);
+            }
+            return pets;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

@@ -3,6 +3,8 @@ package org.grupo12.services.implementation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.grupo12.dao.AdoptionDAO;
 import org.grupo12.models.Adoption;
+import org.grupo12.models.Pet;
+import org.grupo12.models.UserPet;
 import org.grupo12.services.interfaces.IAdoptionService;
 import org.grupo12.services.interfaces.IEmailService;
 import org.grupo12.util.AdoptionUtil;
@@ -85,8 +87,8 @@ public class AdoptionService implements IAdoptionService {
         //Send emails to users
         if(emails != null) {
             for (String email : emails) {
-                String subject = "Mascota Rechazada";
-                String body = "La mascota "+ petName + " a la que marcaste como favorita ha sido rechazada.";
+                String subject = "Mascota Disponible de Nuevo";
+                String body = "La mascota "+ petName + " a la que marcaste como favorita está dispoible para adoptar nuevamente.";
                 emailService.sendEmail(email, subject, body);
             }
             return true;
@@ -124,5 +126,9 @@ public class AdoptionService implements IAdoptionService {
 
     public int getTotalAdoptionsByUser(int userId) {
         return adoptionDAO.getTotalAdoptionsByUser(userId);
+    }
+
+    public List<UserPet>  getPetAdoptionsByUser(int userId){
+        return adoptionDAO.getPetAdoptionsByUser(userId);
     }
 }

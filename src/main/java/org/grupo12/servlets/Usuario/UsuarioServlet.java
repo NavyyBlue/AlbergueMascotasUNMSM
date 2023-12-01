@@ -11,6 +11,7 @@ import org.grupo12.dao.PetFavoriteDAO;
 import org.grupo12.dao.UserDAO;
 import org.grupo12.models.Pet;
 import org.grupo12.models.User;
+import org.grupo12.models.UserPet;
 import org.grupo12.services.UserService;
 import org.grupo12.services.implementation.AdoptionService;
 import org.grupo12.services.implementation.PetFavoriteService;
@@ -19,6 +20,7 @@ import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @WebServlet("/usuario")
 public class UsuarioServlet extends HttpServlet {
@@ -48,9 +50,11 @@ public class UsuarioServlet extends HttpServlet {
 
             int totalFavorites = petFavoriteService.getTotalFavoritesByUser(userId);
             int totalAdoptions = adoptionService.getTotalAdoptionsByUser(userId);
+            List<UserPet> totalAdoptionsPet = adoptionService.getPetAdoptionsByUser(userId);
 
             request.setAttribute("totalFavorites", totalFavorites);
             request.setAttribute("totalAdoptions", totalAdoptions);
+            request.setAttribute("totalAdoptionsPet", totalAdoptionsPet);
 
             request.getRequestDispatcher("/WEB-INF/views/usuario/usuario.jsp").forward(request, response);
 

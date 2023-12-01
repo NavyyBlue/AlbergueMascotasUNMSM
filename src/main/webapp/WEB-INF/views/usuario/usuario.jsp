@@ -7,6 +7,9 @@
 --%>
 <%@ page import="org.grupo12.models.User" %>
 <%@ page import="com.google.gson.Gson" %>
+<%@ page import="org.grupo12.models.Pet" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.grupo12.models.UserPet" %>
 
 <%User user = (User) session.getAttribute("user");%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -33,6 +36,8 @@
     User currentUser = (User) request.getSession().getAttribute("user");
     int totalFavorites = request.getAttribute("totalFavorites") != null ? (int) request.getAttribute("totalFavorites") : 0;
     int totalAdoptions = request.getAttribute("totalAdoptions") != null ? (int) request.getAttribute("totalAdoptions") : 0;
+    List<UserPet> totalAdoptionsPet = request.getAttribute("totalAdoptionsPet") != null ? (List<UserPet>) request.getAttribute("totalAdoptionsPet") : null;
+    System.out.println("totalAdoptionsPet: " + totalAdoptionsPet);
     int userId = currentUser.getUserId();
     // Convert the list of users to JSON using Gson
     Gson gson = new Gson();
@@ -160,9 +165,17 @@
                                 <i class="fa-solid fa-dog align-middle "></i>
 
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <p class="text-muted mb-0"><%=totalAdoptions%></p>
                             </div>
+                            <%if(totalAdoptions > 0){%>
+
+                                <div class="col-sm-3">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adoptedPetsModal">
+                                        Ver
+                                    </button>
+                                </div>
+                            <%}%>
 
                         </div>
 
@@ -190,6 +203,7 @@
                     </div>
                 </div>
             </div>
+    </div>
 
 
 
@@ -235,6 +249,33 @@
         </div>
     </div>
 
+    <!-- Modal ver mascotas adoptadas -->
+    <div class="modal fade" id="adoptedPetsModal" tabindex="-1" aria-labelledby="adoptedPetsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="adoptedPetsModalLabel">Mascotas Adoptadas</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <% if(totalAdoptionsPet != null) {
+                        for (UserPet userPet : totalAdoptionsPet) {%>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <span><%=userPet.getPetName()%></span>
+                                    <button type="button" class="btn btn-primary reject-adoption"
+                                            data-userid="<%=userPet.getUserId()%>" data-petid="<%=userPet.getPetId()%>" data-userPetId="<%=userPet.getUserPetId()%>">
+                                        Rechazar adopción
+                                    </button>
+                                </div>
+                            </li>
+                        <% }
+                    } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <script>
             $('#editModal').on('show.bs.modal', function (event) {
                 let button = $(event.relatedTarget); // Botón que activó el modal
@@ -253,6 +294,31 @@
                     $('#editUserName').val(user.userName);
                     $('#editPhoneNumber').val(user.phoneNumber);
                 });
+
+            $('#adoptedPetsModal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+            });
+
+            $(document).ready(() => {
+                $('.reject-adoption').click((event) => {
+                    let button = $(event.currentTarget);
+                    let userId = button.data('userid');
+                    let petId = button.data('petid');
+                    let userPetId = button.data('userpetid');
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/usuario/rejectAdoption',
+                        type: 'POST',
+                        data: {
+                            rejectAdoptionUserId: userId,
+                            rejectAdoptionPetId: petId,
+                            rejectAdoptionUserPetId: userPetId,
+                        },
+                        success: function (response) {
+                            location.reload();
+                        },
+                    });
+                });
+            })
         </script>
 
 

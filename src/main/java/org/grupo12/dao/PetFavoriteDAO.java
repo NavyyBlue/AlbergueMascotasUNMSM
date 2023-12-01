@@ -1,6 +1,7 @@
 package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.grupo12.models.Pet;
 
 import java.security.PublicKey;
 import java.sql.Connection;
