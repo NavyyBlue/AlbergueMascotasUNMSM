@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
     <script>
@@ -104,14 +107,14 @@
                 for (Pet pet : pets) {
                     String petInfoUrl = "petinfo?petId=" + pet.getPetId();
                     // Imagen por defecto si no tiene
-                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) ?
-                                    request.getContextPath() + "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
+                    String imgUrl = (pet.getImageUrl() == null || pet.getImageUrl().isEmpty()) || !pet.isImageActive() ?
+                                    "/assets/img/petlist/pet_footprint.png" : pet.getImageUrl();
                     boolean isFavorite = favoritePets != null && favoritePets.contains(pet.getPetId());
             %>
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card mb-4 position-relative">
                     <div class="card-link">
-                        <img src="<%= imgUrl %>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
+                        <img src="<%=request.getContextPath() + imgUrl%>" alt="<%= pet.getName() %>" class="card-img bd-placeholder-img bd-placeholder-img-lg petImg">
                         <div class="card-img-overlay infoCardImg">
                             <%if(user != null){%>
                                 <a class="card-text position-absolute top-0 end-0 pe-4 pt-3 favorite-pet-<%=pet.getPetId()%>" onclick="handleFavorite('<%=pet.getPetId()%>')">

@@ -1,5 +1,4 @@
 <%@ page import="org.grupo12.models.Pet" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.grupo12.util.Pagination" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -56,6 +55,7 @@
                 <%
                 List<Pet> pets = (List<Pet>) request.getAttribute("pets");
                 for (Pet pet : pets) {
+                    String petImageUrl = "petImage?petId=" + pet.getPetId();
                 %>
 
                 <tr>
@@ -113,6 +113,11 @@
                             <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
                         </a>
                     </span>
+                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="Subir imagen">
+                         <a href="<%= petImageUrl %>" class="btn btn-info btn-sm me-2">
+                            <img src="<%=request.getContextPath()%>/assets/svg/upload.svg" alt="upload">
+                        </a>
+                    </span>
                     <% String titleTooltip = pet.getActive() == 1 ? "Eliminar" : "Restaurar"; %>
                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="<%=titleTooltip%>">
                         <% if (pet.getActive() == 1) {%>
@@ -151,8 +156,6 @@
     <!-- Controles de paginacion -->
         <nav aria-label="Page navigation example" class="d-flex justify-content-center">
             <form id="paginationForm" action="<%=request.getContextPath()%>/admin/petTable" method="get">
-                <!-- Add hidden fields for other parameters if needed -->
-                <input type="hidden" name="petId" value="<%=petId%>"/>
                 <input type="hidden" id="currentPage" name="page" value="<%=currentPage%>"/>
 
                 <ul class="pagination">
@@ -243,6 +246,10 @@
                             <option value="1">San Fernando</option>
                             <option value="2">Veterinaria</option>
                         </select>
+                    </div>
+                    <div class="mb-3" id="entryDateOption">
+                        <label for="editEntryDate" class="form-label">Fecha de Ingreso</label>
+                        <input type="datetime-local" class="form-control" id="editEntryDate" name="editEntryDate">
                     </div>
                     <input type="hidden" id="isNewPet" name="isNewPet" value="false">
                     <div class="modal-footer">
@@ -349,29 +356,29 @@
         </div>
     </div>
 </div>
-    <!-- Restore Modal -->
-    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="restoreModalLabel">Restaurar Mascota</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="restorePetForm" action="${pageContext.request.contextPath}/admin/petTable" method="post">
-                    <div class="modal-body">
-                        ¿Está seguro de restaurar la mascota?
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="restorePetId" name="restorePetId" value="<%=petId%>">
-                        <input type="hidden" name="_method" value="PATCH">
-
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Restaurar</button>
-                    </div>
-                </form>
+<!-- Restore Modal -->
+<div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="restoreModalLabel">Restaurar Mascota</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form id="restorePetForm" action="${pageContext.request.contextPath}/admin/petTable" method="post">
+                <div class="modal-body">
+                    ¿Está seguro de restaurar la mascota?
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="restorePetId" name="restorePetId" value="<%=petId%>">
+                    <input type="hidden" name="_method" value="PATCH">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Restaurar</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <script>
     function setIsNewUser(isNew) {
@@ -406,6 +413,7 @@
             $('#editAdoptionStatus').val("");
             $('#editBreed').val("");
             $('#editLocation').val("");
+            $('#entryDateOption').hide();
         } else {
             // Parse the JSON data from the attribute
             let petsJson = '<%= request.getAttribute("petsJson") %>';
@@ -414,7 +422,8 @@
             let pet = pets.find(function (u) {
                 return u.petId === petId;
             });
-            console.log("editar");
+
+            $('#editModalLabel').text('Editar Mascota');
             $('#editPetId').val(pet.petId);
             // Update modal fields with user data
             $('#editName').val(pet.name);
@@ -425,6 +434,7 @@
             $('#editAdoptionStatus').val(pet.adoptionStatusId);
             $('#editBreed').val(pet.breed);
             $('#editLocation').val(pet.location);
+            $('#editEntryDate').val(pet.entryDate);
 
         }
         if (petId) {

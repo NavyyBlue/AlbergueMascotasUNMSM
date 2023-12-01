@@ -13,9 +13,11 @@ public class Pet {
     private String description;
     private String breed;
     private int location;
-    private Date entryDate;
+    private String entryDate;
     private int adoptionStatusId;
     private String imageUrl;
+    private boolean isMainImage;
+    private boolean isImageActive;
     private String petStatusName;
     private int active;
     private int totalFavorites;
