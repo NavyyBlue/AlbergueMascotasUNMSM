@@ -11,5 +11,6 @@ public class News {
     private String creationDate;
     private int userId;
     private int newsType;
-    private boolean active;
+    private int active;
+
 }
