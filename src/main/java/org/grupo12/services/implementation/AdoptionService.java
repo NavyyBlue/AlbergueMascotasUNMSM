@@ -4,6 +4,7 @@ import org.grupo12.dao.AdoptionDAO;
 import org.grupo12.services.interfaces.IAdoptionService;
 import org.grupo12.services.interfaces.IEmailService;
 
+import java.security.PublicKey;
 import java.util.List;
 
 public class AdoptionService implements IAdoptionService {
@@ -20,8 +21,19 @@ public class AdoptionService implements IAdoptionService {
         this.adoptionDAO = adoptionDAO;
     }
 
-    public boolean requestAdoption(int userId, int petId) {
-        List<String> emails = adoptionDAO.requestAdoption(userId, petId);
+    public boolean requestAdoption(int userId, int petId){
+        boolean response = adoptionDAO.requestAdoption(userId, petId);
+        if(response){
+            String email = adoptionDAO.getUserEmail(userId);
+            String subject = "Solicitud de Adopción";
+            String body = "Se ha registrado tu solicitud de adopción de la mascota. Espera a que el administrador la apruebe.";
+            emailService.sendEmail(email, subject, body);
+        }
+        return response;
+    }
+
+    public boolean completeAdoption(int userId, int petId, int userPetId) {
+        List<String> emails = adoptionDAO.completeAdoption(userId, petId, userPetId);
         String petName = adoptionDAO.getPetName(petId);
         //Send emails to users
         if(emails != null) {
@@ -47,8 +59,8 @@ public class AdoptionService implements IAdoptionService {
 //        return false;
 //    }
 
-    public boolean rejectAdoption(int userPetId) {
-        List<String> emails = adoptionDAO.rejectAdoption(userPetId);
+    public boolean rejectAdoption(int userId, int petId, int userPetId) {
+        List<String> emails = adoptionDAO.rejectAdoption(userPetId, petId, userPetId);
         String petName = adoptionDAO.getPetName(userPetId);
         //Send emails to users
         if(emails != null) {

@@ -2,6 +2,7 @@ package org.grupo12.dao;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -113,6 +114,26 @@ public class PetFavoriteDAO {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, petId);
+
+            var result = statement.executeQuery();
+            int total = 0;
+            if (result.next()) {
+                total = result.getInt("Total");
+            }
+            return total;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public int getTotalFavoritesByUser(int userId) {
+        String sql = "SELECT COUNT(*) AS Total FROM UserPet WHERE UserId = ? AND IsFavorite = 1";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
 
             var result = statement.executeQuery();
             int total = 0;

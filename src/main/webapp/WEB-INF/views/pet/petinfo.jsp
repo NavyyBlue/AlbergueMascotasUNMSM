@@ -20,12 +20,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
+<jsp:include page="../../components/alerts.jsp"/>
 <jsp:include page="../../components/navBar.jsp"/>
 <%
     User user = (User) request.getSession().getAttribute("user");
     String petIdParam = request.getParameter("petId");
 
-    int userId = user.getUserId();
     int petId = Integer.parseInt(petIdParam);
 
     if (petIdParam != null && !petIdParam.isEmpty()) {
@@ -113,7 +113,12 @@
             ADOPTAR
         </button>
         <button class="buttonPetDetails">APADRINAR</button>
-        <button class="buttonPetDetails" onclick="sendRequestAdoption('<%=userId%>', '<%=petId%>')">ADOPTAR</button>
+        <% if(user != null){%>
+            <button class="buttonPetDetails" onclick="openRequestAdoptionModal()">ADOPTAR</button>
+        <%} else {%>
+            <button class="buttonPetDetails" onclick="sendToLogin()">ADOPTAR</button>
+        <%}%>
+
     </div>
     <div style="width: 1251px; height: 70px; display: flex; align-items: center;justify-content: flex-start;">
         <div style="width: 300px; height: 47px; display: flex; flex-direction: row; align-items: center; justify-content: center; background: #BBD478; border-radius: 30px">
@@ -135,6 +140,53 @@
             </div>
         <% } %>
     </div>
+
+    <!-- Modal to send request adoption -->
+    <div class="modal fade" id="modalRequestAdoption" tabindex="-1" aria-labelledby="modalRequestAdoptionLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalRequestAdoptionLabel">Adopción de mascota</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="modalRequestAdoptiontForm" action="${pageContext.request.contextPath}/adoption" method="post">
+                    <div class="modal-body">
+                        Adopción de mascota
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="userId" name="userId" value="<%=user.getUserId()%>"/>
+                        <input type="hidden" id="petId" name="petId" value="<%=petId%>"/>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal to send to log-in -->
+    <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalLoginLabel">Iniciar sesión</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="modalLoginForm" action="${pageContext.request.contextPath}/login" method="get">
+                    <div class="modal-body">
+                        Se necesita iniciar sesión para poder adoptar una mascota
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 
 </div>
 
@@ -190,18 +242,13 @@
 <h1>No se encontró la mascota</h1>
 <%}%>
 <script>
-    function sendRequestAdoption(userId, petId) {
-        $.ajax({
-            url: "${pageContext.request.contextPath}/adoption",
-            type: "POST",
-            data: {
-                userId: userId,
-                petId: petId
-            },
-            success: function (response) {
-              location.reload();
-            },
-        });
+    //Open a modal to redirect to login page
+    function sendToLogin(){
+        $('#modalLogin').modal('show');
+    }
+
+    function openRequestAdoptionModal() {
+        $('#modalRequestAdoption').modal('show');
     }
 </script>
 </body>

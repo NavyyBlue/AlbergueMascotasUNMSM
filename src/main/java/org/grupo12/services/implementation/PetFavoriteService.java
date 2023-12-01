@@ -42,4 +42,9 @@ public class PetFavoriteService implements IFavoriteService {
     public int getTotalFavoritesByPet(int petId) {
         return petFavoriteDAO.getTotalFavoritesByPet(petId);
     }
+
+    @Override
+    public int getTotalFavoritesByUser(int userId) {
+        return petFavoriteDAO.getTotalFavoritesByUser(userId);
+    }
 }

@@ -9,4 +9,5 @@ public interface IFavoriteService {
     int isFavorite(int userId, int petId);
     List<Integer> getFavoritePetsByUser(int userId);
     int getTotalFavoritesByPet(int userId);
+    int getTotalFavoritesByUser(int userId);
 }
