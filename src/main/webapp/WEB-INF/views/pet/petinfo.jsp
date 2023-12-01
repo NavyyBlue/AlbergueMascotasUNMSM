@@ -26,14 +26,20 @@
         Pet petInfo = (Pet) request.getAttribute("petInfo");
         List<Pet> petStatus = (List<Pet>) request.getAttribute("petStatus");
         List<Pet> petImages = (List<Pet>) request.getAttribute("petImages");
-        String firstImageUrl = null;
-        // Verificar si la lista no está vacía
-        if (!petImages.isEmpty()) {
-            // Obtener el primer elemento de la lista
-            Pet firstPetImage = petImages.get(0);
 
-            // Obtener la propiedad imgUrl del primer elemento
-            firstImageUrl = firstPetImage.getImageUrl();
+        String firstImageUrl = null;
+
+        for(Pet pet : petImages){
+            if(pet.isMainImage() && pet.getImageUrl() != null && pet.isImageActive()){
+                firstImageUrl = pet.getImageUrl();
+                //Quitar la imagen principal de la lista
+                petImages.remove(pet);
+                break;
+            }
+        }
+
+        if(firstImageUrl == null){
+            firstImageUrl = "/assets/img/petlist/pet_footprint.png";
         }
 
         // Crear un array de strings con los valores de petStatusName
@@ -95,9 +101,15 @@
 
     </div>
 
-    <div class="text-center mt-3 mb-5 d-flex flex-wrap gap-5">
-        <% for (Pet image : petImages) { %>
-        <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + image.getImageUrl() %>" alt="Imagen de la mascota">
+    <div class="row text-center mx-5 mt-3">
+        <% for (Pet image : petImages) {
+            if(image.getImageUrl() == null || !image.isImageActive()){
+                continue;
+            }
+        %>
+            <div class="col-md-4 mb-5">
+                <img style="width: 406px; height: 406px; border-radius: 30px;" src="<%=request.getContextPath() + image.getImageUrl() %>" alt="Imagen de la mascota">
+            </div>
         <% } %>
     </div>
 

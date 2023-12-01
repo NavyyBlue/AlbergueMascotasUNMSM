@@ -29,13 +29,18 @@ public class ImagePetService implements IImagePetService {
     }
 
     @Override
-    public boolean updatePetImage(int imageId, String imageUrl, boolean isMainImage) {
-        return petImageDAO.updatePetImage(imageId, imageUrl, isMainImage);
+    public boolean updatePetImage(int imageId, String imageUrl, boolean Active) {
+        return petImageDAO.updatePetImage(imageId, imageUrl, Active);
     }
 
     @Override
     public boolean deletePetImage(int imageId) {
         return petImageDAO.deletePetImage(imageId);
+    }
+
+    @Override
+    public int hadMainImage(int petId) {
+        return petImageDAO.hadMainImage(petId);
     }
 
 }

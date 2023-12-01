@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.grupo12.models.Pet;
 import org.grupo12.models.User;
 import org.grupo12.util.ConnectionDB;
+import org.grupo12.util.ImageUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,27 +20,89 @@ public class PetDAO {
     }
 
     public boolean insertPet(Pet pet) {
-        String sql = "INSERT INTO Pet " +
+        String insertPetSQL = "INSERT INTO Pet " +
                 "(Name, Age, SpeciesId, Gender, Description, EntryDate, Breed, Active, AdoptionStatusId, Location) " +
                 "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, 1, ?, ?)";
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, pet.getName());
-            statement.setInt(2, pet.getAge());
-            statement.setInt(3, pet.getSpeciesId());
-            statement.setString(4, pet.getGender());
-            statement.setString(5, pet.getDescription());
-            statement.setString(6, pet.getBreed());
-            statement.setInt(7, pet.getAdoptionStatusId());
-            statement.setInt(8, pet.getLocation());
+        String insertImageSQL = "INSERT INTO Image " +
+                "(PetId, ImageUrl, IsMainImage) " +
+                "VALUES (?, ?, 1)";
 
-            int rowsUpdated = statement.executeUpdate();
-            return rowsUpdated > 0;
+        Connection connection = null;
+        PreparedStatement petStatement = null;
+        PreparedStatement imageStatement = null;
+
+        try {
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);  // Iniciar transacción
+
+            petStatement = connection.prepareStatement(insertPetSQL, Statement.RETURN_GENERATED_KEYS);
+
+            petStatement.setString(1, pet.getName());
+            petStatement.setInt(2, pet.getAge());
+            petStatement.setInt(3, pet.getSpeciesId());
+            petStatement.setString(4, pet.getGender());
+            petStatement.setString(5, pet.getDescription());
+            petStatement.setString(6, pet.getBreed());
+            petStatement.setInt(7, pet.getAdoptionStatusId());
+            petStatement.setInt(8, pet.getLocation());
+
+            int rowsUpdated = petStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                // Obtener el ID generado para la mascota
+                ResultSet generatedKeys = petStatement.getGeneratedKeys();
+
+                if (generatedKeys.next()) {
+                    int petId = generatedKeys.getInt(1);
+
+                    // Preparar la segunda consulta para la imagen
+                    imageStatement = connection.prepareStatement(insertImageSQL);
+                    imageStatement.setInt(1, petId);
+                    imageStatement.setString(2, ImageUtil.defaultPath);
+
+                    // Ejecutar la segunda consulta
+                    int imageRowsUpdated = imageStatement.executeUpdate();
+
+                    if (imageRowsUpdated > 0) {
+                        // Ambas consultas se ejecutaron correctamente, realizar commit
+                        connection.commit();
+                        return true;
+                    }
+                }
+            }
+
+            //realizar rollback para deshacer cambios en caso de error
+            connection.rollback();
+            return false;
 
         } catch (SQLException e) {
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+
             e.printStackTrace();
             return false;
+
+        } finally {
+            try {
+                if (petStatement != null) {
+                    petStatement.close();
+                }
+                if (imageStatement != null) {
+                    imageStatement.close();
+                }
+                if (connection != null) {
+                    connection.setAutoCommit(true);  // Restaurar comportamiento por defecto
+                    connection.close();
+                }
+            } catch (SQLException closeException) {
+                closeException.printStackTrace();
+            }
         }
     }
 
@@ -322,7 +385,7 @@ public class PetDAO {
                     " img.ImageId, " +
                     " img.ImageUrl, " +
                     " img.IsMainImage, " +
-                    " img.Active AS IsImageActive" +
+                    " img.Active AS IsImageActive " +
                     "FROM Pet p " +
                     "JOIN Image img ON img.PetId = p.PetId " +
                     "WHERE p.PetId = ? AND p.Active = 1 AND img.Active = 1 ";

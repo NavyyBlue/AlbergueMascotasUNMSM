@@ -6,4 +6,6 @@ public class ImageUtil {
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
         return timeStamp + "_" + Math.abs(originalFileName.hashCode()) + fileExtension;
     }
+
+    public static String defaultPath = "/assets/img/petlist/pet_default.jpg";
 }

@@ -249,7 +249,7 @@
                     </div>
                     <div class="mb-3" id="entryDateOption">
                         <label for="editEntryDate" class="form-label">Fecha de Ingreso</label>
-                        <input type="datetime-local" class="form-control" id="editEntryDate" name="editEntryDate" required>
+                        <input type="datetime-local" class="form-control" id="editEntryDate" name="editEntryDate">
                     </div>
                     <input type="hidden" id="isNewPet" name="isNewPet" value="false">
                     <div class="modal-footer">

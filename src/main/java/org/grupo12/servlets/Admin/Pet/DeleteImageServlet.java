@@ -11,6 +11,7 @@ import org.grupo12.dao.PetImageDAO;
 import org.grupo12.models.Image;
 import org.grupo12.services.implementation.ImagePetService;
 import org.grupo12.util.ConnectionDB;
+import org.grupo12.util.ImageUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,12 +27,19 @@ public class DeleteImageServlet extends HttpServlet {
         this.petImageService = new ImagePetService(new PetImageDAO(dataSource));
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         int petId = Integer.parseInt(request.getParameter("petId"));
         try {
             int imageId = Integer.parseInt(request.getParameter("imageId"));
 
             String imageUrl = request.getParameter("imageUrl");
+
+            if(imageUrl.equals(ImageUtil.defaultPath)){
+                petImageService.deletePetImage(imageId);
+                request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Imagen eliminada correctamente"));
+                return;
+            }
 
             String filePath = request.getServletContext().getRealPath("") + imageUrl;
 
@@ -52,6 +60,4 @@ public class DeleteImageServlet extends HttpServlet {
         }
 
     }
-
-
 }

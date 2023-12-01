@@ -80,13 +80,13 @@ public class PetImageDAO {
         }
     }
 
-    public boolean updatePetImage(int imageId, String imageUrl, boolean isMainImage) {
-        String sql = "UPDATE Image SET ImageUrl = ?, IsMainImage = ? WHERE ImageId = ?";
+    public boolean updatePetImage(int imageId, String imageUrl, boolean Active) {
+        String sql = "UPDATE Image SET ImageUrl = ?, Active = ? WHERE ImageId = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, imageUrl);
-            statement.setBoolean(2, isMainImage);
+            statement.setBoolean(2, Active);
             statement.setInt(3, imageId);
 
             int rowsUpdated = statement.executeUpdate();
@@ -112,6 +112,25 @@ public class PetImageDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public int hadMainImage(int petId) {
+        String sql = "SELECT ImageId FROM Image WHERE PetId = ? AND IsMainImage = 1 AND Active = 0";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, petId);
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                return result.getInt("ImageId");
+            }
+            return -1;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

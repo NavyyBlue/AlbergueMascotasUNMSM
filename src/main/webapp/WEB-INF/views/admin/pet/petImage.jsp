@@ -33,7 +33,7 @@
             <div class="mb-3">
                 <label for="uploadImage" class="form-label">Imagen Principal</label>
                 <div class="d-flex">
-                    <input type="file" class="form-control" id="uploadImage" name="uploadImage" accept="image/*" <%=mainImage == null ? "required" : "" %>>
+                    <input type="file" class="form-control" id="uploadImage" name="uploadImage" accept="image/*" required>
                     <button type="submit" class="btn btn-primary" onclick="checkFile()">Subir</button>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="mb-3">
                 <label for="uploadImages" class="form-label">Imagenes Secundarias</label>
                 <div class="d-flex">
-                    <input type="file" class="form-control" id="uploadImages" name="uploadImages" multiple>
+                    <input type="file" class="form-control" id="uploadImages" name="uploadImages" multiple required>
                     <button type="submit" class="btn btn-primary">Subir</button>
                 </div>
             </div>
@@ -100,10 +100,7 @@
                     petId: petId
                 },
                 success: function (response) {
-                    console.log(response);
-                    if (response == "true") {
                         location.reload();
-                    }
                 }
             });
         }

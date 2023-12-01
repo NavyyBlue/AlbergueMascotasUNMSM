@@ -32,6 +32,7 @@ public class SendMultipleImageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int petIdAux = 0;
         // Verificar si la solicitud es de tipo 'multipart'
         if (JakartaServletFileUpload.isMultipartContent(request)) {
             try {
@@ -55,6 +56,7 @@ public class SendMultipleImageServlet extends HttpServlet {
                         // Si es un campo de formulario normal
                         if ("uploadPetId2".equals(item.getFieldName())) {
                             petId = Integer.parseInt(item.getString());
+                            petIdAux = petId;
                         }
                     } else {
                         String fileName = new File(item.getName()).getName();
@@ -86,8 +88,9 @@ public class SendMultipleImageServlet extends HttpServlet {
                 request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Imagen subida correctamente"));
             } catch (Exception e) {
                 request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Ocurrió un error al subir la imagen"));
+            } finally {
+                response.sendRedirect(request.getContextPath() + "/admin/petImage?petId=" + petIdAux);
             }
         }
-        response.sendRedirect(request.getContextPath() + "/admin/petImage?petId=" + request.getParameter("uploadPetId"));
     }
 }

@@ -32,6 +32,7 @@ public class SendSingleImageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int petIdAux = 0;
         // Verificar si la solicitud es de tipo 'multipart'
         if (JakartaServletFileUpload.isMultipartContent(request)) {
             try {
@@ -56,6 +57,7 @@ public class SendSingleImageServlet extends HttpServlet {
                         // Si es un campo de formulario normal
                         if ("uploadPetId".equals(item.getFieldName())) {
                             petId = Integer.parseInt(item.getString());
+                            petIdAux = petId;
                         }
                         if ("imageId".equals(item.getFieldName())) {
                             imageId = Integer.parseInt(item.getString());
@@ -74,7 +76,7 @@ public class SendSingleImageServlet extends HttpServlet {
 
                         if(imageId != -1){
                             petImageService.updatePetImage(imageId, relativePath, isMainImage);
-                            continue;
+                            break;
                         }
 
                         //Set data to image
@@ -83,14 +85,20 @@ public class SendSingleImageServlet extends HttpServlet {
                         image.setMainImage(isMainImage);
                     }
                 }
-
-                petImageService.uploadPetImage(image.getPetId(), image.getImageUrl(), image.isMainImage());
+                int hadMainImage = petImageService.hadMainImage(image.getPetId());
+                if(hadMainImage != -1 && image.isMainImage()){
+                    petImageService.updatePetImage(hadMainImage, image.getImageUrl(), true);
+                }else{
+                    petImageService.uploadPetImage(image.getImageId(), image.getImageUrl(), image.isMainImage());
+                }
 
                 request.getSession().setAttribute("alerts", Collections.singletonMap("success", "Imagen subida correctamente"));
+
             } catch (Exception e) {
                 request.getSession().setAttribute("alerts", Collections.singletonMap("danger", "Ocurrió un error al subir la imagen"));
+            }finally {
+                response.sendRedirect(request.getContextPath() + "/admin/petImage?petId=" + petIdAux);
             }
         }
-        response.sendRedirect(request.getContextPath() + "/admin/petImage?petId=" + request.getParameter("uploadPetId"));
     }
 }
