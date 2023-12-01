@@ -93,6 +93,115 @@ public class AdoptionDAO {
         }
     }
 
+    public String requestSponsor(int userId, int petId, double amount, int methodPayment){
+        String userPetExists = "SELECT UserPetId FROM UserPet WHERE UserId = ? AND PetId = ?";
+        String insertSponsor = "INSERT INTO UserPet(UserId, PetId, Type) VALUES (?, ?, ?)";
+        String updateSponsor = "UPDATE UserPet SET Type = ? WHERE UserPetId = ?";
+        String getEmailToSent = "SELECT Email FROM User WHERE UserId = ?";
+        String insertSponsorPayment = "INSERT INTO SponsorPayment" +
+                "(UserPetId, Amount, MethodPaymentId, Active) VALUES(?, ?, ?, 1);";
+
+        try(Connection connection = dataSource.getConnection()){
+            connection.setAutoCommit(false);
+
+            try(PreparedStatement statement = connection.prepareStatement(userPetExists)){
+                statement.setInt(1, userId);
+                statement.setInt(2, petId);
+                ResultSet resultSet = statement.executeQuery();
+                if(resultSet.next()){
+                    int userPetId = resultSet.getInt("UserPetId");
+                    try(PreparedStatement preparedStatement = connection.prepareStatement(updateSponsor)){
+                        preparedStatement.setInt(1, AdoptionUtil.APADRINAR);
+                        preparedStatement.setInt(2, userPetId);
+                        int rowsAffected = preparedStatement.executeUpdate();
+                        if(rowsAffected > 0){
+                            try(PreparedStatement preparedStatement1 = connection.prepareStatement(insertSponsorPayment)){
+                                preparedStatement1.setInt(1, userPetId);
+                                preparedStatement1.setDouble(2, amount);
+                                preparedStatement1.setInt(3, methodPayment);
+                                int rowsAffected1 = preparedStatement1.executeUpdate();
+                                if (rowsAffected1 > 0){
+                                    try(PreparedStatement preparedStatement3 = connection.prepareStatement(getEmailToSent)){
+                                        preparedStatement3.setInt(1, userId);
+                                        ResultSet resultSet2 = preparedStatement3.executeQuery();
+                                        if(resultSet2.next()){
+                                            String email = resultSet2.getString("Email");
+                                            connection.commit();
+                                            return email;
+                                        }else {
+                                            connection.rollback();
+                                            return null;
+                                        }
+                                    }
+                                }else {
+                                connection.rollback();
+                                return null;
+                                }
+                            }
+                        }else {
+                            connection.rollback();
+                            return null;
+                        }
+                    }
+                }else{
+                    try(PreparedStatement preparedStatement = connection.prepareStatement(insertSponsor)){
+                        preparedStatement.setInt(1, userId);
+                        preparedStatement.setInt(2, petId);
+                        preparedStatement.setInt(3, AdoptionUtil.APADRINAR);
+                        int rowsAffected = preparedStatement.executeUpdate();
+                        if(rowsAffected > 0){
+                            try(PreparedStatement preparedStatement1 = connection.prepareStatement(userPetExists)){
+                                preparedStatement1.setInt(1, userId);
+                                preparedStatement1.setInt(2, petId);
+                                ResultSet resultSet1 = preparedStatement1.executeQuery();
+                                if(resultSet1.next()){
+                                    int userPetId = resultSet1.getInt("UserPetId");
+                                    try(PreparedStatement preparedStatement2 = connection.prepareStatement(insertSponsorPayment)){
+                                        preparedStatement2.setInt(1, userPetId);
+                                        preparedStatement2.setDouble(2, amount);
+                                        preparedStatement2.setInt(3, methodPayment);
+                                        ResultSet resultSet2 = preparedStatement2.executeQuery();
+                                        if (resultSet2.next()){
+                                            try(PreparedStatement preparedStatement3 = connection.prepareStatement(getEmailToSent)){
+                                                preparedStatement3.setInt(1, userId);
+                                                ResultSet resultSet3 = preparedStatement3.executeQuery();
+                                                if(resultSet3.next()){
+                                                    String email = resultSet2.getString("Email");
+                                                    connection.commit();
+                                                    return email;
+                                                }else {
+                                                    connection.rollback();
+                                                    return null;
+                                                }
+                                            }
+                                        }else {
+                                            connection.rollback();
+                                            return null;
+                                        }
+                                    }
+                                }else {
+                                    connection.rollback();
+                                    return null;
+                                }
+                            }
+                        }else {
+                            connection.rollback();
+                            return null;
+                        }
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                connection.rollback();
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     public List<String> completeAdoption(int userId, int petId, int userPetId) {
         String updateAdoption = "UPDATE UserPet SET AdoptionDate = NOW() WHERE UserPetId = ?";
         String changeAdoptionStatus = "UPDATE Pet SET AdoptionStatusId = ? WHERE PetId = ?";
@@ -174,63 +283,63 @@ public class AdoptionDAO {
 
         try(Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
-                try (PreparedStatement preparedStatement1 = connection.prepareStatement(updateAdoption)) {
-                    preparedStatement1.setInt(1, AdoptionUtil.RECHAZAR);
-                    preparedStatement1.setInt(2, userPetId);
+            try (PreparedStatement preparedStatement1 = connection.prepareStatement(updateAdoption)) {
+                preparedStatement1.setInt(1, AdoptionUtil.RECHAZAR);
+                preparedStatement1.setInt(2, userPetId);
 
-                    int rowsAffected = preparedStatement1.executeUpdate();
-                    if (rowsAffected > 0) {
-                        try (PreparedStatement preparedStatement = connection.prepareStatement(changeAdoptionStatus)) {
-                            preparedStatement.setInt(1, AdoptionUtil.DISPONIBLE);
-                            preparedStatement.setInt(2, petId);
+                int rowsAffected = preparedStatement1.executeUpdate();
+                if (rowsAffected > 0) {
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(changeAdoptionStatus)) {
+                        preparedStatement.setInt(1, AdoptionUtil.DISPONIBLE);
+                        preparedStatement.setInt(2, petId);
 
-                            int rowsAffected1 = preparedStatement.executeUpdate();
-                            if (rowsAffected1 > 0) {
-                                try (PreparedStatement preparedStatement2 = connection.prepareStatement(getAllUsersToNotify)) {
-                                    preparedStatement2.setInt(1, petId);
-                                    preparedStatement2.setInt(2, userId);
+                        int rowsAffected1 = preparedStatement.executeUpdate();
+                        if (rowsAffected1 > 0) {
+                            try (PreparedStatement preparedStatement2 = connection.prepareStatement(getAllUsersToNotify)) {
+                                preparedStatement2.setInt(1, petId);
+                                preparedStatement2.setInt(2, userId);
 
-                                    ResultSet resultSet1 = preparedStatement2.executeQuery();
-                                    while (resultSet1.next()) {
-                                        int userIdToNotify = resultSet1.getInt("UserId");
-                                        try (PreparedStatement preparedStatement3 = connection.prepareStatement(insertNotification)) {
-                                            preparedStatement3.setInt(1, userIdToNotify);
+                                ResultSet resultSet1 = preparedStatement2.executeQuery();
+                                while (resultSet1.next()) {
+                                    int userIdToNotify = resultSet1.getInt("UserId");
+                                    try (PreparedStatement preparedStatement3 = connection.prepareStatement(insertNotification)) {
+                                        preparedStatement3.setInt(1, userIdToNotify);
 
-                                            int rowsAffected2 = preparedStatement3.executeUpdate();
-                                            if (rowsAffected2 > 0) {
-                                                try (PreparedStatement preparedStatement4 = connection.prepareStatement(getAllEmailsToSent)) {
-                                                    preparedStatement4.setInt(1, userIdToNotify);
+                                        int rowsAffected2 = preparedStatement3.executeUpdate();
+                                        if (rowsAffected2 > 0) {
+                                            try (PreparedStatement preparedStatement4 = connection.prepareStatement(getAllEmailsToSent)) {
+                                                preparedStatement4.setInt(1, userIdToNotify);
 
-                                                    ResultSet resultSet2 = preparedStatement4.executeQuery();
-                                                    if (resultSet2.next()) {
-                                                        String email = resultSet2.getString("Email");
-                                                        connection.commit();
-                                                        emailsToSend.add(email);
-                                                    } else {
-                                                        connection.rollback();
-                                                        return Collections.emptyList();
-                                                    }
+                                                ResultSet resultSet2 = preparedStatement4.executeQuery();
+                                                if (resultSet2.next()) {
+                                                    String email = resultSet2.getString("Email");
+                                                    connection.commit();
+                                                    emailsToSend.add(email);
+                                                } else {
+                                                    connection.rollback();
+                                                    return Collections.emptyList();
                                                 }
-                                            } else {
-                                                connection.rollback();
-                                                return Collections.emptyList();
                                             }
+                                        } else {
+                                            connection.rollback();
+                                            return Collections.emptyList();
                                         }
                                     }
                                 }
                                 connection.commit();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            connection.rollback();
-                            return Collections.emptyList();
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        connection.rollback();
+                        return Collections.emptyList();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    connection.rollback();
-                    return Collections.emptyList();
                 }
+            }catch (Exception e){
+                e.printStackTrace();
+                connection.rollback();
+                return Collections.emptyList();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return Collections.emptyList();
