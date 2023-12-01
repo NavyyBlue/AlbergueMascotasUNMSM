@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="org.grupo12.models.User" %>
+<%@ page import="com.google.gson.Gson" %>
 
 <%User user = (User) session.getAttribute("user");%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -29,10 +30,13 @@
 <body>
 <%
     // Default speciesId if not present in the request
-    int defaultUserId = 0;
-    int userId = request.getParameter("userId") != null ?
-            Integer.parseInt(request.getParameter("userId")) : defaultUserId;
+    User currentUser = (User) request.getSession().getAttribute("user");
+    int userId = currentUser.getUserId();
+    // Convert the list of users to JSON using Gson
+    Gson gson = new Gson();
+    String usersJson = gson.toJson(currentUser);
 %>
+
 
 <jsp:include page="../../components/navBar.jsp"/>
 
@@ -48,9 +52,9 @@
                         <h5 class="my-3"><%= user.getFirstName()%> <%= user.getLastName()%></h5>
                         <p class="text-muted mb-1">
                             <% if (user.getUserRole() == 0) { %>
-                            Usuario
-                            <% } else if (user.getUserRole() == 1) { %>
                             Administrador
+                            <% } else if (user.getUserRole() == 1) { %>
+                            Usuario
                             <% }
                             %>
                         </p>
@@ -66,13 +70,14 @@
                             <a href="<%=request.getContextPath()%>/logout" class="btn btn-primary">Cerrar Sesion</a>
                         </div>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModalLabel">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal" data-userid="<%=user.getUserId()%>">
                             <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
                             <a>Editar Usuario</a>
                         </button>
 
+
                         <!-- Modal -->
-                        <div class="modal fade" id="editModalLabel" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -101,13 +106,12 @@
                                                 <label for="editPhoneNumber" class="form-label">Telefono</label>
                                                 <input type="text" class="form-control" id="editPhoneNumber" name="editPhoneNumber">
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-primary">Guardar</button>
-                                    </div>
+                                        <div class="modal-footer">
+                                            <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" class="btn btn-primary">Guardar</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -175,9 +179,9 @@
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0"><% if (user.getUserRole() == 0) { %>
-                                    Usuario
-                                    <% } else if (user.getUserRole() == 1) { %>
                                     Administrador
+                                    <% } else if (user.getUserRole() == 1) { %>
+                                    Usuario
                                     <% }
                                     %></p>
                             </div>
@@ -204,7 +208,7 @@
                         <hr>
                         <div class="row align-items-center">
                             <div class="col-sm-3 text-center d-flex align-items-center">
-                                <p class="mb-0 me-2"">Mascotas Apadrinadas</p>
+                                <p class="mb-0 me-2">Mascotas Apadrinadas</p>
                                 <i class="fas fa-bone align-middle"></i>
                             </div>
                             <div class="col-sm-6">
@@ -225,30 +229,30 @@
                     </div>
                 </div>
 
+                </div>
+            </div>
         </div>
     </div>
 
 
         <script>
-            function setIsNewUser(isNew) {
-                document.getElementById('isNewUser').value = isNew;
-            }
-
             $('#editModal').on('show.bs.modal', function (event) {
                 let button = $(event.relatedTarget); // Botón que activó el modal
                 let userId = button.data('userid'); // Extraer el userId del atributo data-userid
 
-                if(userId === <%= user.getUserName()%>){
-                    $('#editUserId').val(user.userId);
-                    // Update modal fields with user data
+
+                    // Parse the JSON data from the attribute
+                    let usersJson = '<%= usersJson %>';
+                    let user = JSON.parse(usersJson);
+                    console.log("userjson",usersJson)
+                    // Find the user with the corresponding userId
+
                     $('#editFirstName').val(user.firstName);
                     $('#editLastName').val(user.lastName);
                     $('#editEmail').val(user.email);
                     $('#editUserName').val(user.userName);
                     $('#editPhoneNumber').val(user.phoneNumber);
-                    $('#editUserRole').val(user.userRole);
-                }
-            });
+                });
         </script>
 
 
