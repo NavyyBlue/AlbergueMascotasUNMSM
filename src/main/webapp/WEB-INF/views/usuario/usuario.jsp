@@ -31,6 +31,8 @@
 <%
     // Default speciesId if not present in the request
     User currentUser = (User) request.getSession().getAttribute("user");
+    int totalFavorites = request.getAttribute("totalFavorites") != null ? (int) request.getAttribute("totalFavorites") : 0;
+    int totalAdoptions = request.getAttribute("totalAdoptions") != null ? (int) request.getAttribute("totalAdoptions") : 0;
     int userId = currentUser.getUserId();
     // Convert the list of users to JSON using Gson
     Gson gson = new Gson();
@@ -149,7 +151,7 @@
             </div>
 
 
-            <div class="col-lg-6 mx-auto">
+            <div class="row-lg-6 mx-auto">
                 <div class="card mb-4 mt-4 ">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -159,7 +161,7 @@
 
                             </div>
                             <div class="col-sm-6">
-                                <p class="text-muted mb-0">10</p>
+                                <p class="text-muted mb-0"><%=totalAdoptions%></p>
                             </div>
 
                         </div>
@@ -177,11 +179,11 @@
                         <hr>
                         <div class="row align-items-center">
                             <div class="col-sm-3 text-center d-flex align-items-center">
-                                <p class="mb-0 me-2">Numero de Favoritos</p>
+                                <p class="mb-0 me-2">Número de Favoritos</p>
                                 <i class="fa-solid fa-heart align-middle"></i>
                             </div>
                             <div class="col-sm-6">
-                                <p class="text-muted mb-0">10</p>
+                                <p class="text-muted mb-0"><%=totalFavorites%></p>
                             </div>
                         </div>
 

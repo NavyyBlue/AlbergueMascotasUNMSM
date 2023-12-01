@@ -6,9 +6,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.grupo12.dao.AdoptionDAO;
+import org.grupo12.dao.PetFavoriteDAO;
 import org.grupo12.dao.UserDAO;
+import org.grupo12.models.Pet;
 import org.grupo12.models.User;
 import org.grupo12.services.UserService;
+import org.grupo12.services.implementation.AdoptionService;
+import org.grupo12.services.implementation.PetFavoriteService;
+import org.grupo12.util.AuthenticationUtils;
 import org.grupo12.util.ConnectionDB;
 
 import java.io.IOException;
@@ -19,14 +25,39 @@ public class UsuarioServlet extends HttpServlet {
 
     private final HikariDataSource dataSource = ConnectionDB.getDataSource();
     private UserService userService;
+    private PetFavoriteService petFavoriteService;
+    private AdoptionService adoptionService;
+
     @Override
     public void init() throws ServletException {
+        petFavoriteService = new PetFavoriteService(new PetFavoriteDAO(dataSource));
+        adoptionService = new AdoptionService(new AdoptionDAO(dataSource));
         userService = new UserService(new UserDAO(dataSource));
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/usuario/usuario.jsp").forward(request, response);
+        try{
+            // Verificar la autorización de administrador
+            if (!AuthenticationUtils.isAuthenticated(request, response)) {
+                return;
+            }
+            User user = (User) request.getSession().getAttribute("user");
+
+            int userId = user.getUserId();
+
+            int totalFavorites = petFavoriteService.getTotalFavoritesByUser(userId);
+            int totalAdoptions = adoptionService.getTotalAdoptionsByUser(userId);
+
+            request.setAttribute("totalFavorites", totalFavorites);
+            request.setAttribute("totalAdoptions", totalAdoptions);
+
+            request.getRequestDispatcher("/WEB-INF/views/usuario/usuario.jsp").forward(request, response);
+
+        }catch (Exception e) {
+            request.getSession().setAttribute("errorOccurred", true);
+            response.sendRedirect(request.getContextPath() + "/error");
+        }
     }
 
 

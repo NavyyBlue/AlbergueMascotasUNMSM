@@ -93,4 +93,8 @@ public class AdoptionService implements IAdoptionService {
 
         return adoptionDAO.getAdoptionsPaginated(offset, limit, petStatusId);
     }
+
+    public int getTotalAdoptionsByUser(int userId) {
+        return adoptionDAO.getTotalAdoptionsByUser(userId);
+    }
 }

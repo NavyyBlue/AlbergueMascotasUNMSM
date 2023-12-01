@@ -354,4 +354,24 @@ public class AdoptionDAO {
         return total;
     }
 
+    public int getTotalAdoptionsByUser(int userId){
+        String sql = "SELECT COUNT(*) AS Total FROM UserPet up JOIN Pet p ON p.PetId = up.PetId WHERE up.UserId = ? AND up.Type = " + AdoptionUtil.ADOPTAR + " AND p.AdoptionStatusId = " + AdoptionUtil.ADOPTADO + " ";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+
+            var result = statement.executeQuery();
+            int total = 0;
+            if (result.next()) {
+                total = result.getInt("Total");
+            }
+            return total;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
 }
