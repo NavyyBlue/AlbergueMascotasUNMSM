@@ -120,7 +120,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div>
                     <form id="editUserForm" action="${pageContext.request.contextPath}/admin/userstable" method="post">
                         <div class="mb-3">
                             <label for="editFirstName" class="form-label">Nombre</label>
@@ -156,7 +155,6 @@
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
-                </div>
                 </div>
             </div>
         </div>

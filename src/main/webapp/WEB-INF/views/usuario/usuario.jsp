@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
-
+    <link href="<%=request.getContextPath()%>/assets/css/usuario.css" rel="stylesheet"/>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -44,7 +44,7 @@
     <div class="container py-5">
 
         <div class="row">
-            <div class="col-lg-4">
+            <div class="row-lg-4">
                 <div class="card mb-4">
                     <div class="card-body text-center">
                         <img src="<%=request.getContextPath()%>/assets/img/home/download.jpeg" alt="avatar"
@@ -74,54 +74,12 @@
                             <img src="<%=request.getContextPath()%>/assets/svg/edit.svg" alt="editar">
                             <a>Editar Usuario</a>
                         </button>
-
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="editModalLabel">Editar Usuario</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="editUserForm" action="${pageContext.request.contextPath}/usuario" method="post">
-                                            <div class="mb-3">
-                                                <label for="editFirstName" class="form-label">Nombre</label>
-                                                <input type="text" class="form-control" id="editFirstName" name="editFirstName">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="editLastName" class="form-label">Apellido</label>
-                                                <input type="text" class="form-control" id="editLastName" name="editLastName">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="editEmail" class="form-label">Email</label>
-                                                <input type="text" class="form-control" id="editEmail" name="editEmail">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="editUserName" class="form-label">Nombre de Usuario</label>
-                                                <input type="text" class="form-control" id="editUserName" name="editUserName">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="editPhoneNumber" class="form-label">Telefono</label>
-                                                <input type="text" class="form-control" id="editPhoneNumber" name="editPhoneNumber">
-                                            </div>
-                                        <div class="modal-footer">
-                                            <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
                         </div>
-
-
                     </div>
                 </div>
+        </div>
 
-            </div>
-            <div class="col-lg-8">
+            <div class="row-lg-8">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
@@ -190,6 +148,7 @@
                 </div>
             </div>
 
+
             <div class="col-lg-6 mx-auto">
                 <div class="card mb-4 mt-4 ">
                     <div class="card-body">
@@ -228,12 +187,51 @@
 
                     </div>
                 </div>
+            </div>
 
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editModalLabel">Editar Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm" action="${pageContext.request.contextPath}/usuario" method="post">
+                        <div class="mb-3">
+                            <label for="editFirstName" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editFirstName" name="editFirstName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLastName" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="editLastName" name="editLastName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="editEmail" name="editEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserName" class="form-label">Nombre de Usuario</label>
+                            <input type="text" class="form-control" id="editUserName" name="editUserName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhoneNumber" class="form-label">Telefono</label>
+                            <input type="text" class="form-control" id="editPhoneNumber" name="editPhoneNumber">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="editUserId" name="editUserId" value="<%=userId%>">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
 
         <script>
             $('#editModal').on('show.bs.modal', function (event) {
