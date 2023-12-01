@@ -32,11 +32,11 @@
             <h2>animales abandonados que viven en los rincones de</h2>
             <h2>la Ciudad Universitaria. </h2>
             <div class="button_container p-6">
-                <button class="button_color">SABER MÁS
+                <a href="<%=request.getContextPath()%>/about" class="button_color" >SABER MÁS
                     <span class="material-symbols-outlined">
                     arrow_forward
                     </span>
-                </button>
+                </a>
             </div>
         </div>
 

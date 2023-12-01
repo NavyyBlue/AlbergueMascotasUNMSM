@@ -46,12 +46,8 @@
                     Organizamos eventos y charlas para involucrar a más personas en la protección y amor hacia nuestros amigos de cuatro patas.
                 </p>
             </div>
-            <div class="social-icons">
-                <a href="#" target="_blank" class="social-icon"><i class="fab fa-facebook-square"></i></a>
-                <a href="#" target="_blank" class="social-icon"><i class="fab fa-instagram-square"></i></a>
-            </div>
             <div class="image-box">
-                <img src="https://scontent-lim1-1.xx.fbcdn.net/v/t39.30808-6/396707091_723350726488658_3425870255139627994_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHaqJ-AiJu7THJrANV8N_TkTleecY0ZGMxOV55xjRkYzKV49SiEaeon0Dvw1qep_W7sS8hK2_rWGNDgOi2Wq-3j&_nc_ohc=PGs41SWvvvoAX8IzHG_&_nc_ht=scontent-lim1-1.xx&cb_e2o_trans=t&oh=00_AfCg_Gd0NO-ecp5ukiFyxUflLrS-9vGcyeJQm-tmz_YlPQ&oe=655BD0C6" alt="Imagen de estudiantes cuidando animales">
+                <img src="https://i.postimg.cc/Dz9K7Gn9/cat-us.jpg" alt="Imagen de estudiantes cuidando animales">
             </div>
         </div>
     </section>
