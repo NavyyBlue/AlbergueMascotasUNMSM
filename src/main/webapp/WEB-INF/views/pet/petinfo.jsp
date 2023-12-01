@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Arrays" %>
+<%@ page import="org.grupo12.models.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,7 +22,12 @@
 <body>
 <jsp:include page="../../components/navBar.jsp"/>
 <%
+    User user = (User) request.getSession().getAttribute("user");
     String petIdParam = request.getParameter("petId");
+
+    int userId = user.getUserId();
+    int petId = Integer.parseInt(petIdParam);
+
     if (petIdParam != null && !petIdParam.isEmpty()) {
         Pet petInfo = (Pet) request.getAttribute("petInfo");
         List<Pet> petStatus = (List<Pet>) request.getAttribute("petStatus");
@@ -70,6 +76,18 @@
                 <p>Etiquetas:</p>
                 <ul id="etiquetasMascota"></ul>
                 <p id="descripcionPlaceholder"></p>
+                <button type="button" class="btn btn-success" id="btnFavorito">Favorito <i class="fa-regular fa-heart align-middle"></i></button>
+
+                <script>
+
+                    $(document).ready(function(){
+
+                        $('#btnFavorito').click(function(){
+
+                            $(this).find('i').toggleClass('fa-regular fa-solid');
+                        });
+                    });
+                </script>
             </div>
             <script>
                 const etiquetasMascota = JSON.parse('<%= Arrays.toString(petStatusArray).replaceAll("'", "\\\\'") %>');
@@ -94,6 +112,8 @@
         <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal" data-petid="0">
             ADOPTAR
         </button>
+        <button class="buttonPetDetails">APADRINAR</button>
+        <button class="buttonPetDetails" onclick="sendRequestAdoption('<%=userId%>', '<%=petId%>')">ADOPTAR</button>
     </div>
     <div style="width: 1251px; height: 70px; display: flex; align-items: center;justify-content: flex-start;">
         <div style="width: 300px; height: 47px; display: flex; flex-direction: row; align-items: center; justify-content: center; background: #BBD478; border-radius: 30px">
@@ -169,5 +189,20 @@
 <%} else {%>
 <h1>No se encontró la mascota</h1>
 <%}%>
+<script>
+    function sendRequestAdoption(userId, petId) {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/adoption",
+            type: "POST",
+            data: {
+                userId: userId,
+                petId: petId
+            },
+            success: function (response) {
+              location.reload();
+            },
+        });
+    }
+</script>
 </body>
 </html>
