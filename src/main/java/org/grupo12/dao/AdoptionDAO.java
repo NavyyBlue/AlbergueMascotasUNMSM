@@ -22,50 +22,69 @@ public class AdoptionDAO {
         String userPetExists = "SELECT UserPetId FROM UserPet WHERE UserId = ? AND PetId = ?";
         String insertAdoption = "INSERT INTO UserPet(UserId, PetId, Type) VALUES (?, ?, ?)";
         String updateAdoption = "UPDATE UserPet SET Type = ? WHERE UserPetId = ?";
+        String changeAdoptionStatus = "UPDATE Pet SET AdoptionStatusId = ? WHERE PetId = ?";
 
         try(Connection connection = dataSource.getConnection()){
             connection.setAutoCommit(false);
 
-            try(PreparedStatement statement = connection.prepareStatement(userPetExists)){
-                statement.setInt(1, userId);
-                statement.setInt(2, petId);
+            try(PreparedStatement preparedStatement = connection.prepareStatement(userPetExists)){
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setInt(2, petId);
 
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = preparedStatement.executeQuery();
                 if(resultSet.next()){
                     int userPetId = resultSet.getInt("UserPetId");
-                    try(PreparedStatement preparedStatement = connection.prepareStatement(updateAdoption)){
-                        preparedStatement.setInt(1, AdoptionUtil.ADOPTAR);
-                        preparedStatement.setInt(2, userPetId);
+                    try(PreparedStatement preparedStatement1 = connection.prepareStatement(updateAdoption)){
+                        preparedStatement1.setInt(1, AdoptionUtil.ADOPTAR);
+                        preparedStatement1.setInt(2, userPetId);
 
-                        int rowsAffected = preparedStatement.executeUpdate();
+                        int rowsAffected = preparedStatement1.executeUpdate();
                         if(rowsAffected > 0){
-                            connection.commit();
-                            return true;
+                            try(PreparedStatement preparedStatement2 = connection.prepareStatement(changeAdoptionStatus)){
+                                preparedStatement2.setInt(1, AdoptionUtil.EN_PROCESO);
+                                preparedStatement2.setInt(2, petId);
+
+                                int rowsAffected1 = preparedStatement2.executeUpdate();
+                                if(rowsAffected1 > 0){
+                                    connection.commit();
+                                    return true;
+                                }else{
+                                    connection.rollback();
+                                    return false;
+                                }
+                            }
                         }else{
                             connection.rollback();
                             return false;
                         }
                     }
                 }else{
-                    try(PreparedStatement preparedStatement = connection.prepareStatement(insertAdoption)){
-                        preparedStatement.setInt(1, userId);
-                        preparedStatement.setInt(2, petId);
-                        preparedStatement.setInt(3, AdoptionUtil.ADOPTAR);
+                    try(PreparedStatement preparedStatement1 = connection.prepareStatement(insertAdoption)){
+                        preparedStatement1.setInt(1, userId);
+                        preparedStatement1.setInt(2, petId);
+                        preparedStatement1.setInt(3, AdoptionUtil.ADOPTAR);
 
-                        int rowsAffected = preparedStatement.executeUpdate();
+                        int rowsAffected = preparedStatement1.executeUpdate();
                         if(rowsAffected > 0){
-                            connection.commit();
-                            return true;
+                            try(PreparedStatement preparedStatement2 = connection.prepareStatement(changeAdoptionStatus)){
+                                preparedStatement2.setInt(1, AdoptionUtil.EN_PROCESO);
+                                preparedStatement2.setInt(2, petId);
+
+                                int rowsAffected1 = preparedStatement2.executeUpdate();
+                                if(rowsAffected1 > 0){
+                                    connection.commit();
+                                    return true;
+                                }else{
+                                    connection.rollback();
+                                    return false;
+                                }
+                            }
                         }else{
                             connection.rollback();
                             return false;
                         }
                     }
                 }
-            }catch (Exception e){
-                e.printStackTrace();
-                connection.rollback();
-                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
