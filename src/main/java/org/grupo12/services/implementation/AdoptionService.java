@@ -34,6 +34,18 @@ public class AdoptionService implements IAdoptionService {
         }
         return false;
     }
+//
+//    public boolean requestSponsor(int userId, int petId, double amount, int methodPayment){
+//        String email = adoptionDAO.requestSponsor(userId, petId, amount, methodPayment);
+//        String petName = adoptionDAO.getPetName(petId);
+//        if(email != null) {
+//            String subject= "Mascota Apadrinada";
+//            String body = "La mascota "+petName+" fue apadrinada exitosamente!";
+//            emailService.sendEmail(email, subject, body);
+//            return true;
+//        }
+//        return false;
+//    }
 
     public boolean rejectAdoption(int userPetId) {
         List<String> emails = adoptionDAO.rejectAdoption(userPetId);
