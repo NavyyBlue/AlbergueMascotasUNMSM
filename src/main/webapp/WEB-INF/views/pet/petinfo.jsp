@@ -105,13 +105,18 @@
         </div>
     </div>
     <div class="divButtonsPet">
+        <% if(user != null){%>
         <button type="button" style="margin: 0 10px 0 0; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal" data-petid="0">
             APADRINAR
         </button>
+        <%} else {%>
+        <button type="button" style="margin: 0 10px 0 0; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogin">APADRINAR</button>
+        <%}%>
+
         <% if(user != null){%>
             <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" onclick="openRequestAdoptionModal()">ADOPTAR</button>
         <%} else {%>
-            <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" onclick="sendToLogin()">ADOPTAR</button>
+            <button type="button" style="margin: 0 0 0 10px; background: #94C11F; border-color: #94C11F; width: 150px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogin">ADOPTAR</button>
         <%}%>
 
     </div>
@@ -136,42 +141,43 @@
         <% } %>
     </div>
 
+    <% if(user != null){%>
     <!-- Modal to send request adoption -->
-    <div class="modal fade" id="modalRequestAdoption" tabindex="-1" aria-labelledby="modalRequestAdoptionLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalRequestAdoptionLabel">Adopción de mascota</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div style="border: 1px solid #4e3838; border-radius: 30px; margin: 10px 30px 10px 30px;  padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                    <h1 style="font-size: 48px; margin: 0;"><%= petInfo.getName() %></h1>
-                </div>
-
-                <div class="divMainPet" style="margin: 0 15px 0 15px">
-                    <p>¡Gracias por abrir su hogar! 🐾 Estamos emocionados de que se una a nuestra familia. Su decisión de adoptar trae alegría y amor a las vidas de las mascotas.</p>
-
-                    <p>Pronto nos pondremos en contacto para organizar los detalles y asegurarnos de que la transición sea lo más suave posible para todos. ¡No podemos esperar para comenzar esta increíble aventura juntos!</p>
-
-                    <p>Una vez más, agradecemos su generosidad y estamos emocionados por el futuro que le espera con su nueva mascota. 🏡</p>
-
-                    <p>IMPORTANTE: Revise su correo como confirmación de la solicitud de adopción</p>
-
-                </div>
-                <form id="modalRequestAdoptiontForm" action="${pageContext.request.contextPath}/adoption" method="post">
-                    <div class="modal-body">
+        <div class="modal fade" id="modalRequestAdoption" tabindex="-1" aria-labelledby="modalRequestAdoptionLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalRequestAdoptionLabel">Adopción de mascota</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="userId" name="userId" value="<%=user.getUserId()%>"/>
-                        <input type="hidden" id="petId" name="petId" value="<%=petId%>"/>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+                    <div style="border: 1px solid #4e3838; border-radius: 30px; margin: 10px 30px 10px 30px;  padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <h1 style="font-size: 48px; margin: 0;"><%= petInfo.getName() %></h1>
                     </div>
-                </form>
+
+                    <div class="divMainPet" style="margin: 0 15px 0 15px">
+                        <p>¡Gracias por abrir su hogar! 🐾 Estamos emocionados de que se una a nuestra familia. Su decisión de adoptar trae alegría y amor a las vidas de las mascotas.</p>
+
+                        <p>Pronto nos pondremos en contacto para organizar los detalles y asegurarnos de que la transición sea lo más suave posible para todos. ¡No podemos esperar para comenzar esta increíble aventura juntos!</p>
+
+                        <p>Una vez más, agradecemos su generosidad y estamos emocionados por el futuro que le espera con su nueva mascota. 🏡</p>
+
+                        <p>IMPORTANTE: Revise su correo como confirmación de la solicitud de adopción</p>
+
+                    </div>
+                    <form id="modalRequestAdoptiontForm" action="${pageContext.request.contextPath}/adoption" method="post">
+                        <div class="modal-body">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="userId" name="userId" value="<%=user.getUserId()%>"/>
+                            <input type="hidden" id="petId" name="petId" value="<%=petId%>"/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
+    <%}%>
 
     <!-- Modal to send to log-in -->
     <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
@@ -200,69 +206,76 @@
 
 
 <!-- Sponsor Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="apadrinarModalLabel">Apadrinar Mascota</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+<% if(user != null){%>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="apadrinarModalLabel">Apadrinar Mascota</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
 
-            <div style="border: 1px solid #4e3838; border-radius: 30px; margin: 10px 30px 10px 30px;  padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <h1 style="font-size: 48px; margin: 0;"><%= petInfo.getName() %></h1>
-            </div>
+                <div style="border: 1px solid #4e3838; border-radius: 30px; margin: 10px 30px 10px 30px;  padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h1 style="font-size: 48px; margin: 0;"><%= petInfo.getName() %></h1>
+                </div>
 
-            <div class="divMainPet" style="margin: 0 15px 0 15px">
-                <p style="text-align: center; margin: 0">Cada aporte va directo al cuidado de la mascota. Si sobrepasamos las necesidades de una, el excedente beneficia a las demás. Tu contribución hace la diferencia en sus vidas. ¡Gracias por ser parte de nuestro compromiso con el bienestar animal! 🐾 </p>
-            </div>
-            <div class="modal-body">
-                <form id="deletePetForm" action="${pageContext.request.contextPath}/sponsor" method="post">
+                <div class="divMainPet" style="margin: 0 15px 0 15px">
+                    <p style="text-align: center; margin: 0">Cada aporte va directo al cuidado de la mascota. Si sobrepasamos las necesidades de una, el excedente beneficia a las demás. Tu contribución hace la diferencia en sus vidas. ¡Gracias por ser parte de nuestro compromiso con el bienestar animal! 🐾 </p>
+                </div>
+                <div class="modal-body">
+                    <form id="deletePetForm" action="${pageContext.request.contextPath}/sponsor" method="post">
 
-                    <div class="mb-3" style="justify-content: center;">
-                        <label class="form-label">Monto</label>
-                        <br>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment1" value="10">
-                            <label class="form-check-label" for="inlineRadioPayment1">S./10</label>
+                        <div class="mb-3" style="justify-content: center;">
+                            <label class="form-label">Monto</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment1" value="10">
+                                <label class="form-check-label" for="inlineRadioPayment1">S./10</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment2" value="15">
+                                <label class="form-check-label" for="inlineRadioPayment2">S./15</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment3" value="20">
+                                <label class="form-check-label" for="inlineRadioPayment3">S./20</label>
+                            </div>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment2" value="15">
-                            <label class="form-check-label" for="inlineRadioPayment2">S./15</label>
+
+                        <select id="sponsorMethodPayment" name="sponsorMethodPayment" class="form-select"
+                                aria-label="Default select example" required>
+                            <option value="" disabled selected>Seleccione un método de Pago</option>
+                            <option value="0">Yape (+51 972 194 681)</option>
+                            <option value="1">Plin (+51 972 194 681)</option>
+                            <option value="2">Transferencia Bancaria BCP (0011-1561561-15521561)</option>
+                        </select>
+
+                        <div class="modal-footer" style="justify-content: center; margin: 20px 0 0 0;">
+                            <input type="hidden" id="SponsorPetId" name="SponsorPetId" value="<%=petId%>">
+                            <input type="hidden" id="SponsorUserId" name="SponsorUserId" value="<%=user.getUserId()%>"/>
+
+                            <button type="submit" class="btn btn-primary" style="margin: 0 10px 0 0; background: #94C11F; border-color: #94C11F; width: 150px;">Apadrinar</button>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioPayment3" value="20">
-                            <label class="form-check-label" for="inlineRadioPayment3">S./20</label>
-                        </div>
-                    </div>
-
-                    <select id="sponsorMethodPayment" name="sponsorMethodPayment" class="form-select"
-                            aria-label="Default select example" required>
-                        <option value="" disabled selected>Seleccione un método de Pago</option>
-                        <option value="0">Yape (+51 972 194 681)</option>
-                        <option value="1">Plin (+51 972 194 681)</option>
-                        <option value="2">Transferencia Bancaria BCP (0011-1561561-15521561)</option>
-                    </select>
-
-                    <div class="modal-footer" style="justify-content: center; margin: 20px 0 0 0;">
-                        <input type="hidden" id="SponsorPetId" name="SponsorPetId" value="<%=petId%>">
-                        <input type="hidden" id="SponsorUserId" name="SponsorUserId" value="<%=user.getUserId()%>"/>
-
-                        <button type="submit" class="btn btn-primary" style="margin: 0 10px 0 0; background: #94C11F; border-color: #94C11F; width: 150px;">Apadrinar</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<%} else {%>
-<h1>No se encontró la mascota</h1>
 <%}%>
+<% } %>
 <script>
-    //Open a modal to redirect to login page
-    function sendToLogin(){
+/*    console.log("user: ", <%=user%>)
+    if(<%=user != null%>){
+        $('#modalRequestAdoption').modal('show');
+    }else{
         $('#modalLogin').modal('show');
-    }
+    }*/
+    //Open a modal to redirect to login page
+    $('#modalLogin').on('shown.bs.modal', function (event) {
+        let button = $(event.relatedTarget);
+    })
+
 
     function openRequestAdoptionModal() {
         $('#modalRequestAdoption').modal('show');
