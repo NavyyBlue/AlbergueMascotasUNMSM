@@ -3,7 +3,6 @@ package org.grupo12.services;
 import jakarta.servlet.http.HttpServletRequest;
 import org.grupo12.dao.PetDAO;
 import org.grupo12.models.Pet;
-import org.grupo12.models.User;
 import org.grupo12.util.Pagination;
 
 import java.util.List;
@@ -100,6 +99,13 @@ public class PetService {
 
         return petDAO.getPets(petId,active, offset, limit);
     }
+
+    public Pet getPetInfo(int petId){return petDAO.getPetInfo(petId);}
+
+    public List<Pet> getPetImages(int petId){return  petDAO.getPetImages(petId);}
+
+    public List<Pet> getPetStatus(int petId){return petDAO.getPetStatus(petId);}
+
 
     public boolean deletePet(int petId) {return petDAO.deletePet(petId);}
     public boolean restorePet(int petId) {return petDAO.restorePet(petId);}
