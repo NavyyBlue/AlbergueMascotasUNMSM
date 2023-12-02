@@ -21,8 +21,8 @@ public class PetDAO {
 
     public boolean insertPet(Pet pet) {
         String insertPetSQL = "INSERT INTO Pet " +
-                "(Name, Age, SpeciesId, Gender, Description, EntryDate, Breed, Active, AdoptionStatusId, Location) " +
-                "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, 1, ?, ?)";
+                "(Name, Age, SpeciesId, Gender, Description, EntryDate, Breed, AdoptionStatusId, Location) " +
+                "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)";
 
         String insertImageSQL = "INSERT INTO Image " +
                 "(PetId, ImageUrl, IsMainImage) " +
