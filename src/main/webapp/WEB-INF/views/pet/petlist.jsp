@@ -28,7 +28,7 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
     <script>
         // Establecer la conexión WebSocket
-        let socket = new WebSocket("<%=webSocketUrl%>/petfavorites");
+        let socket = new WebSocket("ws://34.133.57.204:8085/petfavorites");
 
         // Escuchar eventos WebSocket
         socket.onmessage = function(event) {
