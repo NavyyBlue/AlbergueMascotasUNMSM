@@ -44,6 +44,6 @@ public class ConfigLoader {
 
     public static String getWebSocketUrl(HttpServletRequest request) {
         ServletContext context = request.getServletContext();
-        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath();
+        return "ws://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath();
     }
 }
