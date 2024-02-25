@@ -1,6 +1,7 @@
 package org.grupo12.util;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,8 +42,8 @@ public class ConfigLoader {
         return "prod".equalsIgnoreCase(env) ? CONFIG_FILE_PROD : CONFIG_FILE_DEV;
     }
 
-    public static String getWebSocketUrl(String warName) {
-        String property = properties.getProperty("websocket.url");
-        return property + warName;
+    public static String getWebSocketUrl(HttpServletRequest request) {
+        ServletContext context = request.getServletContext();
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath();
     }
 }

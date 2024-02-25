@@ -6,9 +6,7 @@
 <%@ page import="org.grupo12.util.ConfigLoader" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    ServletContext context = request.getServletContext();
-    String warName = context.getContextPath();
-    String webSocketUrl = ConfigLoader.getWebSocketUrl(warName);
+    String webSocketUrl = ConfigLoader.getWebSocketUrl(request);
 %>
 <!DOCTYPE html>
 <html lang="es">
